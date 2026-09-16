@@ -136,9 +136,17 @@
             <span class="sx-caret">▼</span>
           </div>
           <div class="sx-children">
-            {%- for collection in collections.all -%}
-              <a class="sx-item {% if request.path == collection.url %}active{% endif %}" href="{{ collection.url }}">{{ collection.title }}</a>
-            {%- endfor -%}
+            {%- if collections.all.size > 0 -%}
+              {%- for collection in collections.all -%}
+                <a class="sx-item {% if request.path == collection.url %}active{% endif %}" href="{{ collection.url }}">{{ collection.title }}</a>
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Demo list so the sidebar is not empty before collections exist {%- endcomment -%}
+              {% assign demo_sb = "30th Celebration: Classic Collection;30th Celebration;Pitch Black;Chaos Rising;Perfect Order;Ascended Heroes;Phantasmal Flames;Mega Evolution;Mega Evolution Energies;Mega Evolution Black Star Promos" | split: ';' %}
+              {%- for name in demo_sb -%}
+                <a class="sx-item {% if forloop.first %}active{% endif %}" href="#">{{ name }}</a>
+              {%- endfor -%}
+            {%- endif -%}
           </div>
         </div>
       {%- endif -%}
