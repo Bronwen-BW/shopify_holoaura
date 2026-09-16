@@ -30,9 +30,9 @@
 
 /* ── announcement ticker ── */
 .px-shop .announce{background:#000;border-bottom:2px solid var(--pink);overflow:hidden;white-space:nowrap;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--gold);padding:9px 0}
-.px-shop .announce .in{display:inline-block;padding-left:100%;animation:px-tick 30s linear infinite}
-@keyframes px-tick{to{transform:translateX(-100%)}}
-.px-shop .announce span{margin-right:60px}
+.px-shop .announce .in{display:inline-flex;animation:px-tick 30s linear infinite}
+.px-shop .announce .in span{margin-right:60px}
+@keyframes px-tick{to{transform:translateX(-50%)}}
 .px-shop .announce .p{color:var(--pink)} .px-shop .announce .c{color:var(--cyan)}
 
 /* ── hero ── */
@@ -52,17 +52,11 @@
 
 /* ── hero carousel (no arrows, dots only) ── */
 .px-shop .carousel{background:var(--panel);border:3px solid #000;box-shadow:8px 8px 0 rgba(0,0,0,.5);padding:18px}
-.px-shop .car-head{display:flex;justify-content:space-between;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--gold);margin-bottom:12px}
 .px-shop .car-viewport{position:relative;aspect-ratio:1;overflow:hidden;border:3px solid #000;background:#000}
 .px-shop .car-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s;display:flex;align-items:center;justify-content:center}
 .px-shop .car-slide.active{opacity:1}
 .px-shop .car-slide img,.px-shop .car-slide .ph{width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:80px}
 .px-shop .car-slide .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.15),transparent 65%)}
-.px-shop .car-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}
-.px-shop .car-meta{min-width:0}
-.px-shop .car-meta .t{font-family:"Press Start 2P",monospace;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-.px-shop .car-meta .s{font-size:14px;color:var(--text3);margin-top:3px;display:block}
-.px-shop .car-price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--gold);flex-shrink:0}
 .px-shop .car-dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
 .px-shop .car-dots .dot{width:10px;height:10px;background:var(--line2);border:1px solid #000;cursor:pointer}
 .px-shop .car-dots .dot.active{background:var(--pink)}
@@ -75,9 +69,11 @@
 .px-shop .sec-head .more{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);border:2px solid var(--cyan);padding:8px 14px;box-shadow:3px 3px 0 #000}
 .px-shop .sec-head .more:hover{background:var(--cyan);color:#001a1a}
 
-/* ── category tiles ── */
-.px-shop .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.px-shop .cat{position:relative;border:3px solid #000;min-height:200px;display:flex;align-items:flex-end;overflow:hidden;box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s}
+/* ── category carousel (horizontal scroll) ── */
+.px-shop .cat-wrap{position:relative}
+.px-shop .cat-track{display:flex;gap:18px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 12px}
+.px-shop .cat-track::-webkit-scrollbar{display:none}
+.px-shop .cat{position:relative;flex:0 0 calc((100% - 54px)/4);min-height:200px;display:flex;align-items:flex-end;overflow:hidden;border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s}
 .px-shop .cat:hover{transform:translateY(-4px)}
 .px-shop .cat .cat-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
 .px-shop .cat:hover .cat-bg{transform:scale(1.06)}
@@ -85,6 +81,10 @@
 .px-shop .cat.c2 .cat-bg{background:linear-gradient(135deg,#e53935,#7f1d1d)}
 .px-shop .cat.c3 .cat-bg{background:linear-gradient(135deg,#6a11cb,#2575fc)}
 .px-shop .cat.c4 .cat-bg{background:linear-gradient(135deg,#11998e,#38ef7d)}
+.px-shop .cat.c5 .cat-bg{background:linear-gradient(135deg,#f5576c,#f093fb)}
+.px-shop .cat.c6 .cat-bg{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.px-shop .cat.c7 .cat-bg{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+.px-shop .cat.c8 .cat-bg{background:linear-gradient(135deg,#fa709a,#fee140)}
 .px-shop .cat .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.82))}
 .px-shop .cat .ct{position:relative;z-index:2;padding:18px;width:100%}
 .px-shop .cat .ct h3{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;margin:0 0 6px;text-shadow:2px 2px 0 #000}
@@ -150,10 +150,11 @@
 @media (max-width:1024px){
   .px-shop .hero .wrap{grid-template-columns:1fr}
   .px-shop .prod{flex:0 0 calc((100% - 40px)/3)}
-  .px-shop .cats{grid-template-columns:repeat(2,1fr)}
+  .px-shop .cat{flex:0 0 calc((100% - 36px)/3)}
 }
 @media (max-width:768px){
   .px-shop .prod{flex:0 0 calc((100% - 20px)/2)}
+  .px-shop .cat{flex:0 0 calc((100% - 18px)/2)}
   .px-shop .feats,.px-shop .revs{grid-template-columns:1fr}
   .px-shop .cta .sub{flex-direction:column}
   .px-shop .pnav.prev{left:4px}
@@ -161,13 +162,18 @@
 }
 @media (max-width:480px){
   .px-shop .prod{flex:0 0 100%}
-  .px-shop .cats{grid-template-columns:1fr}
+  .px-shop .cat{flex:0 0 80%}
 }
 </style>
 
-  <!-- announcement ticker -->
+  <!-- announcement ticker (content duplicated for seamless loop) -->
   <div class="announce">
     <div class="in">
+      <span>★ <span class="p">FREE WORLDWIDE SHIPPING</span> over $50</span>
+      <span>✦ NEW: <span class="c">ASCENDED HEROES</span> extended art cases now live</span>
+      <span>♦ Limited stock — <span class="p">UMBREON SIR</span> restocked</span>
+      <span>♥ 30-day money-back guarantee</span>
+      <span>★ UV-protected archival materials</span>
       <span>★ <span class="p">FREE WORLDWIDE SHIPPING</span> over $50</span>
       <span>✦ NEW: <span class="c">ASCENDED HEROES</span> extended art cases now live</span>
       <span>♦ Limited stock — <span class="p">UMBREON SIR</span> restocked</span>
@@ -190,7 +196,6 @@
       </div>
 
       <div class="carousel" data-hero-carousel>
-        <div class="car-head"><span>★ FEATURED ROTATION</span><span class="c">AUTO</span></div>
         <div class="car-viewport">
           {%- if hero_products.size >= 1 -%}
             {%- for product in hero_products limit:4 -%}
@@ -210,18 +215,6 @@
             <div class="car-slide g3"><div class="glow"></div><span class="ph">✨</span></div>
             <div class="car-slide g4"><div class="glow"></div><span class="ph">⚡</span></div>
           {%- endif -%}
-        </div>
-        <div class="car-foot">
-          <div class="car-meta">
-            {%- if hero_products.size >= 1 -%}
-              <span class="t">{{ hero_products.first.title }}</span>
-              <span class="s">{{ hero_products.first.type }} · {% if hero_products.first.available %}In stock{% else %}Sold out{% endif %}</span>
-            {%- else -%}
-              <span class="t">Featured Display Cases</span>
-              <span class="s">Extended Art · In stock</span>
-            {%- endif -%}
-          </div>
-          <span class="car-price">{% if hero_products.size >= 1 %}{{ hero_products.first.price | money }}{% else %}$29.99{% endif %}</span>
         </div>
         <div class="car-dots">
           {%- if hero_products.size >= 1 -%}
@@ -243,10 +236,12 @@
         <h2>// SHOP BY <span class="blk">CATEGORY</span></h2>
         <a class="more" href="/collections/all">ALL →</a>
       </div>
-      <div class="cats">
+      <div class="cat-wrap">
+        <span class="pnav prev" data-cat-prev>‹</span>
+        <div class="cat-track">
         {%- if collections.all.size > 0 -%}
-          {%- for collection in collections.all limit:4 -%}
-            <a class="cat c{{ forloop.index }}" href="{{ collection.url }}">
+          {%- for collection in collections.all limit:8 -%}
+            <a class="cat c{{ forloop.index0 | modulo:8 | plus:1 }}" href="{{ collection.url }}">
               <div class="cat-bg" {% if collection.image %}style="background-image:url('{{ collection.image | image_url: width:800, height:500, crop:'center' }}')"{% endif %}></div>
               <div class="shade"></div>
               <div class="ct">
@@ -261,7 +256,13 @@
           <a class="cat c2" href="/collections/one-piece"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>One Piece</h3><p>Manga &amp; OP card cases</p><span class="cnt">24+ ITEMS</span></div></a>
           <a class="cat c3" href="/collections/lorcana"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Lorcana</h3><p>Ravensburger TCG cases</p><span class="cnt">32+ ITEMS</span></div></a>
           <a class="cat c4" href="/collections/accessories"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Accessories</h3><p>Sleeves, slabs, storage</p><span class="cnt">18+ ITEMS</span></div></a>
+          <a class="cat c5" href="/collections/yugioh"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Yu-Gi-Oh</h3><p>Rarity collection cases</p><span class="cnt">36+ ITEMS</span></div></a>
+          <a class="cat c6" href="/collections/magic"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Magic: The Gathering</h3><p>MTG rare display cases</p><span class="cnt">22+ ITEMS</span></div></a>
+          <a class="cat c7" href="/collections/digimon"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Digimon</h3><p>BT / EX series cases</p><span class="cnt">15+ ITEMS</span></div></a>
+          <a class="cat c8" href="/collections/star-wars"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Star Wars</h3><p>Unlimited &amp; Vintage cases</p><span class="cnt">12+ ITEMS</span></div></a>
         {%- endif -%}
+        </div>
+        <span class="pnav next" data-cat-next>›</span>
       </div>
     </div>
   </section>
@@ -442,6 +443,20 @@
     function step(){
       var card = track.querySelector('.prod');
       return card ? card.getBoundingClientRect().width + 20 : 300;
+    }
+    if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
+    if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
+  });
+
+  /* Category carousel */
+  document.querySelectorAll('.cat-wrap').forEach(function(wrap){
+    var track = wrap.querySelector('.cat-track');
+    var prev = wrap.querySelector('[data-cat-prev]');
+    var next = wrap.querySelector('[data-cat-next]');
+    if (!track) return;
+    function step(){
+      var card = track.querySelector('.cat');
+      return card ? card.getBoundingClientRect().width + 18 : 250;
     }
     if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
     if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
