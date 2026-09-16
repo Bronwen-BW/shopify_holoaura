@@ -1,66 +1,77 @@
 {% comment %}
-  Scrydex — Category / Expansions page (matches scrydex.com/pokemon/expansions).
-  Dark doc-style layout: left sidebar nav + main hero + logo grid.
-  Data: Shopify collections (title / handle / products_count / image / published_at).
-  Sidebar menu: pick a linklist in settings, otherwise fallback sample groups render.
+  Scrydex — Category / Expansions page.
+  Layout from scrydex.com/pokemon/expansions (sidebar + hero + logo grid),
+  visual style from scrydex-home.liquid (pixel / 8-bit, dark purple, hard shadows).
+  Data: Shopify collections (title / image / published_at).
+  Sidebar: pick a link_list in settings, otherwise sample fallback renders.
   Release date override: collection.metafields.custom.release_date.
 {% endcomment %}
 
 {% assign source = section.settings.source_collection | default: collections.all %}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
 <style>
 .sx-cats{
-  --bg:#000; --surface:#0d0d0f; --surface2:#161618;
-  --border:#1f1f23; --text:#ffffff; --text2:#9ca3af; --text3:#6b7280;
-  --accent:#a855f7; --accent-soft:#c084fc; --red:#ee3a43;
+  --bg:#0d0b1a; --panel:#1a1636; --panel2:#221d47;
+  --line:#2e2656; --line2:#3d3373;
+  --text:#e8e6ff; --text2:#9a94c7; --text3:#5e5888;
+  --pink:#ff2e88; --cyan:#00f0ff; --gold:#ffd600;
+  --red:#ff4757; --purple:#b14aed;
   background:var(--bg); color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
-  font-size:16px; line-height:1.5;
+  font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
 }
 .sx-cats *,.sx-cats *::before,.sx-cats *::after{box-sizing:border-box}
 .sx-cats a{color:inherit;text-decoration:none}
 .sx-cats img{max-width:100%;display:block}
 
 /* ── layout ── */
-.sx-cats .sx-layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sx-cats .sx-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
 .sx-cats .sx-main{min-width:0}
 
 /* ── sidebar ── */
-.sx-cats .sx-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--text);cursor:pointer;user-select:none}
-.sx-cats .sx-group-head .sx-glyph{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:11px;margin-right:10px;flex:0 0 auto}
-.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:10px;color:var(--text3)}
+.sx-cats .sx-sidebar{background:var(--panel);border-right:3px solid #000;padding:24px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase}
+.sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
+.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
 .sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
 .sx-cats .sx-group.closed .sx-children{display:none}
-.sx-cats .sx-item{display:block;padding:7px 20px 7px 44px;color:var(--text2);font-size:14px;border-left:2px solid transparent;transition:background .12s,color .12s}
-.sx-cats .sx-item:hover{color:var(--text);background:var(--surface2)}
-.sx-cats .sx-item.active{color:var(--accent-soft);border-left-color:var(--accent);background:rgba(168,85,247,.08)}
+.sx-cats .sx-item{display:block;padding:7px 20px 7px 40px;color:var(--text2);font-size:17px;border-left:3px solid transparent;transition:background .12s,color .12s}
+.sx-cats .sx-item:hover{color:var(--text);background:var(--panel2)}
+.sx-cats .sx-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
 
 /* ── hero ── */
-.sx-cats .sx-hero{position:relative;overflow:hidden;padding:48px 40px 56px;border-bottom:1px solid var(--border)}
-.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:clamp(120px,20vw,300px);font-weight:900;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:-.04em;line-height:1}
-.sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:760px}
-.sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-.sx-cats .sx-ball{width:42px;height:42px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:2px solid #000;position:relative;flex:0 0 auto;box-shadow:0 0 0 2px #2a2a2a}
-.sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:7px;background:#000;transform:translateY(-50%)}
-.sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:13px;height:13px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
-.sx-cats .sx-hero h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.01em}
-.sx-cats .sx-hero p{font-size:17px;color:var(--text2);margin:0;max-width:680px}
+.sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
+.sx-cats .sx-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
+.sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:780px}
+.sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+.sx-cats .sx-ball{width:46px;height:46px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:3px solid #000;position:relative;flex:0 0 auto;box-shadow:4px 4px 0 #000}
+.sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:8px;background:#000;transform:translateY(-50%)}
+.sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:14px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
+.sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(18px,2.6vw,28px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
+.sx-cats .sx-hero h1 .c{color:var(--cyan)}
+.sx-cats .sx-hero p{font-size:20px;color:var(--text2);margin:0;max-width:700px}
+.sx-cats .sx-hero p b{color:var(--gold)}
 
 /* ── section ── */
-.sx-cats .sx-section{padding:36px 40px 64px}
-.sx-cats .sx-section-title{font-size:22px;font-weight:800;margin:0 0 28px;letter-spacing:.01em}
+.sx-cats .sx-section{padding:40px 40px 64px}
+.sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:clamp(14px,2vw,18px);margin:0 0 28px;color:#fff;line-height:1.3}
+.sx-cats .sx-section-title .blk{color:var(--pink)}
 
-/* ── logo grid ── */
-.sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:28px 20px}
-.sx-cats .sx-tile{display:flex;flex-direction:column;align-items:center;text-align:center}
-.sx-cats .sx-tile-logo{height:110px;width:100%;display:flex;align-items:center;justify-content:center}
-.sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .15s}
-.sx-cats .sx-tile:hover .sx-tile-logo img{opacity:.85}
-.sx-cats .sx-tile-logo .sx-ph{font-size:44px;filter:grayscale(.2)}
-.sx-cats .sx-tile-name{color:var(--text);font-size:14px;margin-top:14px;line-height:1.35;min-height:2.6em}
-.sx-cats .sx-tile:hover .sx-tile-name{color:var(--accent-soft)}
-.sx-cats .sx-tile-date{color:var(--text3);font-size:13px;margin-top:6px}
+/* ── logo grid (pixel tiles) ── */
+.sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.sx-cats .sx-tile{background:var(--panel);border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);padding:20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .15s}
+.sx-cats .sx-tile:hover{transform:translateY(-4px)}
+.sx-cats .sx-tile-logo{height:110px;width:100%;display:flex;align-items:center;justify-content:center;background:var(--panel2);border:2px solid #000;padding:8px}
+.sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s}
+.sx-cats .sx-tile:hover .sx-tile-logo img{transform:scale(1.05)}
+.sx-cats .sx-tile-logo .sx-ph{font-size:42px}
+.sx-cats .sx-tile-name{font-family:"VT323",monospace;font-size:18px;font-weight:bold;color:#fff;margin-top:14px;line-height:1.3;min-height:2.6em}
+.sx-cats .sx-tile:hover .sx-tile-name{color:var(--cyan)}
+.sx-cats .sx-tile-date{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:5px 8px;color:var(--gold)}
 
 /* ── responsive ── */
 @media (max-width:1100px){
@@ -68,13 +79,14 @@
 }
 @media (max-width:900px){
   .sx-cats .sx-layout{grid-template-columns:1fr}
-  .sx-cats .sx-sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+  .sx-cats .sx-sidebar{position:relative;height:auto;border-right:0;border-bottom:3px solid #000}
   .sx-cats .sx-grid{grid-template-columns:repeat(3,1fr)}
   .sx-cats .sx-hero,.sx-cats .sx-section{padding-left:20px;padding-right:20px}
 }
 @media (max-width:560px){
-  .sx-cats .sx-grid{grid-template-columns:repeat(2,1fr);gap:24px 14px}
+  .sx-cats .sx-grid{grid-template-columns:repeat(2,1fr);gap:16px}
   .sx-cats .sx-tile-logo{height:80px}
+  .sx-cats .sx-tile-name{font-size:16px}
 }
 </style>
 
@@ -103,7 +115,7 @@
         {% comment %} Fallback sidebar matching the reference screenshot {% endcomment %}
         <div class="sx-group">
           <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:#ee3a43">◉</span>POKÉMON</span>
+            <span><span class="sx-glyph" style="color:var(--red)">◉</span>POKÉMON</span>
             <span class="sx-caret">▼</span>
           </div>
           <div class="sx-children">
@@ -116,43 +128,36 @@
         </div>
         <div class="sx-group">
           <div class="sx-group-head" data-sx-toggle>
-            <span>&nbsp;</span>
+            <span style="visibility:hidden">x</span>
           </div>
           <div class="sx-children">
-            <a class="sx-item" href="#" style="padding-left:20px">Latest Japanese Expansions</a>
+            <a class="sx-item" href="#" style="padding-left:28px">Latest Japanese Expansions</a>
             <a class="sx-item" href="#">30th Celebration</a>
             <a class="sx-item" href="#">Storm Emerald</a>
             <a class="sx-item" href="#">Abyss Eye</a>
-          </div>
-        </div>
-        <div class="sx-group">
-          <div class="sx-group-head" data-sx-toggle>
-            <span>&nbsp;</span>
-          </div>
-          <div class="sx-children">
-            <a class="sx-item" href="#" style="padding-left:20px">Latest TCG Pocket Expansions</a>
+            <a class="sx-item" href="#" style="padding-left:28px">Latest TCG Pocket Expansions</a>
             <a class="sx-item" href="#">Team Rocket's Ambition</a>
             <a class="sx-item" href="#">Everyday Wonders</a>
             <a class="sx-item" href="#">Pulsing Aura</a>
-            <a class="sx-item" href="#" style="padding-left:20px">API Docs</a>
+            <a class="sx-item" href="#" style="padding-left:28px">API Docs</a>
           </div>
         </div>
         <div class="sx-group">
           <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:#c084fc">◆</span>LORCANA</span>
+            <span><span class="sx-glyph" style="color:var(--purple)">◆</span>LORCANA</span>
             <span class="sx-caret">▼</span>
           </div>
           <div class="sx-children">
-            <a class="sx-item" href="#" style="padding-left:20px">Latest Expansions</a>
+            <a class="sx-item" href="#" style="padding-left:28px">Latest Expansions</a>
             <a class="sx-item" href="#">Attack of the Vine!</a>
             <a class="sx-item" href="#">Wilds Unknown</a>
             <a class="sx-item" href="#">Winterspell</a>
-            <a class="sx-item" href="#" style="padding-left:20px">API Docs</a>
+            <a class="sx-item" href="#" style="padding-left:28px">API Docs</a>
           </div>
         </div>
         <div class="sx-group closed">
           <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:#60a5fa">✦</span>MAGIC: THE GATHERING</span>
+            <span><span class="sx-glyph" style="color:var(--cyan)">✦</span>MAGIC: THE GATHERING</span>
             <span class="sx-caret">▼</span>
           </div>
         </div>
@@ -176,7 +181,7 @@
 
       <!-- logo grid -->
       <section class="sx-section">
-        <h2 class="sx-section-title">{{ section.settings.section_title | default: 'Mega Evolution' }}</h2>
+        <h2 class="sx-section-title">{{ section.settings.section_title | default: 'MEGA EVOLUTION' }}</h2>
         <div class="sx-grid">
           {%- if source.size > 0 -%}
             {%- for collection in source -%}
@@ -236,7 +241,7 @@
     { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." },
     { "type": "text", "id": "watermark_text", "label": "Background watermark", "default": "Pokémon" },
     { "type": "header", "content": "Grid" },
-    { "type": "text", "id": "section_title", "label": "Grid heading", "default": "Mega Evolution" },
+    { "type": "text", "id": "section_title", "label": "Grid heading", "default": "MEGA EVOLUTION" },
     { "type": "collection", "id": "source_collection", "label": "Expansions source", "info": "Collections shown as logo tiles. Leave empty to list all collections." },
     { "type": "checkbox", "id": "show_date", "label": "Show release date", "default": true },
     { "type": "header", "content": "Sidebar" },
