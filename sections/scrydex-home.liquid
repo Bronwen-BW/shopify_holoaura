@@ -9,7 +9,10 @@
 {% assign hero_products = best_coll.products %}
 
 <div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
-<div class="bw-toggle" title="切换黑白/彩色" onclick="document.querySelector('.px-shop').classList.toggle('bw')">BW</div>
+<script>try{if(localStorage.getItem('px_bw')==='1')document.currentScript.parentNode.classList.add('bw')}catch(e){}</script>
+<div class="bw-toggle" title="切换黑白/彩色" onclick="var r=document.querySelector('.px-shop');r.classList.toggle('bw');try{localStorage.setItem('px_bw',r.classList.contains('bw')?'1':'0')}catch(e){}">BW</div>
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
