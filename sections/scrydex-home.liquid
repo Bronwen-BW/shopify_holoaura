@@ -603,18 +603,8 @@
     if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
     if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
   });
-
-  /* B/W toggle */
-  var _root = document.querySelector('.px-shop');
-  var _bwBtn = document.querySelector('.bw-toggle');
-  if (_root && _bwBtn) {
-    try { if (localStorage.getItem('px_bw') === '1') _root.classList.add('bw'); } catch(e){}
-    _bwBtn.addEventListener('click', function(){
-      _root.classList.toggle('bw');
-      try { localStorage.setItem('px_bw', _root.classList.contains('bw') ? '1' : '0'); } catch(e){}
-    });
-  }
 })();
+
 </script>
 
 {% schema %}
