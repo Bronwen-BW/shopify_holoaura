@@ -1,597 +1,608 @@
 {% comment %}
-  RiPro-V5 dark home — 1:1 port of ripro.rizhuti.com homepage.
-  Colors / radii / spacing taken directly from main.min.css dark theme:
-    body-bg #1a1d24, card #21242b, border rgba(255,255,255,.04/.06),
-    body-color #b0b5bd, emphasis #f8f9fb, muted #9499a5,
-    primary #3b6ff5 (gradient to #3462d8), primary-text #89a9f9.
-  Layout mirrors the real HTML: search hero + live dynamic bar +
-  catbox quick entries + division feature row + post grid.
+  Pixel Anime Card Archive home — retro 8-bit game UI aesthetic.
+  Dark pixel-noir palette, Press Start 2P headings, pixel borders,
+  HP/EXP bars, rarity tiers (N/R/SR/SSR/UR), daily check-in, leaderboard.
+  All styles scoped under .px-home.
 {% endcomment %}
 
-<div class="ri-home" style="{% render 'spacing-padding', settings: section.settings %}">
-<style>
-.ri-home{
-  /* RiPro dark theme tokens */
-  --ri-body-bg:#1a1d24;
-  --ri-body-color:#b0b5bd;
-  --ri-emphasis:#f8f9fb;
-  --ri-muted:#9499a5;
-  --ri-card:#21242b;
-  --ri-card-2:#1a1c23;
-  --ri-border:rgba(255,255,255,.04);
-  --ri-border-2:rgba(255,255,255,.06);
-  --ri-primary:#3b6ff5;
-  --ri-primary-2:#3462d8;
-  --ri-primary-text:#89a9f9;
-  --ri-primary-subtle:#0c1631;
-  --ri-shadow:0 1px 3px rgba(0,0,0,.4);
-  --ri-shadow-lg:0 4px 14px rgba(59,111,245,.35);
-  --ri-radius:.5rem;
-  --ri-radius-lg:.6rem;
-  background:var(--ri-body-bg);
-  color:var(--ri-body-color);
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",Arial,sans-serif;
-  font-size:.9375rem;
-  font-weight:500;
-  line-height:1.6;
-  overflow:hidden;
-}
-.ri-home *, .ri-home *::before, .ri-home *::after{box-sizing:border-box}
-.ri-home a{color:inherit;text-decoration:none}
-.ri-home img{max-width:100%;display:block}
-.ri-home .container{max-width:1320px;margin-left:auto;margin-right:auto;padding-left:15px;padding-right:15px}
+<div class="px-home" style="{% render 'spacing-padding', settings: section.settings %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
-/* ===== HERO SEARCH (home-search-box / search-bg) ===== */
-.ri-home .search-box{position:relative;text-align:center;z-index:0;
-  background:#1a66b2 radial-gradient(120% 120% at 50% 0%,#21abce 0%,#1a66b2 45%,#0f3a6b 100%);
+<style>
+.px-home{
+  --px-bg:#0d0b1a;
+  --px-bg-2:#14112b;
+  --px-panel:#1a1636;
+  --px-panel-2:#221d47;
+  --px-line:#2e2656;
+  --px-line-2:#3d3373;
+  --px-text:#e8e6ff;
+  --px-text-2:#9a94c7;
+  --px-text-3:#5e5888;
+  --px-pink:#ff2e88;
+  --px-cyan:#00f0ff;
+  --px-gold:#ffd600;
+  --px-purple:#b14aed;
+  --px-green:#00ff88;
+  --px-red:#ff4757;
+  --px-blue:#4a9eff;
+  background:var(--px-bg);
+  color:var(--px-text);
+  font-family:"VT323", ui-monospace, "Courier New", monospace;
+  font-size:18px;
+  line-height:1.5;
+  overflow:hidden;
+  image-rendering:pixelated;
+}
+.px-home *, .px-home *::before, .px-home *::after{box-sizing:border-box}
+.px-home a{color:inherit;text-decoration:none}
+.px-home img{max-width:100%;display:block}
+.px-home .px-wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.px-home .px-font{font-family:"Press Start 2P", monospace}
+
+/* pixel hard shadow helper */
+.px-home .hard{box-shadow:0 0 0 2px #000, 6px 6px 0 0 rgba(0,0,0,.45)}
+.px-home .hard-sm{box-shadow:0 0 0 2px #000, 4px 4px 0 0 rgba(0,0,0,.4)}
+
+/* ===== TICKER ===== */
+.px-home .ticker{
+  background:#000;border-bottom:2px solid var(--px-pink);
+  overflow:hidden;white-space:nowrap;
+  font-family:"Press Start 2P",monospace;font-size:11px;
+  color:var(--px-gold);padding:10px 0;
+}
+.px-home .ticker .in{display:inline-block;padding-left:100%;animation:px-scroll 28s linear infinite}
+@keyframes px-scroll{to{transform:translateX(-100%)}}
+.px-home .ticker span{margin-right:60px}
+.px-home .ticker .p{color:var(--px-pink)} .px-home .ticker .c{color:var(--px-cyan)}
+
+/* ===== HERO ===== */
+.px-home .hero{
+  position:relative;
+  background:
+    radial-gradient(60% 80% at 20% 20%, rgba(177,74,237,.25), transparent 60%),
+    radial-gradient(50% 70% at 85% 70%, rgba(255,46,136,.22), transparent 60%),
+    linear-gradient(180deg,#1a1240 0%, #0d0b1a 100%);
+  padding:60px 0 70px;
   overflow:hidden;
 }
-.ri-home .search-box::before{
+.px-home .hero::before{
   content:"";position:absolute;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
-  background-size:48px 48px;
-  mask-image:radial-gradient(70% 80% at 50% 40%,#000 20%,transparent 100%);
-  -webkit-mask-image:radial-gradient(70% 80% at 50% 40%,#000 20%,transparent 100%);
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;
   pointer-events:none;
 }
-.ri-home .search-overlay{
-  position:absolute;inset:0;z-index:1;
-  background:linear-gradient(135deg,rgba(25,27,38,.8),rgba(25,27,38,.6));
+.px-home .hero .px-wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.px-home .hero .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.px-home .chip{
+  font-family:"Press Start 2P",monospace;font-size:10px;
+  padding:8px 12px;border:2px solid #000;background:var(--px-panel);
+  color:var(--px-cyan);box-shadow:3px 3px 0 #000;
 }
-.ri-home .search-warp{position:relative;z-index:2;padding:120px 15px;max-width:1320px;margin:0 auto}
-.ri-home .search-title{color:#fff;margin:0 0 .875rem;font-size:2rem;font-weight:700;line-height:1.25}
-.ri-home .search-desc{color:rgba(255,255,255,.8);margin:0 0 1.5rem;font-size:1.05rem}
-.ri-home .search-form{
-  display:flex;align-items:stretch;max-width:680px;margin:0 auto;
-  border-radius:var(--ri-radius-lg);background-color:var(--ri-card);
-  border:1px solid var(--ri-border-2);
-  box-shadow:0 2px 12px rgba(0,0,0,.3);overflow:hidden;
+.px-home .chip.pk{color:var(--px-pink)} .px-home .chip.gd{color:var(--px-gold)}
+.px-home .hero h1{
+  font-family:"Press Start 2P",monospace;
+  font-size:clamp(22px,4vw,42px);line-height:1.25;margin:0;
+  color:#fff;text-shadow:4px 4px 0 var(--px-pink), 8px 8px 0 rgba(0,0,0,.5);
 }
-.ri-home .search-fields{flex:1 1 auto;display:flex;align-items:center;min-width:0}
-.ri-home .search-fields input{
-  flex:1;background:transparent;border:0;outline:0;color:var(--ri-body-color);
-  font-size:1rem;padding:0 18px;height:52px;min-width:0;
+.px-home .hero h1 .c{color:var(--px-cyan)}
+.px-home .hero p.lead{font-size:20px;color:var(--px-text-2);max-width:560px;margin:22px 0 0}
+.px-home .hero p.lead b{color:var(--px-gold)}
+.px-home .cta-row{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
+.px-home .pbtn{
+  font-family:"Press Start 2P",monospace;font-size:13px;
+  padding:14px 22px;border:2px solid #000;cursor:pointer;
+  display:inline-flex;align-items:center;gap:10px;transition:transform .1s;
 }
-.ri-home .search-fields input::placeholder{color:var(--ri-muted)}
-.ri-home .search-form button{
-  align-self:stretch;border:0;cursor:pointer;color:#fff;font-weight:600;font-size:.95rem;
-  padding:0 26px;background:linear-gradient(135deg,#3b6ff5,#3462d8);
-  box-shadow:0 4px 14px rgba(59,111,245,.35);
-}
-.ri-home .search-hots{margin-top:18px;font-size:.85rem;color:rgba(255,255,255,.65)}
-.ri-home .search-hots .lbl{margin-right:6px}
-.ri-home .search-hots a{color:#fff;margin:0 5px;padding:3px 10px;border-radius:.35rem;background:rgba(255,255,255,.12);transition:background .2s}
-.ri-home .search-hots a:hover{background:rgba(255,255,255,.22)}
+.px-home .pbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.px-home .pbtn.pk{background:var(--px-pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
+.px-home .pbtn.cy{background:var(--px-cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
+.px-home .pbtn.ol{background:var(--px-panel);color:var(--px-text);box-shadow:4px 4px 0 #000}
 
-/* ===== LIVE DYNAMIC BAR ===== */
-.ri-home .dyn-wrap{max-width:1320px;margin:-26px auto 0;padding:0 15px;position:relative;z-index:3}
-.ri-home .dyn{
-  display:flex;align-items:center;gap:14px;padding:10px 16px;
-  background:rgba(176,181,189,.1);border-radius:.5rem;font-size:.875rem;
+/* hero player card */
+.px-home .pcard{
+  background:var(--px-panel);border:3px solid #000;
+  box-shadow:8px 8px 0 rgba(0,0,0,.5);
+  padding:18px;
 }
-.ri-home .dyn .badge{
-  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
-  background:rgba(176,181,189,.18);color:#fff;font-weight:600;font-size:.8rem;
-  padding:5px 10px;border-radius:.35rem;
+.px-home .pcard .top{display:flex;justify-content:space-between;align-items:center;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--px-gold)}
+.px-home .pcard .avatar{
+  width:100%;aspect-ratio:1;
+  background:
+    linear-gradient(135deg, var(--px-purple), var(--px-pink));
+  border:2px solid #000;margin:14px 0;
+  display:flex;align-items:center;justify-content:center;font-size:64px;
 }
-.ri-home .dyn .badge .pulse{width:7px;height:7px;border-radius:50%;background:#2ecc71;animation:ri-pulse 2s infinite}
-@keyframes ri-pulse{0%{box-shadow:0 0 0 0 rgba(46,204,113,.5)}70%{box-shadow:0 0 0 7px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}}
-.ri-home .dyn .feed{flex:1;overflow:hidden;white-space:nowrap;color:var(--ri-body-color)}
-.ri-home .dyn .feed b{color:var(--ri-emphasis);font-weight:600;margin:0 3px}
-.ri-home .dyn .feed .t{color:var(--ri-muted);margin-left:8px;font-size:.78rem}
+.px-home .bar{height:14px;background:#000;border:2px solid #000;position:relative;margin:6px 0 4px}
+.px-home .bar .fill{height:100%}
+.px-home .bar.hp .fill{width:78%;background:var(--px-green)}
+.px-home .bar.mp .fill{width:54%;background:var(--px-blue)}
+.px-home .bar.exp .fill{width:92%;background:var(--px-gold)}
+.px-home .bar-label{display:flex;justify-content:space-between;font-size:14px;color:var(--px-text-2);font-family:"Press Start 2P",monospace;font-size:9px}
 
-/* ===== GENERIC SECTION ===== */
-.ri-home section{margin:1.5rem 0}
-.ri-home .section-title{text-align:center;margin-bottom:1.5rem}
-.ri-home .section-title h3{margin:0;font-size:1.4rem;font-weight:600;color:var(--ri-emphasis)}
-.ri-home .section-title p{margin:.4rem 0 0;color:var(--ri-muted);font-size:.9rem}
+/* ===== SECTION HEAD ===== */
+.px-home section{padding:56px 0}
+.px-home .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.px-home .sec-head h2{
+  font-family:"Press Start 2P",monospace;font-size:clamp(16px,2.4vw,22px);
+  margin:0;color:#fff;line-height:1.3;
+}
+.px-home .sec-head h2 .blk{color:var(--px-pink)}
+.px-home .sec-head .more{
+  font-family:"Press Start 2P",monospace;font-size:10px;
+  color:var(--px-cyan);border:2px solid var(--px-cyan);padding:8px 14px;
+  background:transparent;box-shadow:3px 3px 0 #000;
+}
+.px-home .sec-head .more:hover{background:var(--px-cyan);color:#001a1a}
 
-/* ===== CATBOX (home-cat-box) ===== */
-.ri-home .catbox{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-.ri-home .catbox-item{
-  position:relative;height:120px;border-radius:var(--ri-radius);overflow:hidden;
-  background-size:cover;background-position:center;text-align:center;
+/* ===== BANNER STRIP (events) ===== */
+.px-home .banners{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.px-home .banner{
+  position:relative;border:3px solid #000;overflow:hidden;
+  padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5);
+}
+.px-home .banner .tag{
+  position:absolute;top:12px;left:12px;
+  font-family:"Press Start 2P",monospace;font-size:9px;
+  padding:5px 9px;background:#000;color:var(--px-gold);
+}
+.px-home .banner.b1{background:linear-gradient(135deg,#b14aed,#ff2e88)}
+.px-home .banner.b2{background:linear-gradient(135deg,#00f0ff,#4a9eff)}
+.px-home .banner.b3{background:linear-gradient(135deg,#ffd600,#ff7a00)}
+.px-home .banner h3{font-family:"Press Start 2P",monospace;font-size:14px;color:#fff;margin:0 0 8px;text-shadow:2px 2px 0 #000}
+.px-home .banner p{margin:0;color:rgba(255,255,255,.9);font-size:16px}
+.px-home .banner .count{
+  margin-top:10px;font-family:"Press Start 2P",monospace;font-size:10px;
+  background:rgba(0,0,0,.5);padding:6px 10px;display:inline-block;color:#fff;align-self:flex-start;
+}
+
+/* ===== RARITY TIERS ===== */
+.px-home .rarities{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.px-home .rar{
+  border:3px solid #000;padding:18px 12px;text-align:center;
+  background:var(--px-panel);box-shadow:5px 5px 0 rgba(0,0,0,.5);
+  transition:transform .15s;
+}
+.px-home .rar:hover{transform:translateY(-4px)}
+.px-home .rar .letter{font-family:"Press Start 2P",monospace;font-size:26px;margin-bottom:8px}
+.px-home .rar .stars{color:var(--px-gold);letter-spacing:2px;font-size:14px}
+.px-home .rar .desc{font-size:14px;color:var(--px-text-2);margin-top:6px}
+.px-home .rar.n .letter{color:#9a94c7}
+.px-home .rar.r .letter{color:var(--px-blue)}
+.px-home .rar.sr .letter{color:var(--px-purple)}
+.px-home .rar.ssr .letter{color:var(--px-gold)}
+.px-home .rar.ur .letter{color:var(--px-pink);text-shadow:0 0 12px var(--px-pink)}
+
+/* ===== CARD GRID ===== */
+.px-home .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.px-home .card{
+  background:var(--px-panel);border:3px solid #000;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .15s;
+}
+.px-home .card:hover{transform:translateY(-4px)}
+.px-home .card .art{
+  position:relative;aspect-ratio:3/4;border-bottom:3px solid #000;
   display:flex;align-items:center;justify-content:center;
-  transition:all .3s;
+  font-size:64px;
 }
-.ri-home .catbox-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
-.ri-home .catbox-item .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
-.ri-home .catbox-item .inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;width:100%;padding:10px}
-.ri-home .catbox-item .badge{
-  display:inline-block;font-size:.75rem;font-weight:600;color:#fff;
-  background:rgba(255,255,255,.18);backdrop-filter:blur(4px);
-  padding:2px 8px;border-radius:.35rem;margin-bottom:6px;
+.px-home .card .art .glow{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.18), transparent 65%);
 }
-.ri-home .catbox-item .cname{color:#fff;font-weight:600;letter-spacing:1px;font-size:1rem}
-/* placeholder gradients (mirror ripro series-bg style) */
-.ri-home .cb-g1{background:linear-gradient(135deg,#667eea,#764ba2)}
-.ri-home .cb-g2{background:linear-gradient(135deg,#f093fb,#f5576c)}
-.ri-home .cb-g3{background:linear-gradient(135deg,#4facfe,#00f2fe)}
-.ri-home .cb-g4{background:linear-gradient(135deg,#43e97b,#38f9d7)}
-.ri-home .cb-g5{background:linear-gradient(135deg,#fa709a,#fee140)}
+.px-home .card .rar-tag{
+  position:absolute;top:8px;left:8px;
+  font-family:"Press Start 2P",monospace;font-size:9px;
+  padding:4px 8px;color:#fff;border:2px solid #000;
+}
+.px-home .card .lvl{
+  position:absolute;top:8px;right:8px;
+  font-family:"Press Start 2P",monospace;font-size:9px;
+  background:#000;color:var(--px-gold);padding:4px 8px;
+}
+.px-home .card.r-n .rar-tag{background:#6b6890}
+.px-home .card.r-r .rar-tag{background:var(--px-blue)}
+.px-home .card.r-sr .rar-tag{background:var(--px-purple)}
+.px-home .card.r-ssr .rar-tag{background:var(--px-gold);color:#1a1205}
+.px-home .card.r-ur .rar-tag{background:var(--px-pink)}
+.px-home .card.r-n .art{background:linear-gradient(160deg,#2a2550,#1a1636)}
+.px-home .card.r-r .art{background:linear-gradient(160deg,#1e3a6b,#142447)}
+.px-home .card.r-sr .art{background:linear-gradient(160deg,#4a1e6b,#2a1447)}
+.px-home .card.r-ssr .art{background:linear-gradient(160deg,#6b5a1e,#473a14)}
+.px-home .card.r-ur .art{background:linear-gradient(160deg,#6b1e3a,#47142a)}
+.px-home .card .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.px-home .card .cname{font-size:17px;font-weight:bold;color:#fff;line-height:1.25}
+.px-home .card .cmeta{font-size:14px;color:var(--px-text-2)}
+.px-home .card .cstats{display:flex;gap:10px;font-size:13px;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--px-text-2)}
+.px-home .card .cstats .hp{color:var(--px-green)} .px-home .card .cstats .at{color:var(--px-red)}
+.px-home .card .buy{
+  margin-top:auto;display:flex;justify-content:space-between;align-items:center;
+  border-top:2px dashed var(--px-line-2);padding-top:10px;
+}
+.px-home .card .price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--px-gold)}
+.px-home .card .buy-btn{
+  font-family:"Press Start 2P",monospace;font-size:9px;
+  background:var(--px-pink);color:#fff;border:2px solid #000;
+  padding:7px 12px;cursor:pointer;box-shadow:3px 3px 0 #7a0f44;
+}
+.px-home .card .buy-btn:hover{background:var(--px-cyan);color:#001a1a;box-shadow:3px 3px 0 #007a8a}
 
-/* ===== DIVISION FEATURE ROW ===== */
-.ri-home .division{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.ri-home .division-item{
-  display:flex;align-items:center;gap:14px;
-  background-color:var(--ri-card);padding:.75rem;border-radius:var(--ri-radius);
-  border:1px solid var(--ri-border);box-shadow:var(--ri-shadow);
-  transition:all .3s;
+/* ===== DECK / TWO-COLUMN ===== */
+.px-home .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.px-home .panel{
+  background:var(--px-panel);border:3px solid #000;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5);
 }
-.ri-home .division-item:hover{border-color:var(--ri-border-2)}
-.ri-home .division-icon{
-  flex-shrink:0;width:46px;height:46px;border-radius:var(--ri-radius);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;
+.px-home .panel .panel-head{
+  font-family:"Press Start 2P",monospace;font-size:12px;
+  background:#000;color:var(--px-cyan);padding:12px 16px;
+  border-bottom:3px solid #000;display:flex;justify-content:space-between;align-items:center;
 }
-.ri-home .di-1{background:linear-gradient(135deg,#3b6ff5,#3b82f6)}
-.ri-home .di-2{background:linear-gradient(135deg,#f093fb,#f5576c)}
-.ri-home .di-3{background:linear-gradient(135deg,#4facfe,#00f2fe)}
-.ri-home .di-4{background:linear-gradient(135deg,#43e97b,#38f9d7)}
-.ri-home .division-warp{min-width:0}
-.ri-home .division-title{font-size:1rem;font-weight:600;color:var(--ri-emphasis);margin:0 0 2px}
-.ri-home .division-desc{margin:0;font-size:.82rem;color:var(--ri-muted)}
+.px-home .panel .panel-body{padding:18px}
 
-/* ===== FILTER PILLS (section-cat-navbtn) ===== */
-.ri-home .cat-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.5rem}
-.ri-home .cat-nav a{
-  display:inline-block;font-size:.85rem;font-weight:500;
-  padding:6px 16px;border-radius:var(--ri-radius);
-  background:var(--ri-card);border:1px solid var(--ri-border);color:var(--ri-body-color);
-  transition:all .2s;
+/* daily check-in grid */
+.px-home .checkin{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.px-home .day{
+  aspect-ratio:1;border:2px solid var(--px-line-2);background:var(--px-bg-2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;color:var(--px-text-3);text-align:center;gap:2px;
 }
-.ri-home .cat-nav a:hover{color:var(--ri-emphasis);border-color:var(--ri-border-2)}
-.ri-home .cat-nav a.active{
-  background:linear-gradient(135deg,#3b6ff5,#3462d8);color:#fff;border-color:transparent;
-  box-shadow:0 4px 14px rgba(59,111,245,.35);
-}
+.px-home .day .d{font-family:"Press Start 2P",monospace;font-size:8px}
+.px-home .day .g{font-size:18px}
+.px-home .day.done{background:#1d3a2a;border-color:var(--px-green);color:var(--px-green)}
+.px-home .day.today{background:var(--px-pink);border-color:#000;color:#fff;animation:px-blink 1.2s infinite}
+@keyframes px-blink{50%{opacity:.7}}
+.px-home .day.today .d,.px-home .day.today .g{color:#fff}
 
-/* ===== POST GRID (posts-warp) ===== */
-.ri-home .posts{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-.ri-home .post-item{
-  position:relative;display:flex;flex-direction:column;overflow:hidden;
-  background-color:var(--ri-card);border-radius:var(--ri-radius);
-  border:1px solid var(--ri-border);box-shadow:var(--ri-shadow);
-  transition:all .3s;
+/* leaderboard */
+.px-home .lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:2px dashed var(--px-line-2)}
+.px-home .lb-row:last-child{border-bottom:0}
+.px-home .lb-rank{font-family:"Press Start 2P",monospace;font-size:12px;width:36px;text-align:center}
+.px-home .lb-rank.r1{color:var(--px-gold)} .px-home .lb-rank.r2{color:#c0c0c0} .px-home .lb-rank.r3{color:#cd7f32}
+.px-home .lb-ava{width:36px;height:36px;background:var(--px-panel-2);border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:18px}
+.px-home .lb-name{flex:1;font-size:17px;color:#fff}
+.px-home .lb-name small{display:block;color:var(--px-text-3);font-size:13px}
+.px-home .lb-score{font-family:"Press Start 2P",monospace;font-size:11px;color:var(--px-cyan)}
+
+/* ===== NEWS LIST ===== */
+.px-home .news{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.px-home .news-item{
+  background:var(--px-panel);border:3px solid #000;
+  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:18px;
 }
-.ri-home .post-item:hover{border-color:var(--ri-border-2);transform:translateY(-2px)}
-.ri-home .post-media{position:relative;aspect-ratio:3/2;overflow:hidden;background:#0f1117}
-.ri-home .post-media img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.ri-home .post-item:hover .post-media img{transform:scale(1.05)}
-.ri-home .post-media .ph{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;font-weight:700;color:rgba(255,255,255,.85);
-}
-.ri-home .post-flags{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2}
-.ri-home .post-flags .flag{
-  font-size:.7rem;font-weight:600;color:#fff;padding:3px 8px;border-radius:.35rem;
-}
-.ri-home .flag-hot{background:rgba(229,62,62,.85)}
-.ri-home .flag-new{background:rgba(245,158,11,.85);color:#1a1205}
-.ri-home .flag-best{background:rgba(20,22,28,.75)}
-.ri-home .post-body{padding:12px;display:flex;flex-direction:column;flex:1;min-width:0}
-.ri-home .post-cats{display:flex;align-items:center;margin-bottom:3px;font-size:.72rem;color:var(--ri-muted)}
-.ri-home .post-cats a{color:var(--ri-muted)}
-.ri-home .post-cats a+a::before{content:"·";margin:0 6px}
-.ri-home .post-cats a:hover{color:var(--ri-primary-text)}
-.ri-home .post-title{
-  margin:0;font-size:.95rem;font-weight:600;color:var(--ri-emphasis);line-height:1.4;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all;
-}
-.ri-home .post-desc{
-  color:var(--ri-muted);margin-top:4px;font-size:.75rem;line-height:1.35;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-}
-.ri-home .post-meta{
-  display:flex;align-items:center;margin-top:8px;gap:10px;
-  color:var(--ri-muted);font-size:.75rem;white-space:nowrap;letter-spacing:-.2px;
-}
-.ri-home .post-meta .price{color:var(--ri-primary-text);font-weight:700;font-size:.92rem;margin-left:auto}
-.ri-home .post-meta .stat{display:inline-flex;align-items:center;gap:3px}
+.px-home .news-item .ndate{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--px-pink)}
+.px-home .news-item h4{margin:10px 0 8px;font-size:19px;color:#fff}
+.px-home .news-item p{margin:0;color:var(--px-text-2);font-size:15px}
 
 /* ===== REVIEWS ===== */
-.ri-home .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ri-home .rev{
-  background:var(--ri-card);border:1px solid var(--ri-border);border-radius:var(--ri-radius);
-  padding:20px;box-shadow:var(--ri-shadow);
+.px-home .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.px-home .rev{
+  background:var(--px-panel);border:3px solid #000;
+  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:20px;
 }
-.ri-home .rev .stars{color:#f59e0b;letter-spacing:2px;font-size:.9rem}
-.ri-home .rev p{margin:10px 0 0;color:var(--ri-body-color);font-size:.88rem}
-.ri-home .rev .who{margin-top:10px;font-size:.78rem;color:var(--ri-muted)}
+.px-home .rev .stars{color:var(--px-gold);letter-spacing:2px}
+.px-home .rev p{margin:10px 0 0;font-size:16px;color:var(--px-text)}
+.px-home .rev .who{margin-top:10px;font-size:14px;color:var(--px-text-3)}
 
 /* ===== CTA ===== */
-.ri-home .cta-panel{
+.px-home .cta{
   position:relative;text-align:center;
-  background:linear-gradient(135deg,rgba(59,111,245,.18),rgba(52,98,216,.08)),var(--ri-card);
-  border:1px solid var(--ri-border);border-radius:var(--ri-radius-lg);
-  padding:56px 24px;
+  background:
+    radial-gradient(60% 100% at 50% 0%, rgba(255,46,136,.3), transparent 70%),
+    linear-gradient(180deg,#2a1447,#0d0b1a);
+  border:3px solid var(--px-pink);
+  box-shadow:0 0 0 3px #000, 8px 8px 0 rgba(0,0,0,.5);
+  padding:60px 24px;
 }
-.ri-home .cta-panel .eyebrow{
-  display:inline-block;font-size:.78rem;color:var(--ri-primary-text);
-  background:var(--ri-primary-subtle);border:1px solid rgba(59,111,245,.3);
-  padding:5px 12px;border-radius:999px;
+.px-home .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(16px,3vw,26px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--px-pink)}
+.px-home .cta p{color:var(--px-text-2);max-width:560px;margin:16px auto 0;font-size:18px}
+.px-home .cta .sub-form{display:flex;gap:12px;max-width:480px;margin:26px auto 0}
+.px-home .cta .sub-form input{
+  flex:1;background:#000;border:2px solid var(--px-cyan);color:var(--px-text);
+  padding:12px 16px;font-family:"VT323",monospace;font-size:18px;outline:none;
 }
-.ri-home .cta-panel h2{margin:14px 0 0;font-size:1.5rem;font-weight:600;color:var(--ri-emphasis)}
-.ri-home .cta-panel p{margin:10px auto 0;max-width:540px;color:var(--ri-muted);font-size:.9rem}
-.ri-home .sub-form{display:flex;gap:10px;max-width:440px;margin:24px auto 0}
-.ri-home .sub-form input{
-  flex:1;background:var(--ri-card-2);border:1px solid var(--ri-border-2);
-  color:var(--ri-body-color);border-radius:var(--ri-radius);padding:11px 14px;font-size:.9rem;outline:none;
-}
-.ri-home .sub-form input:focus{border-color:var(--ri-primary)}
-.ri-home .sub-form button{
-  border:0;cursor:pointer;color:#fff;font-weight:600;padding:0 22px;border-radius:var(--ri-radius);
-  background:linear-gradient(135deg,#3b6ff5,#3462d8);box-shadow:0 4px 14px rgba(59,111,245,.35);
+.px-home .cta .sub-form button{
+  font-family:"Press Start 2P",monospace;font-size:12px;
+  background:var(--px-cyan);color:#001a1a;border:2px solid #000;
+  padding:0 22px;cursor:pointer;box-shadow:4px 4px 0 #007a8a;
 }
 
-/* ===== RESPONSIVE (mirror ripro breakpoints) ===== */
-@media (max-width:1199px){
-  .ri-home .posts{grid-template-columns:repeat(4,1fr)}
-  .ri-home .catbox{grid-template-columns:repeat(5,1fr)}
+/* ===== RESPONSIVE ===== */
+@media (max-width:1024px){
+  .px-home .hero .px-wrap{grid-template-columns:1fr}
+  .px-home .cards{grid-template-columns:repeat(3,1fr)}
+  .px-home .rarities{grid-template-columns:repeat(5,1fr)}
 }
-@media (max-width:991px){
-  .ri-home .search-warp{padding:70px 15px}
-  .ri-home .search-title{font-size:1.5rem}
-  .ri-home .division{grid-template-columns:repeat(2,1fr)}
-  .ri-home .posts{grid-template-columns:repeat(3,1fr)}
-  .ri-home .catbox{grid-template-columns:repeat(3,1fr)}
-  .ri-home .rev-grid{grid-template-columns:1fr}
-  .ri-home .dyn{flex-direction:column;align-items:flex-start}
+@media (max-width:768px){
+  .px-home .banners,.px-home .two-col,.px-home .news,.px-home .rev-grid{grid-template-columns:1fr}
+  .px-home .cards{grid-template-columns:repeat(2,1fr)}
+  .px-home .rarities{grid-template-columns:repeat(3,1fr)}
+  .px-home .checkin{grid-template-columns:repeat(4,1fr)}
+  .px-home .cta .sub-form{flex-direction:column}
 }
-@media (max-width:767px){
-  .ri-home .posts{grid-template-columns:repeat(2,1fr)}
-  .ri-home .catbox{grid-template-columns:repeat(2,1fr)}
-  .ri-home .division{grid-template-columns:1fr}
-  .ri-home .sub-form{flex-direction:column}
+@media (max-width:480px){
+  .px-home .cards{grid-template-columns:1fr}
+  .px-home .rarities{grid-template-columns:repeat(2,1fr)}
+  .px-home .checkin{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 
-  {% comment %} ===== HERO SEARCH ===== {% endcomment %}
-  <div class="search-box">
-    <div class="search-overlay"></div>
-    <div class="search-warp">
-      <h1 class="search-title">搜索本站精品资源</h1>
-      <p class="search-desc">Premium extended-art display cases for Pokémon, One Piece &amp; Lorcana collectors</p>
-      <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
-        <div class="search-fields">
-          <input type="search" name="q" placeholder="输入关键词 回车..." aria-label="Search">
-          <button type="submit">搜索</button>
-        </div>
-      </form>
-      <div class="search-hots">
-        <span class="lbl">搜索热词：</span>
-        <a href="/collections/all">Pokémon</a>
-        <a href="/collections/all">Charizard</a>
-        <a href="/collections/all">Umbreon</a>
-        <a href="/collections/all">Mew</a>
-        <a href="/collections/all">Lorcana</a>
-      </div>
+  {% comment %} ===== TICKER ===== {% endcomment %}
+  <div class="ticker">
+    <div class="in">
+      <span>★ NEW DROP: <span class="p">CHARIZARD EX UR</span> IS LIVE NOW!</span>
+      <span>✦ <span class="c">SERVER 8</span> IS NOW OPEN</span>
+      <span>♦ LIMITED PACK: <span class="p">UMBREON SIR</span> 70% OFF</span>
+      <span>♥ WELCOME NEW PLAYER: get 10 FREE GACHA PULLS</span>
+      <span>★ MAINTENANCE COMPLETE — thank you for waiting</span>
+      <span>✦ TOP DEAL: <span class="c">MEWTWO SAR</span> restocked</span>
     </div>
   </div>
 
-  {% comment %} ===== LIVE DYNAMIC ===== {% endcomment %}
-  <div class="dyn-wrap">
-    <div class="dyn">
-      <span class="badge"><span class="pulse"></span>网站动态</span>
-      <div class="feed">
-        <b>j***e</b> 成功购买 <span>Mega Charizard X ex 展示盒</span><span class="t">2 分钟前</span>
-        &nbsp;&nbsp;·&nbsp;&nbsp;
-        <b>m***a</b> 评价了 <span>Umbreon SIR 展示盒</span><span class="t">14 分钟前</span>
-        &nbsp;&nbsp;·&nbsp;&nbsp;
-        <b>p***k</b> 将 <span>Pikachu ex AHR-276</span> 加入购物车<span class="t">31 分钟前</span>
+  {% comment %} ===== HERO ===== {% endcomment %}
+  <section class="hero">
+    <div class="px-wrap">
+      <div>
+        <div class="badge-row">
+          <span class="chip">v2.4.1 ONLINE</span>
+          <span class="chip pk">★ UR RATE-UP</span>
+          <span class="chip gd">♦ 12,847 PLAYERS</span>
+        </div>
+        <h1>CARD<br><span class="c">ARCHIVE</span><br>EX:</h1>
+        <p class="lead">The ultimate <b>extended-art display archive</b> for serious collectors. Pull, organize, and showcase your rarest cards in pure 8-bit glory. No duplicates, no compromises.</p>
+        <div class="cta-row">
+          <a class="pbtn pk" href="#cards">▶ START COLLECTING</a>
+          <a class="pbtn ol" href="#decks">▸ VIEW DECK</a>
+        </div>
       </div>
-    </div>
-  </div>
-
-  {% comment %} ===== CATBOX ===== {% endcomment %}
-  <section>
-    <div class="container">
-      <div class="catbox">
-        {%- if collections.all.size > 0 -%}
-          {%- for collection in collections.all limit: 5 -%}
-            <a class="catbox-item" href="{{ collection.url }}"
-              {%- if collection.image -%}style="background-image:url('{{ collection.image | image_url: width: 600, height: 360, crop: 'center' }}')"{%- endif -%}>
-              <div class="shade"></div>
-              <div class="inner">
-                <span class="badge">{{ collection.products_count }}+</span>
-                <div class="cname">{{ collection.title }}</div>
-              </div>
-            </a>
-          {%- endfor -%}
-        {%- else -%}
-          <a class="catbox-item cb-g1" href="/collections/pokemon"><div class="shade"></div><div class="inner"><span class="badge">48+</span><div class="cname">Pokémon</div></div></a>
-          <a class="catbox-item cb-g2" href="/collections/one-piece"><div class="shade"></div><div class="inner"><span class="badge">24+</span><div class="cname">One Piece</div></div></a>
-          <a class="catbox-item cb-g3" href="/collections/lorcana"><div class="shade"></div><div class="inner"><span class="badge">32+</span><div class="cname">Lorcana</div></div></a>
-          <a class="catbox-item cb-g4" href="/collections/accessories"><div class="shade"></div><div class="inner"><span class="badge">18+</span><div class="cname">Accessories</div></div></a>
-          <a class="catbox-item cb-g5" href="/collections/best-sellers"><div class="shade"></div><div class="inner"><span class="badge">60+</span><div class="cname">Best Sellers</div></div></a>
-        {%- endif -%}
-      </div>
-    </div>
-  </section>
-
-  {% comment %} ===== DIVISION FEATURES ===== {% endcomment %}
-  <section>
-    <div class="container">
-      <div class="division">
-        <div class="division-item">
-          <div class="division-icon di-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-          <div class="division-warp">
-            <h4 class="division-title">模块化首页</h4>
-            <p class="division-desc">自由组合展示你的收藏</p>
-          </div>
-        </div>
-        <div class="division-item">
-          <div class="division-icon di-2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div class="division-warp">
-            <h4 class="division-title">UV 防护</h4>
-            <p class="division-desc">档案级防紫外线材料</p>
-          </div>
-        </div>
-        <div class="division-item">
-          <div class="division-icon di-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <div class="division-warp">
-            <h4 class="division-title">磁吸闭合</h4>
-            <p class="division-desc">超清高透面板，高端质感</p>
-          </div>
-        </div>
-        <div class="division-item">
-          <div class="division-icon di-4"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5.5 20l2-7L2 9h7z"/></svg></div>
-          <div class="division-warp">
-            <h4 class="division-title">收藏家掉落</h4>
-            <p class="division-desc">每周更新扩展美术设计</p>
-          </div>
+      <div>
+        <div class="pcard hard">
+          <div class="top"><span>LV.47</span><span class="c">★★★★★</span></div>
+          <div class="avatar">🎴</div>
+          <div class="bar-label"><span>HP</span><span>3850 / 4900</span></div>
+          <div class="bar hp"><div class="fill"></div></div>
+          <div class="bar-label"><span>MP</span><span>120 / 220</span></div>
+          <div class="bar mp"><div class="fill"></div></div>
+          <div class="bar-label"><span>EXP</span><span>92%</span></div>
+          <div class="bar exp"><div class="fill"></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  {% comment %} ===== LATEST POSTS ===== {% endcomment %}
+  {% comment %} ===== EVENT BANNERS ===== {% endcomment %}
   <section>
-    <div class="container">
-      <div class="section-title">
-        <h3>最新推荐</h3>
-        <p>当前最新发布更新的热门资源，我们将会持续保持更新</p>
+    <div class="px-wrap">
+      <div class="banners">
+        <div class="banner b1">
+          <span class="tag">EVENT</span>
+          <h3>✦ NEON GACHA FEST</h3>
+          <p>Double UR drop rate for 72 hours. New exclusive art skins.</p>
+          <span class="count">⏱ ENDS IN 2D 14:09</span>
+        </div>
+        <div class="banner b2">
+          <span class="tag">NEW</span>
+          <h3>✦ ASCENDED HEROES SET</h3>
+          <p>8 new SAR cards just dropped. Collect the full wave.</p>
+          <span class="count">● JUST RELEASED</span>
+        </div>
+        <div class="banner b3">
+          <span class="tag">SALE</span>
+          <h3>♦ HOLIDAY PACK BUNDLE</h3>
+          <p>Buy 3 cases, get 1 free. Limited stock worldwide.</p>
+          <span class="count">♦ 42% LEFT IN STOCK</span>
+        </div>
       </div>
+    </div>
+  </section>
 
-      <div class="cat-nav">
-        <a href="" class="active">最新</a>
-        <a href="/collections/pokemon">Pokémon</a>
-        <a href="/collections/one-piece">One Piece</a>
-        <a href="/collections/lorcana">Lorcana</a>
-        <a href="/collections/accessories">Accessories</a>
-        <a href="/collections/best-sellers">Best Sellers</a>
+  {% comment %} ===== RARITY TIERS ===== {% endcomment %}
+  <section style="padding-top:0">
+    <div class="px-wrap">
+      <div class="sec-head">
+        <h2>// RARITY <span class="blk">SYSTEM</span></h2>
+        <a class="more" href="/collections/all">VIEW ALL →</a>
       </div>
+      <div class="rarities">
+        <div class="rar n"><div class="letter">N</div><div class="stars">★</div><div class="desc">Common<br>Base pulls</div></div>
+        <div class="rar r"><div class="letter">R</div><div class="stars">★★</div><div class="desc">Rare<br>Skill cards</div></div>
+        <div class="rar sr"><div class="letter">SR</div><div class="stars">★★★</div><div class="desc">Super Rare<br>Alt art</div></div>
+        <div class="rar ssr"><div class="letter">SSR</div><div class="stars">★★★★</div><div class="desc">SSR<br>Holo foil</div></div>
+        <div class="rar ur"><div class="letter">UR</div><div class="stars">★★★★★</div><div class="desc">Ultra Rare<br>One of a kind</div></div>
+      </div>
+    </div>
+  </section>
 
-      <div class="posts">
-        <a class="post-item" href="/products/mega-charizard-x-ex-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-hot">置顶</span><span class="flag flag-new">VIP</span></div>
-            <span class="ph">CHX</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">SIR SAR</a></div>
-            <h4 class="post-title">Mega Charizard X ex 125-094 SIR SAR Phantasmal Flames</h4>
-            <p class="post-desc">Extended art display case with UV-resistant ultra-clear front for your most valued SIR cards.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 2 年前</span>
-              <span class="stat">&#128065; 9.7K</span>
-              <span class="price">$29.99</span>
-            </div>
+  {% comment %} ===== CARD GRID ===== {% endcomment %}
+  <section id="cards" style="padding-top:0">
+    <div class="px-wrap">
+      <div class="sec-head">
+        <h2>// LATEST <span class="blk">CARDS</span></h2>
+        <a class="more" href="/collections/all">SEE MORE →</a>
+      </div>
+      <div class="cards">
+        <a class="card r-ur" href="/products/charizard-ex">
+          <div class="art"><div class="glow"></div><span class="rar-tag">UR</span><span class="lvl">LV.99</span>🔥</div>
+          <div class="info">
+            <div class="cname">Mega Charizard X EX</div>
+            <div class="cmeta">Phantasmal Flames · SIR SAR</div>
+            <div class="cstats"><span class="hp">HP 9800</span><span class="at">ATK 1250</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/mega-gengar-ex-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-hot">置顶</span></div>
-            <span class="ph">MGA</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <h4 class="post-title">Mega Gengar ex 284-217 SIR SAR Ascended Heroes</h4>
-            <p class="post-desc">Premium magnetic-close display case designed for serious collectors.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 3 年前</span>
-              <span class="stat">&#128065; 18.2K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-ssr" href="/products/umbreon-sir">
+          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.88</span>🌙</div>
+          <div class="info">
+            <div class="cname">Umbreon 161 SIR</div>
+            <div class="cmeta">Prismatic Evolutions</div>
+            <div class="cstats"><span class="hp">HP 8200</span><span class="at">ATK 980</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/mew-ex-paldean-fates-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-hot">置顶</span><span class="flag flag-new">VIP</span></div>
-            <span class="ph">MEW</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Paldean Fates</a></div>
-            <h4 class="post-title">Mew ex 232-091 SIR SAR Paldean Fates</h4>
-            <p class="post-desc">Archival-quality holder preserving your Mew SIR in mint condition for years.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 5 年前</span>
-              <span class="stat">&#128065; 69.2K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-sr" href="/products/pikachu-ex">
+          <div class="art"><div class="glow"></div><span class="rar-tag">SR</span><span class="lvl">LV.76</span>⚡</div>
+          <div class="info">
+            <div class="cname">Pikachu ex AHR-276</div>
+            <div class="cmeta">Ascended Heroes</div>
+            <div class="cstats"><span class="hp">HP 6800</span><span class="at">ATK 1100</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/zapdos-gx-promo-display-case">
-          <div class="post-media">
-            <span class="ph">TRI</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Promo</a></div>
-            <h4 class="post-title">Moltres &amp; Zapdos &amp; Articuno GX SM210 Promo</h4>
-            <p class="post-desc">Extended background display for the legendary bird trio promo.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 1 年前</span>
-              <span class="stat">&#128065; 12.4K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-ur" href="/products/mew-ex">
+          <div class="art"><div class="glow"></div><span class="rar-tag">UR</span><span class="lvl">LV.95</span>✨</div>
+          <div class="info">
+            <div class="cname">Mew ex 232 SIR</div>
+            <div class="cmeta">Paldean Fates · Holo</div>
+            <div class="cstats"><span class="hp">HP 9100</span><span class="at">ATK 1400</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/pikachu-ex-ahr-276-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-new">新</span></div>
-            <span class="ph">PIK</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <h4 class="post-title">Pikachu ex 276-217 SIR SAR Ascended Heroes</h4>
-            <p class="post-desc">Just dropped — the latest Ascended Heroes extended art case.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 刚刚</span>
-              <span class="stat">&#128065; 3.1K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-ssr" href="/products/gengar-ex">
+          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.82</span>👻</div>
+          <div class="info">
+            <div class="cname">Mega Gengar ex 284</div>
+            <div class="cmeta">Ascended Heroes</div>
+            <div class="cstats"><span class="hp">HP 7600</span><span class="at">ATK 1050</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/umbreon-161-sir-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-best">BEST</span></div>
-            <span class="ph">UMB</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Prismatic Evolutions</a></div>
-            <h4 class="post-title">Umbreon 161-131 SIR SAR Prismatic Evolutions</h4>
-            <p class="post-desc">Fan-favorite Umbreon SIR, presented in a show-ready clear case.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 2 年前</span>
-              <span class="stat">&#128065; 42.8K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-r" href="/products/psyduck">
+          <div class="art"><div class="glow"></div><span class="rar-tag">R</span><span class="lvl">LV.45</span>🦆</div>
+          <div class="info">
+            <div class="cname">Psyduck 226 IR</div>
+            <div class="cmeta">Ascended Heroes</div>
+            <div class="cstats"><span class="hp">HP 3200</span><span class="at">ATK 280</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/pikachu-grey-felt-hat-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-new">新</span></div>
-            <span class="ph">VAN</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Promo</a></div>
-            <h4 class="post-title">Pikachu with Grey Felt Hat SVP 085 Promo</h4>
-            <p class="post-desc">The Van Gogh crossover promo, protected and displayed in style.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 6 月前</span>
-              <span class="stat">&#128065; 25.6K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-sr" href="/products/dragonite">
+          <div class="art"><div class="glow"></div><span class="rar-tag">SR</span><span class="lvl">LV.71</span>🐉</div>
+          <div class="info">
+            <div class="cname">Mega Dragonite EX SAR</div>
+            <div class="cmeta">Ascended Heroes</div>
+            <div class="cstats"><span class="hp">HP 7200</span><span class="at">ATK 950</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
-
-        <a class="post-item" href="/products/psyduck-226-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-new">新</span></div>
-            <span class="ph">PSY</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <h4 class="post-title">Psyduck 226-217 IR AR Ascended Heroes</h4>
-            <p class="post-desc">IR art extended background case for the charming Psyduck.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 刚刚</span>
-              <span class="stat">&#128065; 1.9K</span>
-              <span class="price">$29.99</span>
-            </div>
+        <a class="card r-ssr" href="/products/van-gogh-pikachu">
+          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.90</span>🎨</div>
+          <div class="info">
+            <div class="cname">Pikachu Grey Felt Hat</div>
+            <div class="cmeta">SVP 085 Black Star Promo</div>
+            <div class="cstats"><span class="hp">HP 8800</span><span class="at">ATK 1150</span></div>
+            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
           </div>
         </a>
+      </div>
+    </div>
+  </section>
 
-        <a class="post-item" href="/products/mega-dragonite-ex-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-best">BEST</span></div>
-            <span class="ph">DRG</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <h4 class="post-title">Mega Dragonite EX SAR SIR Ascended Heroes</h4>
-            <p class="post-desc">Stunning SAR art displayed in an ultra-clear collector case.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 1 年前</span>
-              <span class="stat">&#128065; 8.3K</span>
-              <span class="price">$29.99</span>
+  {% comment %} ===== DAILY + LEADERBOARD ===== {% endcomment %}
+  <section id="decks" style="padding-top:0">
+    <div class="px-wrap">
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head"><span>⌂ DAILY CHECK-IN</span><span class="c" style="color:var(--px-gold)">DAY 12 / 30</span></div>
+          <div class="panel-body">
+            <div class="checkin">
+              <div class="day done"><span class="d">D1</span><span class="g">♦</span></div>
+              <div class="day done"><span class="d">D2</span><span class="g">♦</span></div>
+              <div class="day done"><span class="d">D3</span><span class="g">♥</span></div>
+              <div class="day done"><span class="d">D4</span><span class="g">♦</span></div>
+              <div class="day done"><span class="d">D5</span><span class="g">★</span></div>
+              <div class="day today"><span class="d">TODAY</span><span class="g">✚</span></div>
+              <div class="day"><span class="d">D7</span><span class="g">?</span></div>
+              <div class="day"><span class="d">D8</span><span class="g">?</span></div>
+              <div class="day"><span class="d">D9</span><span class="g">?</span></div>
+              <div class="day"><span class="d">D10</span><span class="g">?</span></div>
+              <div class="day"><span class="d">D11</span><span class="g">?</span></div>
+              <div class="day"><span class="d">D12</span><span class="g">?</span></div>
             </div>
+            <p style="margin:16px 0 0;color:var(--px-text-2);font-size:15px">Sign in daily to earn free pulls, gems, and exclusive border skins. Missed a day? Use a <b style="color:var(--px-gold)">Chrono Ticket</b> to claim back.</p>
           </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span>♔ WEEKLY TOP PLAYERS</span><span>RESET IN 3D</span></div>
+          <div class="panel-body" style="padding-top:6px;padding-bottom:6px">
+            <div class="lb-row"><span class="lb-rank r1">01</span><span class="lb-ava">🐉</span><span class="lb-name">DragonMaster_99<small>Just pulled UR Charizard</small></span><span class="lb-score">98,240</span></div>
+            <div class="lb-row"><span class="lb-rank r2">02</span><span class="lb-ava">🌙</span><span class="lb-name">MoonCollector<small>Full Eeveelution set</small></span><span class="lb-score">94,118</span></div>
+            <div class="lb-row"><span class="lb-rank r3">03</span><span class="lb-ava">⚡</span><span class="lb-name">VoltBolt<small>128 consecutive wins</small></span><span class="lb-score">91,804</span></div>
+            <div class="lb-row"><span class="lb-rank">04</span><span class="lb-ava">👻</span><span class="lb-name">GengarMain<small>Completed Pokédex 72%</small></span><span class="lb-score">88,355</span></div>
+            <div class="lb-row"><span class="lb-rank">05</span><span class="lb-ava">✨</span><span class="lb-name">MewTwilight<small>100+ graded slabs</small></span><span class="lb-score">86,912</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% comment %} ===== NEWS ===== {% endcomment %}
+  <section style="padding-top:0">
+    <div class="px-wrap">
+      <div class="sec-head">
+        <h2>// SYSTEM <span class="blk">NEWS</span></h2>
+        <a class="more" href="/blogs/news">ALL NEWS →</a>
+      </div>
+      <div class="news">
+        <a class="news-item" href="#">
+          <div class="ndate">2026.09.15</div>
+          <h4>Patch 2.4.1 — Balance Update</h4>
+          <p>UR drop rates adjusted, new border skins added, and daily rewards doubled for all active players.</p>
         </a>
-
-        <a class="post-item" href="/products/mega-charizard-y-ex-display-case">
-          <div class="post-media">
-            <div class="post-flags"><span class="flag flag-new">新</span></div>
-            <span class="ph">CHY</span>
-          </div>
-          <div class="post-body">
-            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Hyper Rare</a></div>
-            <h4 class="post-title">Mega Charizard Y ex 294-217 Hyper Rare MUR</h4>
-            <p class="post-desc">The Hyper Rare MUR variant, protected and showcased like a trophy.</p>
-            <div class="post-meta">
-              <span class="stat">&#128337; 刚刚</span>
-              <span class="stat">&#128065; 5.2K</span>
-              <span class="price">$29.99</span>
-            </div>
-          </div>
+        <a class="news-item" href="#">
+          <div class="ndate">2026.09.12</div>
+          <h4>New Set: Ascended Heroes Wave 2</h4>
+          <p>8 new SAR cards revealed. Pre-order bundles now live with early-access bonus packs.</p>
+        </a>
+        <a class="news-item" href="#">
+          <div class="ndate">2026.09.08</div>
+          <h4>Server Merge EU + US</h4>
+          <p>Cross-region trading enabled. Leaderboards reset, top 100 players get exclusive avatar frames.</p>
         </a>
       </div>
     </div>
   </section>
 
   {% comment %} ===== REVIEWS ===== {% endcomment %}
-  <section>
-    <div class="container">
-      <div class="section-title">
-        <h3>收藏家好评</h3>
-        <p>来自全球玩家的真实反馈</p>
+  <section style="padding-top:0">
+    <div class="px-wrap">
+      <div class="sec-head">
+        <h2>// PLAYER <span class="blk">REVIEWS</span></h2>
       </div>
       <div class="rev-grid">
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"The case is crystal clear and the magnetic close feels premium. My Charizard SIR has never looked better on the shelf."</p>
-          <div class="who">— Ethan R. · verified buyer</div>
+          <p>"This is the only archive that gets my SIR cards right. The pixel aesthetic is insane and the cases feel premium."</p>
+          <div class="who">— Ethan_R · LV.52 · verified</div>
         </div>
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"Fast worldwide shipping, packaging was perfect. The UV protection gives me peace of mind for my graded cards."</p>
-          <div class="who">— Maya K. · verified buyer</div>
+          <p>"I ordered 12 cases. Every single one arrived flawless. The HP bar UI on the site is too addictive."</p>
+          <div class="who">— Maya_K · LV.48 · verified</div>
         </div>
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"Clean, modern look. The recessed slot holds my sleeved card perfectly. Already ordered three more."</p>
-          <div class="who">— Jordan L. · verified buyer</div>
+          <p>"Finally a store that treats my collection like a game. Daily check-in, leaderboards — 10/10."</p>
+          <div class="who">— Jordan_L · LV.61 · verified</div>
         </div>
       </div>
     </div>
   </section>
 
   {% comment %} ===== CTA ===== {% endcomment %}
-  <section>
-    <div class="container">
-      <div class="cta-panel">
-        <span class="eyebrow">Collector's Club</span>
-        <h2>加入收藏家俱乐部</h2>
-        <p>Don't miss the next drop! Get early access to new extended art designs, member-only discounts, and sneak peeks.</p>
+  <section style="padding-top:0">
+    <div class="px-wrap">
+      <div class="cta">
+        <h2>▶ READY TO <span style="color:var(--px-cyan)">LOG IN?</span></h2>
+        <p>Join 12,847 collectors. Get 10 free gacha pulls on your first order, plus weekly drop alerts before anyone else.</p>
         <form class="sub-form" action="/account" method="post">
-          <input type="email" name="email" placeholder="you@example.com" required>
-          <button type="submit">立即加入</button>
+          <input type="email" name="email" placeholder="player@guild.xyz" required>
+          <button type="submit">SIGN UP ▸</button>
         </form>
       </div>
     </div>
@@ -601,7 +612,7 @@
 
 {% schema %}
 {
-  "name": "RiPro Home",
+  "name": "Pixel Card Home",
   "settings": [
     {
       "type": "header",
@@ -630,7 +641,7 @@
   ],
   "presets": [
     {
-      "name": "RiPro Home"
+      "name": "Pixel Card Home"
     }
   ]
 }
