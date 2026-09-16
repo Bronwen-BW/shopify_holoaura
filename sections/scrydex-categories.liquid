@@ -112,53 +112,16 @@
           </div>
         {%- endfor -%}
       {%- else -%}
-        {% comment %} Fallback sidebar matching the reference screenshot {% endcomment %}
+        {% comment %} Auto-list every collection so the sidebar is never incomplete {% endcomment %}
         <div class="sx-group">
           <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:var(--red)">◉</span>POKÉMON</span>
+            <span><span class="sx-glyph" style="color:var(--red)">◉</span>{{ section.settings.sidebar_title | default: 'EXPANSIONS' }}</span>
             <span class="sx-caret">▼</span>
           </div>
           <div class="sx-children">
-            <a class="sx-item active" href="#">Latest English Expansions <span style="float:right">→</span></a>
-            <a class="sx-item" href="#">30th Celebration</a>
-            <a class="sx-item" href="#">30th Celebration: Classic C…</a>
-            <a class="sx-item" href="#">Pitch Black</a>
-            <a class="sx-item" href="#">Chaos Rising</a>
-          </div>
-        </div>
-        <div class="sx-group">
-          <div class="sx-group-head" data-sx-toggle>
-            <span style="visibility:hidden">x</span>
-          </div>
-          <div class="sx-children">
-            <a class="sx-item" href="#" style="padding-left:28px">Latest Japanese Expansions</a>
-            <a class="sx-item" href="#">30th Celebration</a>
-            <a class="sx-item" href="#">Storm Emerald</a>
-            <a class="sx-item" href="#">Abyss Eye</a>
-            <a class="sx-item" href="#" style="padding-left:28px">Latest TCG Pocket Expansions</a>
-            <a class="sx-item" href="#">Team Rocket's Ambition</a>
-            <a class="sx-item" href="#">Everyday Wonders</a>
-            <a class="sx-item" href="#">Pulsing Aura</a>
-            <a class="sx-item" href="#" style="padding-left:28px">API Docs</a>
-          </div>
-        </div>
-        <div class="sx-group">
-          <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:var(--purple)">◆</span>LORCANA</span>
-            <span class="sx-caret">▼</span>
-          </div>
-          <div class="sx-children">
-            <a class="sx-item" href="#" style="padding-left:28px">Latest Expansions</a>
-            <a class="sx-item" href="#">Attack of the Vine!</a>
-            <a class="sx-item" href="#">Wilds Unknown</a>
-            <a class="sx-item" href="#">Winterspell</a>
-            <a class="sx-item" href="#" style="padding-left:28px">API Docs</a>
-          </div>
-        </div>
-        <div class="sx-group closed">
-          <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:var(--cyan)">✦</span>MAGIC: THE GATHERING</span>
-            <span class="sx-caret">▼</span>
+            {%- for collection in collections.all -%}
+              <a class="sx-item {% if request.path == collection.url %}active{% endif %}" href="{{ collection.url }}">{{ collection.title }}</a>
+            {%- endfor -%}
           </div>
         </div>
       {%- endif -%}
@@ -245,7 +208,8 @@
     { "type": "collection", "id": "source_collection", "label": "Expansions source", "info": "Collections shown as logo tiles. Leave empty to list all collections." },
     { "type": "checkbox", "id": "show_date", "label": "Show release date", "default": true },
     { "type": "header", "content": "Sidebar" },
-    { "type": "link_list", "id": "sidebar_menu", "label": "Sidebar menu", "info": "Top-level links = game groups; their nested links = expansion items. Leave empty for sample placeholder." }
+    { "type": "text", "id": "sidebar_title", "label": "Sidebar heading (auto-list)", "default": "EXPANSIONS", "info": "Shown when no sidebar menu is picked." },
+    { "type": "link_list", "id": "sidebar_menu", "label": "Sidebar menu", "info": "Optional. If set, uses this menu (top-level = game groups, nested links = items) instead of auto-listing all collections." }
   ],
   "presets": [
     { "name": "Categories" }
