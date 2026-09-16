@@ -9,7 +9,7 @@
 {% assign hero_products = best_coll.products %}
 
 <div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
-<div class="bw-toggle" title="切换黑白/彩色">◐</div>
+<div class="bw-toggle" title="切换黑白/彩色" onclick="document.querySelector('.px-shop').classList.toggle('bw')">BW</div>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
   --pink:#111111; --cyan:#333333; --gold:#555555;
   --red:#cc0000; --purple:#333333;
 }
-.px-shop .bw-toggle{position:fixed;right:18px;bottom:18px;z-index:9999;width:48px;height:48px;background:var(--panel);color:var(--gold);border:3px solid #000;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 rgba(0,0,0,.5);font-family:'Press Start 2P',monospace;line-height:1;user-select:none}
+.px-shop .bw-toggle{position:fixed;right:18px;top:80px;z-index:99999;width:54px;height:54px;background:var(--panel);color:var(--gold);border:3px solid #000;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 rgba(0,0,0,.5);font-family:'Press Start 2P',monospace;line-height:1;user-select:none;pointer-events:auto}
 .px-shop .bw-toggle:hover{background:var(--pink);color:#fff}
 .px-shop *,.px-shop *::before,.px-shop *::after{box-sizing:border-box}
 .px-shop a{color:inherit;text-decoration:none}
