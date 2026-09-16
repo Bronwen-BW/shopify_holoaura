@@ -1,428 +1,380 @@
 {% comment %}
-  RiPro-style dark home section.
-  Layout modelled on ripro.rizhuti.com: search hero, live activity bar,
-  category quick-entry cards, feature division, product grid with filter pills,
-  reviews and subscribe CTA. All styles scoped under .rp-home.
+  RiPro-V5 dark home — 1:1 port of ripro.rizhuti.com homepage.
+  Colors / radii / spacing taken directly from main.min.css dark theme:
+    body-bg #1a1d24, card #21242b, border rgba(255,255,255,.04/.06),
+    body-color #b0b5bd, emphasis #f8f9fb, muted #9499a5,
+    primary #3b6ff5 (gradient to #3462d8), primary-text #89a9f9.
+  Layout mirrors the real HTML: search hero + live dynamic bar +
+  catbox quick entries + division feature row + post grid.
 {% endcomment %}
 
-<div class="rp-home" style="{% render 'spacing-padding', settings: section.settings %}">
-  <style>
-    .rp-home {
-      --rp-bg: #0b0f17;
-      --rp-bg-2: #0f1522;
-      --rp-card: #141c2b;
-      --rp-card-2: #1a2334;
-      --rp-border: #243049;
-      --rp-border-soft: #1c2536;
-      --rp-text: #e8ecf3;
-      --rp-text-2: #9aa6b8;
-      --rp-text-3: #6b7689;
-      --rp-primary: #3b82f6;
-      --rp-primary-2: #60a5fa;
-      --rp-primary-soft: rgba(59,130,246,0.14);
-      --rp-gold: #f59e0b;
-      --rp-red: #ef4444;
-      --rp-green: #10b981;
-      --rp-rad: 14px;
-      --rp-rad-sm: 10px;
-      background: var(--rp-bg);
-      color: var(--rp-text);
-      line-height: 1.6;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-    .rp-home *, .rp-home *::before, .rp-home *::after { box-sizing: border-box; }
-    .rp-home a { color: inherit; text-decoration: none; }
-    .rp-home .rp-wrap { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+<div class="ri-home" style="{% render 'spacing-padding', settings: section.settings %}">
+<style>
+.ri-home{
+  /* RiPro dark theme tokens */
+  --ri-body-bg:#1a1d24;
+  --ri-body-color:#b0b5bd;
+  --ri-emphasis:#f8f9fb;
+  --ri-muted:#9499a5;
+  --ri-card:#21242b;
+  --ri-card-2:#1a1c23;
+  --ri-border:rgba(255,255,255,.04);
+  --ri-border-2:rgba(255,255,255,.06);
+  --ri-primary:#3b6ff5;
+  --ri-primary-2:#3462d8;
+  --ri-primary-text:#89a9f9;
+  --ri-primary-subtle:#0c1631;
+  --ri-shadow:0 1px 3px rgba(0,0,0,.4);
+  --ri-shadow-lg:0 4px 14px rgba(59,111,245,.35);
+  --ri-radius:.5rem;
+  --ri-radius-lg:.6rem;
+  background:var(--ri-body-bg);
+  color:var(--ri-body-color);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",Arial,sans-serif;
+  font-size:.9375rem;
+  font-weight:500;
+  line-height:1.6;
+  overflow:hidden;
+}
+.ri-home *, .ri-home *::before, .ri-home *::after{box-sizing:border-box}
+.ri-home a{color:inherit;text-decoration:none}
+.ri-home img{max-width:100%;display:block}
+.ri-home .container{max-width:1320px;margin-left:auto;margin-right:auto;padding-left:15px;padding-right:15px}
 
-    /* ---------- HERO / SEARCH ---------- */
-    .rp-home .rp-hero {
-      position: relative;
-      padding: 96px 0 72px;
-      text-align: center;
-      background:
-        radial-gradient(80% 120% at 50% -10%, rgba(59,130,246,0.35), transparent 60%),
-        radial-gradient(50% 80% at 80% 20%, rgba(139,92,246,0.18), transparent 60%),
-        linear-gradient(180deg, #0c1424 0%, #0b0f17 100%);
-      overflow: hidden;
-    }
-    .rp-home .rp-hero::before {
-      content: "";
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(70% 60% at 50% 30%, #000 30%, transparent 100%);
-      -webkit-mask-image: radial-gradient(70% 60% at 50% 30%, #000 30%, transparent 100%);
-      pointer-events: none;
-    }
-    .rp-home .rp-hero > .rp-wrap { position: relative; z-index: 1; }
-    .rp-home .rp-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12.5px; letter-spacing: 0.08em;
-      color: var(--rp-primary-2);
-      background: var(--rp-primary-soft);
-      border: 1px solid rgba(59,130,246,0.3);
-      padding: 6px 14px; border-radius: 999px;
-      margin-bottom: 22px;
-    }
-    .rp-home .rp-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rp-green); box-shadow: 0 0 0 4px rgba(16,185,129,0.18); }
-    .rp-home .rp-hero h1 {
-      font-size: clamp(34px, 5.6vw, 60px);
-      line-height: 1.12; letter-spacing: -0.02em; font-weight: 800;
-      margin: 0;
-    }
-    .rp-home .rp-hero h1 .grad {
-      background: linear-gradient(90deg, var(--rp-primary-2), #a78bfa);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .rp-home .rp-hero p.sub {
-      color: var(--rp-text-2); font-size: clamp(15px, 1.5vw, 17.5px);
-      max-width: 620px; margin: 18px auto 0;
-    }
+/* ===== HERO SEARCH (home-search-box / search-bg) ===== */
+.ri-home .search-box{position:relative;text-align:center;z-index:0;
+  background:#1a66b2 radial-gradient(120% 120% at 50% 0%,#21abce 0%,#1a66b2 45%,#0f3a6b 100%);
+  overflow:hidden;
+}
+.ri-home .search-box::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(70% 80% at 50% 40%,#000 20%,transparent 100%);
+  -webkit-mask-image:radial-gradient(70% 80% at 50% 40%,#000 20%,transparent 100%);
+  pointer-events:none;
+}
+.ri-home .search-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(135deg,rgba(25,27,38,.8),rgba(25,27,38,.6));
+}
+.ri-home .search-warp{position:relative;z-index:2;padding:120px 15px;max-width:1320px;margin:0 auto}
+.ri-home .search-title{color:#fff;margin:0 0 .875rem;font-size:2rem;font-weight:700;line-height:1.25}
+.ri-home .search-desc{color:rgba(255,255,255,.8);margin:0 0 1.5rem;font-size:1.05rem}
+.ri-home .search-form{
+  display:flex;align-items:stretch;max-width:680px;margin:0 auto;
+  border-radius:var(--ri-radius-lg);background-color:var(--ri-card);
+  border:1px solid var(--ri-border-2);
+  box-shadow:0 2px 12px rgba(0,0,0,.3);overflow:hidden;
+}
+.ri-home .search-fields{flex:1 1 auto;display:flex;align-items:center;min-width:0}
+.ri-home .search-fields input{
+  flex:1;background:transparent;border:0;outline:0;color:var(--ri-body-color);
+  font-size:1rem;padding:0 18px;height:52px;min-width:0;
+}
+.ri-home .search-fields input::placeholder{color:var(--ri-muted)}
+.ri-home .search-form button{
+  align-self:stretch;border:0;cursor:pointer;color:#fff;font-weight:600;font-size:.95rem;
+  padding:0 26px;background:linear-gradient(135deg,#3b6ff5,#3462d8);
+  box-shadow:0 4px 14px rgba(59,111,245,.35);
+}
+.ri-home .search-hots{margin-top:18px;font-size:.85rem;color:rgba(255,255,255,.65)}
+.ri-home .search-hots .lbl{margin-right:6px}
+.ri-home .search-hots a{color:#fff;margin:0 5px;padding:3px 10px;border-radius:.35rem;background:rgba(255,255,255,.12);transition:background .2s}
+.ri-home .search-hots a:hover{background:rgba(255,255,255,.22)}
 
-    .rp-home .rp-search {
-      display: flex; align-items: stretch;
-      max-width: 680px; margin: 34px auto 0;
-      background: var(--rp-card);
-      border: 1px solid var(--rp-border);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px -20px rgba(0,0,0,0.7);
-    }
-    .rp-home .rp-search input {
-      flex: 1; background: transparent; border: 0; outline: none;
-      color: var(--rp-text); font-size: 15px; padding: 0 20px; min-width: 0;
-    }
-    .rp-home .rp-search input::placeholder { color: var(--rp-text-3); }
-    .rp-home .rp-search button {
-      background: var(--rp-primary); border: 0; color: #fff;
-      padding: 0 26px; font-size: 15px; font-weight: 600; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
-      transition: background .15s ease;
-    }
-    .rp-home .rp-search button:hover { background: #2563eb; }
+/* ===== LIVE DYNAMIC BAR ===== */
+.ri-home .dyn-wrap{max-width:1320px;margin:-26px auto 0;padding:0 15px;position:relative;z-index:3}
+.ri-home .dyn{
+  display:flex;align-items:center;gap:14px;padding:10px 16px;
+  background:rgba(176,181,189,.1);border-radius:.5rem;font-size:.875rem;
+}
+.ri-home .dyn .badge{
+  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
+  background:rgba(176,181,189,.18);color:#fff;font-weight:600;font-size:.8rem;
+  padding:5px 10px;border-radius:.35rem;
+}
+.ri-home .dyn .badge .pulse{width:7px;height:7px;border-radius:50%;background:#2ecc71;animation:ri-pulse 2s infinite}
+@keyframes ri-pulse{0%{box-shadow:0 0 0 0 rgba(46,204,113,.5)}70%{box-shadow:0 0 0 7px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}}
+.ri-home .dyn .feed{flex:1;overflow:hidden;white-space:nowrap;color:var(--ri-body-color)}
+.ri-home .dyn .feed b{color:var(--ri-emphasis);font-weight:600;margin:0 3px}
+.ri-home .dyn .feed .t{color:var(--ri-muted);margin-left:8px;font-size:.78rem}
 
-    .rp-home .rp-hots { margin-top: 18px; font-size: 13px; color: var(--rp-text-3); }
-    .rp-home .rp-hots .label { margin-right: 6px; }
-    .rp-home .rp-hots a {
-      color: var(--rp-text-2); margin: 0 8px;
-      padding: 3px 10px; border-radius: 999px;
-      background: var(--rp-card); border: 1px solid var(--rp-border-soft);
-      transition: color .15s, border-color .15s;
-    }
-    .rp-home .rp-hots a:hover { color: var(--rp-primary-2); border-color: var(--rp-primary); }
+/* ===== GENERIC SECTION ===== */
+.ri-home section{margin:1.5rem 0}
+.ri-home .section-title{text-align:center;margin-bottom:1.5rem}
+.ri-home .section-title h3{margin:0;font-size:1.4rem;font-weight:600;color:var(--ri-emphasis)}
+.ri-home .section-title p{margin:.4rem 0 0;color:var(--ri-muted);font-size:.9rem}
 
-    /* ---------- LIVE ACTIVITY BAR ---------- */
-    .rp-home .rp-live {
-      background: var(--rp-bg-2);
-      border: 1px solid var(--rp-border-soft);
-      border-radius: 12px;
-      margin: -28px auto 0;
-      position: relative; z-index: 2;
-      display: flex; align-items: center; gap: 14px;
-      padding: 12px 18px;
-      max-width: 1320px;
-    }
-    .rp-home .rp-live .badge {
-      flex-shrink: 0;
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--rp-card-2); color: var(--rp-text);
-      font-size: 12.5px; font-weight: 600;
-      padding: 6px 12px; border-radius: 8px;
-    }
-    .rp-home .rp-live .badge .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--rp-green); animation: rp-pulse 2s infinite; }
-    @keyframes rp-pulse { 0%{box-shadow:0 0 0 0 rgba(16,185,129,.5);} 70%{box-shadow:0 0 0 7px rgba(16,185,129,0);} 100%{box-shadow:0 0 0 0 rgba(16,185,129,0);} }
-    .rp-home .rp-live .items {
-      flex: 1; overflow: hidden; white-space: nowrap;
-      font-size: 13.5px; color: var(--rp-text-2);
-    }
-    .rp-home .rp-live .items span.u { color: var(--rp-text); font-weight: 600; margin: 0 4px; }
-    .rp-home .rp-live .items span.t { color: var(--rp-text-3); margin-left: 10px; font-size: 12.5px; }
+/* ===== CATBOX (home-cat-box) ===== */
+.ri-home .catbox{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.ri-home .catbox-item{
+  position:relative;height:120px;border-radius:var(--ri-radius);overflow:hidden;
+  background-size:cover;background-position:center;text-align:center;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.ri-home .catbox-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.ri-home .catbox-item .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+.ri-home .catbox-item .inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;width:100%;padding:10px}
+.ri-home .catbox-item .badge{
+  display:inline-block;font-size:.75rem;font-weight:600;color:#fff;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(4px);
+  padding:2px 8px;border-radius:.35rem;margin-bottom:6px;
+}
+.ri-home .catbox-item .cname{color:#fff;font-weight:600;letter-spacing:1px;font-size:1rem}
+/* placeholder gradients (mirror ripro series-bg style) */
+.ri-home .cb-g1{background:linear-gradient(135deg,#667eea,#764ba2)}
+.ri-home .cb-g2{background:linear-gradient(135deg,#f093fb,#f5576c)}
+.ri-home .cb-g3{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.ri-home .cb-g4{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+.ri-home .cb-g5{background:linear-gradient(135deg,#fa709a,#fee140)}
 
-    /* ---------- SECTION HEAD ---------- */
-    .rp-home section.rp-sec { padding: 64px 0; }
-    .rp-home .sec-head { text-align: center; margin-bottom: 34px; }
-    .rp-home .sec-head h2 {
-      font-size: clamp(24px, 3.2vw, 34px); font-weight: 700;
-      margin: 0; letter-spacing: -0.01em;
-    }
-    .rp-home .sec-head p { color: var(--rp-text-2); margin: 10px 0 0; font-size: 15px; }
+/* ===== DIVISION FEATURE ROW ===== */
+.ri-home .division{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ri-home .division-item{
+  display:flex;align-items:center;gap:14px;
+  background-color:var(--ri-card);padding:.75rem;border-radius:var(--ri-radius);
+  border:1px solid var(--ri-border);box-shadow:var(--ri-shadow);
+  transition:all .3s;
+}
+.ri-home .division-item:hover{border-color:var(--ri-border-2)}
+.ri-home .division-icon{
+  flex-shrink:0;width:46px;height:46px;border-radius:var(--ri-radius);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;
+}
+.ri-home .di-1{background:linear-gradient(135deg,#3b6ff5,#3b82f6)}
+.ri-home .di-2{background:linear-gradient(135deg,#f093fb,#f5576c)}
+.ri-home .di-3{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.ri-home .di-4{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+.ri-home .division-warp{min-width:0}
+.ri-home .division-title{font-size:1rem;font-weight:600;color:var(--ri-emphasis);margin:0 0 2px}
+.ri-home .division-desc{margin:0;font-size:.82rem;color:var(--ri-muted)}
 
-    /* ---------- CATEGORY QUICK CARDS ---------- */
-    .rp-home .rp-cats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-    .rp-home .rp-cat {
-      position: relative; display: block; border-radius: var(--rp-rad);
-      overflow: hidden; aspect-ratio: 4/3;
-      border: 1px solid var(--rp-border-soft);
-      transition: transform .2s ease, border-color .2s ease;
-    }
-    .rp-home .rp-cat:hover { transform: translateY(-3px); border-color: var(--rp-primary); }
-    .rp-home .rp-cat .bg {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center;
-      transition: transform .3s ease;
-    }
-    .rp-home .rp-cat:hover .bg { transform: scale(1.06); }
-    .rp-home .rp-cat .shade {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(8,12,22,0.1) 0%, rgba(8,12,22,0.85) 100%);
-    }
-    .rp-home .rp-cat .meta { position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 2; }
-    .rp-home .rp-cat .count {
-      display: inline-block; font-size: 11px; font-weight: 700;
-      background: rgba(255,255,255,0.16); backdrop-filter: blur(6px);
-      color: #fff; padding: 3px 9px; border-radius: 6px; margin-bottom: 6px;
-    }
-    .rp-home .rp-cat .name { color: #fff; font-weight: 600; font-size: 15px; }
+/* ===== FILTER PILLS (section-cat-navbtn) ===== */
+.ri-home .cat-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.5rem}
+.ri-home .cat-nav a{
+  display:inline-block;font-size:.85rem;font-weight:500;
+  padding:6px 16px;border-radius:var(--ri-radius);
+  background:var(--ri-card);border:1px solid var(--ri-border);color:var(--ri-body-color);
+  transition:all .2s;
+}
+.ri-home .cat-nav a:hover{color:var(--ri-emphasis);border-color:var(--ri-border-2)}
+.ri-home .cat-nav a.active{
+  background:linear-gradient(135deg,#3b6ff5,#3462d8);color:#fff;border-color:transparent;
+  box-shadow:0 4px 14px rgba(59,111,245,.35);
+}
 
-    /* gradient placeholders */
-    .rp-home .g-poke    { background: linear-gradient(135deg, #f7b733, #fc4a1a); }
-    .rp-home .g-op      { background: linear-gradient(135deg, #e53935, #7f1d1d); }
-    .rp-home .g-lorcana { background: linear-gradient(135deg, #6a11cb, #2575fc); }
-    .rp-home .g-acc     { background: linear-gradient(135deg, #11998e, #38ef7d); }
-    .rp-home .g-best    { background: linear-gradient(135deg, #f857a6, #ff5858); }
-    .rp-home .g-new     { background: linear-gradient(135deg, #4b6cb7, #182848); }
+/* ===== POST GRID (posts-warp) ===== */
+.ri-home .posts{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.ri-home .post-item{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  background-color:var(--ri-card);border-radius:var(--ri-radius);
+  border:1px solid var(--ri-border);box-shadow:var(--ri-shadow);
+  transition:all .3s;
+}
+.ri-home .post-item:hover{border-color:var(--ri-border-2);transform:translateY(-2px)}
+.ri-home .post-media{position:relative;aspect-ratio:3/2;overflow:hidden;background:#0f1117}
+.ri-home .post-media img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.ri-home .post-item:hover .post-media img{transform:scale(1.05)}
+.ri-home .post-media .ph{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;font-weight:700;color:rgba(255,255,255,.85);
+}
+.ri-home .post-flags{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2}
+.ri-home .post-flags .flag{
+  font-size:.7rem;font-weight:600;color:#fff;padding:3px 8px;border-radius:.35rem;
+}
+.ri-home .flag-hot{background:rgba(229,62,62,.85)}
+.ri-home .flag-new{background:rgba(245,158,11,.85);color:#1a1205}
+.ri-home .flag-best{background:rgba(20,22,28,.75)}
+.ri-home .post-body{padding:12px;display:flex;flex-direction:column;flex:1;min-width:0}
+.ri-home .post-cats{display:flex;align-items:center;margin-bottom:3px;font-size:.72rem;color:var(--ri-muted)}
+.ri-home .post-cats a{color:var(--ri-muted)}
+.ri-home .post-cats a+a::before{content:"·";margin:0 6px}
+.ri-home .post-cats a:hover{color:var(--ri-primary-text)}
+.ri-home .post-title{
+  margin:0;font-size:.95rem;font-weight:600;color:var(--ri-emphasis);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all;
+}
+.ri-home .post-desc{
+  color:var(--ri-muted);margin-top:4px;font-size:.75rem;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ri-home .post-meta{
+  display:flex;align-items:center;margin-top:8px;gap:10px;
+  color:var(--ri-muted);font-size:.75rem;white-space:nowrap;letter-spacing:-.2px;
+}
+.ri-home .post-meta .price{color:var(--ri-primary-text);font-weight:700;font-size:.92rem;margin-left:auto}
+.ri-home .post-meta .stat{display:inline-flex;align-items:center;gap:3px}
 
-    /* ---------- FEATURE DIVISION ---------- */
-    .rp-home .rp-div {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-      background: var(--rp-bg-2);
-      border: 1px solid var(--rp-border-soft);
-      border-radius: var(--rp-rad);
-      padding: 28px 24px;
-    }
-    .rp-home .rp-div .item { display: flex; align-items: center; gap: 14px; }
-    .rp-home .rp-div .ic {
-      flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 18px;
-    }
-    .rp-home .rp-div h4 { margin: 0; font-size: 15px; font-weight: 600; }
-    .rp-home .rp-div p { margin: 2px 0 0; font-size: 12.5px; color: var(--rp-text-3); }
+/* ===== REVIEWS ===== */
+.ri-home .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ri-home .rev{
+  background:var(--ri-card);border:1px solid var(--ri-border);border-radius:var(--ri-radius);
+  padding:20px;box-shadow:var(--ri-shadow);
+}
+.ri-home .rev .stars{color:#f59e0b;letter-spacing:2px;font-size:.9rem}
+.ri-home .rev p{margin:10px 0 0;color:var(--ri-body-color);font-size:.88rem}
+.ri-home .rev .who{margin-top:10px;font-size:.78rem;color:var(--ri-muted)}
 
-    /* ---------- FILTER PILLS ---------- */
-    .rp-home .rp-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 28px; }
-    .rp-home .rp-pills a {
-      font-size: 13px; padding: 7px 16px; border-radius: 999px;
-      background: var(--rp-card); border: 1px solid var(--rp-border);
-      color: var(--rp-text-2); transition: all .15s ease;
-    }
-    .rp-home .rp-pills a:hover { color: var(--rp-text); border-color: var(--rp-primary); }
-    .rp-home .rp-pills a.active { background: var(--rp-primary); border-color: var(--rp-primary); color: #fff; }
+/* ===== CTA ===== */
+.ri-home .cta-panel{
+  position:relative;text-align:center;
+  background:linear-gradient(135deg,rgba(59,111,245,.18),rgba(52,98,216,.08)),var(--ri-card);
+  border:1px solid var(--ri-border);border-radius:var(--ri-radius-lg);
+  padding:56px 24px;
+}
+.ri-home .cta-panel .eyebrow{
+  display:inline-block;font-size:.78rem;color:var(--ri-primary-text);
+  background:var(--ri-primary-subtle);border:1px solid rgba(59,111,245,.3);
+  padding:5px 12px;border-radius:999px;
+}
+.ri-home .cta-panel h2{margin:14px 0 0;font-size:1.5rem;font-weight:600;color:var(--ri-emphasis)}
+.ri-home .cta-panel p{margin:10px auto 0;max-width:540px;color:var(--ri-muted);font-size:.9rem}
+.ri-home .sub-form{display:flex;gap:10px;max-width:440px;margin:24px auto 0}
+.ri-home .sub-form input{
+  flex:1;background:var(--ri-card-2);border:1px solid var(--ri-border-2);
+  color:var(--ri-body-color);border-radius:var(--ri-radius);padding:11px 14px;font-size:.9rem;outline:none;
+}
+.ri-home .sub-form input:focus{border-color:var(--ri-primary)}
+.ri-home .sub-form button{
+  border:0;cursor:pointer;color:#fff;font-weight:600;padding:0 22px;border-radius:var(--ri-radius);
+  background:linear-gradient(135deg,#3b6ff5,#3462d8);box-shadow:0 4px 14px rgba(59,111,245,.35);
+}
 
-    /* ---------- PRODUCT GRID ---------- */
-    .rp-home .rp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .rp-home .rp-pc {
-      background: var(--rp-card);
-      border: 1px solid var(--rp-border-soft);
-      border-radius: var(--rp-rad);
-      overflow: hidden;
-      transition: transform .18s ease, border-color .18s ease;
-      display: flex; flex-direction: column;
-    }
-    .rp-home .rp-pc:hover { transform: translateY(-3px); border-color: var(--rp-primary); }
-    .rp-home .rp-pc .media {
-      position: relative; aspect-ratio: 3/2;
-      background: var(--rp-card-2);
-      border-bottom: 1px solid var(--rp-border-soft);
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .rp-home .rp-pc .media img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
-    .rp-home .rp-pc:hover .media img { transform: scale(1.05); }
-    .rp-home .rp-pc .ph {
-      font-size: 34px; font-weight: 800; color: rgba(255,255,255,0.85);
-      letter-spacing: -0.02em;
-    }
-    .rp-home .rp-pc .flags { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; z-index: 2; }
-    .rp-home .rp-pc .flag {
-      font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em;
-      padding: 4px 9px; border-radius: 6px; color: #fff;
-    }
-    .rp-home .flag.hot  { background: var(--rp-red); }
-    .rp-home .flag.new  { background: var(--rp-gold); color: #1a1205; }
-    .rp-home .flag.best { background: #1f2937; }
-    .rp-home .rp-pc .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .rp-home .rp-pc .cats { font-size: 11.5px; color: var(--rp-text-3); }
-    .rp-home .rp-pc .cats a { color: var(--rp-text-3); }
-    .rp-home .rp-pc .cats a + a::before { content: "·"; margin: 0 6px; }
-    .rp-home .rp-pc .cats a:hover { color: var(--rp-primary-2); }
-    .rp-home .rp-pc .pname {
-      font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--rp-text);
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .rp-home .rp-pc .pdesc {
-      font-size: 12.5px; color: var(--rp-text-3);
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .rp-home .rp-pc .meta {
-      margin-top: auto; padding-top: 10px;
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: var(--rp-text-3);
-      border-top: 1px dashed var(--rp-border-soft);
-    }
-    .rp-home .rp-pc .meta .price {
-      color: var(--rp-primary-2); font-weight: 700; font-size: 15px;
-    }
-    .rp-home .rp-pc .meta .stats { display: flex; gap: 10px; }
-    .rp-home .rp-pc .meta .stats span { display: inline-flex; align-items: center; gap: 4px; }
+/* ===== RESPONSIVE (mirror ripro breakpoints) ===== */
+@media (max-width:1199px){
+  .ri-home .posts{grid-template-columns:repeat(4,1fr)}
+  .ri-home .catbox{grid-template-columns:repeat(5,1fr)}
+}
+@media (max-width:991px){
+  .ri-home .search-warp{padding:70px 15px}
+  .ri-home .search-title{font-size:1.5rem}
+  .ri-home .division{grid-template-columns:repeat(2,1fr)}
+  .ri-home .posts{grid-template-columns:repeat(3,1fr)}
+  .ri-home .catbox{grid-template-columns:repeat(3,1fr)}
+  .ri-home .rev-grid{grid-template-columns:1fr}
+  .ri-home .dyn{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:767px){
+  .ri-home .posts{grid-template-columns:repeat(2,1fr)}
+  .ri-home .catbox{grid-template-columns:repeat(2,1fr)}
+  .ri-home .division{grid-template-columns:1fr}
+  .ri-home .sub-form{flex-direction:column}
+}
+</style>
 
-    /* ---------- REVIEWS ---------- */
-    .rp-home .rp-rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; }
-    .rp-home .rp-rev {
-      background: var(--rp-card); border: 1px solid var(--rp-border-soft);
-      border-radius: var(--rp-rad); padding: 24px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-    .rp-home .rp-rev .stars { color: var(--rp-gold); letter-spacing: 2px; }
-    .rp-home .rp-rev p { margin: 0; color: var(--rp-text-2); font-size: 14px; flex: 1; }
-    .rp-home .rp-rev .who { font-size: 12.5px; color: var(--rp-text-3); }
-
-    /* ---------- CTA ---------- */
-    .rp-home .rp-cta .panel {
-      position: relative;
-      background:
-        radial-gradient(80% 140% at 50% 0%, rgba(59,130,246,0.18), var(--rp-card) 65%);
-      border: 1px solid var(--rp-border);
-      border-radius: 20px;
-      padding: 60px 24px; text-align: center;
-    }
-    .rp-home .rp-cta .panel h2 { font-size: clamp(24px, 3vw, 34px); margin: 14px 0 0; }
-    .rp-home .rp-cta .panel p { color: var(--rp-text-2); max-width: 560px; margin: 12px auto 0; }
-    .rp-home .rp-sub { display: flex; gap: 10px; max-width: 460px; margin: 26px auto 0; }
-    .rp-home .rp-sub input {
-      flex: 1; background: var(--rp-bg-2); border: 1px solid var(--rp-border);
-      color: var(--rp-text); border-radius: 10px; padding: 13px 16px; font-size: 14px; outline: none;
-    }
-    .rp-home .rp-sub input:focus { border-color: var(--rp-primary); }
-    .rp-home .rp-sub button {
-      background: var(--rp-primary); color: #fff; border: 0;
-      padding: 0 24px; border-radius: 10px; font-weight: 600; cursor: pointer;
-    }
-    .rp-home .rp-sub button:hover { background: #2563eb; }
-
-    @media (max-width: 1100px) {
-      .rp-home .rp-cats { grid-template-columns: repeat(3, 1fr); }
-      .rp-home .rp-grid { grid-template-columns: repeat(3, 1fr); }
-      .rp-home .rp-div { grid-template-columns: repeat(2, 1fr); gap: 22px; }
-    }
-    @media (max-width: 760px) {
-      .rp-home .rp-cats { grid-template-columns: repeat(2, 1fr); }
-      .rp-home .rp-grid { grid-template-columns: repeat(2, 1fr); }
-      .rp-home .rp-rev-grid { grid-template-columns: 1fr; }
-      .rp-home .rp-hero { padding: 64px 0 56px; }
-      .rp-home section.rp-sec { padding: 48px 0; }
-      .rp-home .rp-live { flex-direction: column; align-items: flex-start; gap: 8px; }
-    }
-    @media (max-width: 480px) {
-      .rp-home .rp-grid, .rp-home .rp-cats { grid-template-columns: 1fr; }
-      .rp-home .rp-sub { flex-direction: column; }
-    }
-  </style>
-
-  {% comment %} ---------- HERO / SEARCH ---------- {% endcomment %}
-  <section class="rp-hero">
-    <div class="rp-wrap">
-      <span class="rp-eyebrow"><span class="dot"></span> Premium Collector Store</span>
-      <h1>Discover the Best <span class="grad">Extended Art</span><br>Card Display Cases</h1>
-      <p class="sub">Premium holders and display cases designed for serious Pokémon, One Piece &amp; Lorcana collectors. Keep your treasures safe, organized, and beautifully showcased.</p>
-
-      <form class="rp-search" action="{{ routes.search_url }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Search cards, sets, characters..." aria-label="Search">
-        <button type="submit"><i aria-hidden="true">&#128269;</i> Search</button>
+  {% comment %} ===== HERO SEARCH ===== {% endcomment %}
+  <div class="search-box">
+    <div class="search-overlay"></div>
+    <div class="search-warp">
+      <h1 class="search-title">搜索本站精品资源</h1>
+      <p class="search-desc">Premium extended-art display cases for Pokémon, One Piece &amp; Lorcana collectors</p>
+      <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
+        <div class="search-fields">
+          <input type="search" name="q" placeholder="输入关键词 回车..." aria-label="Search">
+          <button type="submit">搜索</button>
+        </div>
       </form>
-
-      <div class="rp-hots">
-        <span class="label">Hot:</span>
+      <div class="search-hots">
+        <span class="lbl">搜索热词：</span>
         <a href="/collections/all">Pokémon</a>
-        <a href="/collections/all">SIR SAR</a>
-        <a href="/collections/all">Umbreon</a>
         <a href="/collections/all">Charizard</a>
+        <a href="/collections/all">Umbreon</a>
+        <a href="/collections/all">Mew</a>
         <a href="/collections/all">Lorcana</a>
-      </div>
-    </div>
-  </section>
-
-  {% comment %} ---------- LIVE ACTIVITY ---------- {% endcomment %}
-  <div class="rp-wrap">
-    <div class="rp-live">
-      <span class="badge"><span class="pulse"></span> Live Activity</span>
-      <div class="items">
-        <span class="u">j***e</span> purchased <span>Mega Charizard X ex Display Case</span><span class="t">2 min ago</span>
-        &nbsp;&nbsp;·&nbsp;&nbsp;
-        <span class="u">m***a</span> reviewed <span>Umbreon SIR Case</span><span class="t">14 min ago</span>
-        &nbsp;&nbsp;·&nbsp;&nbsp;
-        <span class="u">p***k</span> added <span>Pikachu ex AHR-276</span> to cart<span class="t">31 min ago</span>
       </div>
     </div>
   </div>
 
-  {% comment %} ---------- CATEGORY QUICK CARDS ---------- {% endcomment %}
-  <section class="rp-sec">
-    <div class="rp-wrap">
-      <div class="rp-cats">
+  {% comment %} ===== LIVE DYNAMIC ===== {% endcomment %}
+  <div class="dyn-wrap">
+    <div class="dyn">
+      <span class="badge"><span class="pulse"></span>网站动态</span>
+      <div class="feed">
+        <b>j***e</b> 成功购买 <span>Mega Charizard X ex 展示盒</span><span class="t">2 分钟前</span>
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <b>m***a</b> 评价了 <span>Umbreon SIR 展示盒</span><span class="t">14 分钟前</span>
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <b>p***k</b> 将 <span>Pikachu ex AHR-276</span> 加入购物车<span class="t">31 分钟前</span>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} ===== CATBOX ===== {% endcomment %}
+  <section>
+    <div class="container">
+      <div class="catbox">
         {%- if collections.all.size > 0 -%}
           {%- for collection in collections.all limit: 5 -%}
-            <a class="rp-cat" href="{{ collection.url }}">
-              {%- if collection.image -%}
-                <div class="bg" style="background-image:url('{{ collection.image | image_url: width: 600, height: 450, crop: 'center' }}')"></div>
-              {%- else -%}
-                <div class="bg g-poke"></div>
-              {%- endif -%}
+            <a class="catbox-item" href="{{ collection.url }}"
+              {%- if collection.image -%}style="background-image:url('{{ collection.image | image_url: width: 600, height: 360, crop: 'center' }}')"{%- endif -%}>
               <div class="shade"></div>
-              <div class="meta">
-                <span class="count">{{ collection.products_count }}+ items</span>
-                <div class="name">{{ collection.title }}</div>
+              <div class="inner">
+                <span class="badge">{{ collection.products_count }}+</span>
+                <div class="cname">{{ collection.title }}</div>
               </div>
             </a>
           {%- endfor -%}
         {%- else -%}
-          <a class="rp-cat" href="/collections/pokemon"><div class="bg g-poke"></div><div class="shade"></div><div class="meta"><span class="count">48+</span><div class="name">Pokémon</div></div></a>
-          <a class="rp-cat" href="/collections/one-piece"><div class="bg g-op"></div><div class="shade"></div><div class="meta"><span class="count">24+</span><div class="name">One Piece</div></div></a>
-          <a class="rp-cat" href="/collections/lorcana"><div class="bg g-lorcana"></div><div class="shade"></div><div class="meta"><span class="count">32+</span><div class="name">Lorcana</div></div></a>
-          <a class="rp-cat" href="/collections/accessories"><div class="bg g-acc"></div><div class="shade"></div><div class="meta"><span class="count">18+</span><div class="name">Accessories</div></div></a>
-          <a class="rp-cat" href="/collections/best-sellers"><div class="bg g-best"></div><div class="shade"></div><div class="meta"><span class="count">60+</span><div class="name">Best Sellers</div></div></a>
+          <a class="catbox-item cb-g1" href="/collections/pokemon"><div class="shade"></div><div class="inner"><span class="badge">48+</span><div class="cname">Pokémon</div></div></a>
+          <a class="catbox-item cb-g2" href="/collections/one-piece"><div class="shade"></div><div class="inner"><span class="badge">24+</span><div class="cname">One Piece</div></div></a>
+          <a class="catbox-item cb-g3" href="/collections/lorcana"><div class="shade"></div><div class="inner"><span class="badge">32+</span><div class="cname">Lorcana</div></div></a>
+          <a class="catbox-item cb-g4" href="/collections/accessories"><div class="shade"></div><div class="inner"><span class="badge">18+</span><div class="cname">Accessories</div></div></a>
+          <a class="catbox-item cb-g5" href="/collections/best-sellers"><div class="shade"></div><div class="inner"><span class="badge">60+</span><div class="cname">Best Sellers</div></div></a>
         {%- endif -%}
       </div>
     </div>
   </section>
 
-  {% comment %} ---------- FEATURE DIVISION ---------- {% endcomment %}
-  <section class="rp-sec" style="padding-top:0;">
-    <div class="rp-wrap">
-      <div class="rp-div">
-        <div class="item">
-          <div class="ic" style="background:#8399ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-          <div><h4>Modular Display</h4><p>Stack, sort &amp; expand your setup</p></div>
+  {% comment %} ===== DIVISION FEATURES ===== {% endcomment %}
+  <section>
+    <div class="container">
+      <div class="division">
+        <div class="division-item">
+          <div class="division-icon di-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+          <div class="division-warp">
+            <h4 class="division-title">模块化首页</h4>
+            <p class="division-desc">自由组合展示你的收藏</p>
+          </div>
         </div>
-        <div class="item">
-          <div class="ic" style="background:#FF9800;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div><h4>UV Protection</h4><p>Archival, fade-safe materials</p></div>
+        <div class="division-item">
+          <div class="division-icon di-2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="division-warp">
+            <h4 class="division-title">UV 防护</h4>
+            <p class="division-desc">档案级防紫外线材料</p>
+          </div>
         </div>
-        <div class="item">
-          <div class="ic" style="background:#475569;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <div><h4>Magnetic Close</h4><p>Premium feel, ultra-clear front</p></div>
+        <div class="division-item">
+          <div class="division-icon di-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="division-warp">
+            <h4 class="division-title">磁吸闭合</h4>
+            <p class="division-desc">超清高透面板，高端质感</p>
+          </div>
         </div>
-        <div class="item">
-          <div class="ic" style="background:#ff75a4;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5.5 20l2-7L2 9h7z"/></svg></div>
-          <div><h4>Collector Drops</h4><p>New extended art weekly</p></div>
+        <div class="division-item">
+          <div class="division-icon di-4"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5.5 20l2-7L2 9h7z"/></svg></div>
+          <div class="division-warp">
+            <h4 class="division-title">收藏家掉落</h4>
+            <p class="division-desc">每周更新扩展美术设计</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  {% comment %} ---------- LATEST PRODUCTS ---------- {% endcomment %}
-  <section class="rp-sec" style="padding-top:0;">
-    <div class="rp-wrap">
-      <div class="sec-head">
-        <h2>Latest Recommended</h2>
-        <p>Freshly released extended art display cases, updated weekly for serious collectors.</p>
+  {% comment %} ===== LATEST POSTS ===== {% endcomment %}
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <h3>最新推荐</h3>
+        <p>当前最新发布更新的热门资源，我们将会持续保持更新</p>
       </div>
 
-      <div class="rp-pills">
-        <a href="" class="active">Latest</a>
+      <div class="cat-nav">
+        <a href="" class="active">最新</a>
         <a href="/collections/pokemon">Pokémon</a>
         <a href="/collections/one-piece">One Piece</a>
         <a href="/collections/lorcana">Lorcana</a>
@@ -430,131 +382,172 @@
         <a href="/collections/best-sellers">Best Sellers</a>
       </div>
 
-      <div class="rp-grid">
-        <a class="rp-pc" href="/products/mega-charizard-x-ex-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag hot">HOT</span></div>
+      <div class="posts">
+        <a class="post-item" href="/products/mega-charizard-x-ex-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-hot">置顶</span><span class="flag flag-new">VIP</span></div>
             <span class="ph">CHX</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">SIR SAR</a></div>
-            <div class="pname">Mega Charizard X ex 125-094 SIR SAR Phantasmal Flames</div>
-            <div class="pdesc">Extended art display case with UV-resistant ultra-clear front.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">SIR SAR</a></div>
+            <h4 class="post-title">Mega Charizard X ex 125-094 SIR SAR Phantasmal Flames</h4>
+            <p class="post-desc">Extended art display case with UV-resistant ultra-clear front for your most valued SIR cards.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 2 年前</span>
+              <span class="stat">&#128065; 9.7K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 9.7K</span><span>&#11088; 36</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/mega-gengar-ex-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag best">BEST</span></div>
+        <a class="post-item" href="/products/mega-gengar-ex-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-hot">置顶</span></div>
             <span class="ph">MGA</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <div class="pname">Mega Gengar ex 284-217 SIR SAR Ascended Heroes</div>
-            <div class="pdesc">Premium magnetic-close display case for your most valued SIR cards.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
+            <h4 class="post-title">Mega Gengar ex 284-217 SIR SAR Ascended Heroes</h4>
+            <p class="post-desc">Premium magnetic-close display case designed for serious collectors.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 3 年前</span>
+              <span class="stat">&#128065; 18.2K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 18.2K</span><span>&#11088; 55</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/mew-ex-paldean-fates-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag hot">HOT</span></div>
+        <a class="post-item" href="/products/mew-ex-paldean-fates-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-hot">置顶</span><span class="flag flag-new">VIP</span></div>
             <span class="ph">MEW</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Paldean Fates</a></div>
-            <div class="pname">Mew ex 232-091 SIR SAR Paldean Fates</div>
-            <div class="pdesc">Archival-quality holder preserving your Mew SIR in mint condition.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Paldean Fates</a></div>
+            <h4 class="post-title">Mew ex 232-091 SIR SAR Paldean Fates</h4>
+            <p class="post-desc">Archival-quality holder preserving your Mew SIR in mint condition for years.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 5 年前</span>
+              <span class="stat">&#128065; 69.2K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 69.2K</span><span>&#11088; 128</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/zapdos-gx-promo-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag best">BEST</span></div>
+        <a class="post-item" href="/products/zapdos-gx-promo-display-case">
+          <div class="post-media">
             <span class="ph">TRI</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Promo</a></div>
-            <div class="pname">Moltres &amp; Zapdos &amp; Articuno GX SM210 Promo</div>
-            <div class="pdesc">Extended background display for the legendary bird trio promo.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Promo</a></div>
+            <h4 class="post-title">Moltres &amp; Zapdos &amp; Articuno GX SM210 Promo</h4>
+            <p class="post-desc">Extended background display for the legendary bird trio promo.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 1 年前</span>
+              <span class="stat">&#128065; 12.4K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 12.4K</span><span>&#11088; 41</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/pikachu-ex-ahr-276-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag new">NEW</span></div>
+        <a class="post-item" href="/products/pikachu-ex-ahr-276-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-new">新</span></div>
             <span class="ph">PIK</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <div class="pname">Pikachu ex 276-217 SIR SAR Ascended Heroes</div>
-            <div class="pdesc">Just dropped — the latest Ascended Heroes extended art case.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
+            <h4 class="post-title">Pikachu ex 276-217 SIR SAR Ascended Heroes</h4>
+            <p class="post-desc">Just dropped — the latest Ascended Heroes extended art case.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 刚刚</span>
+              <span class="stat">&#128065; 3.1K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 3.1K</span><span>&#11088; 22</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/umbreon-161-sir-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag best">BEST</span></div>
+        <a class="post-item" href="/products/umbreon-161-sir-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-best">BEST</span></div>
             <span class="ph">UMB</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Prismatic Evolutions</a></div>
-            <div class="pname">Umbreon 161-131 SIR SAR Prismatic Evolutions</div>
-            <div class="pdesc">Fan-favorite Umbreon SIR, presented in a show-ready clear case.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Prismatic Evolutions</a></div>
+            <h4 class="post-title">Umbreon 161-131 SIR SAR Prismatic Evolutions</h4>
+            <p class="post-desc">Fan-favorite Umbreon SIR, presented in a show-ready clear case.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 2 年前</span>
+              <span class="stat">&#128065; 42.8K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 42.8K</span><span>&#11088; 312</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/pikachu-grey-felt-hat-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag new">NEW</span></div>
+        <a class="post-item" href="/products/pikachu-grey-felt-hat-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-new">新</span></div>
             <span class="ph">VAN</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Black Star Promo</a></div>
-            <div class="pname">Pikachu with Grey Felt Hat SVP 085 Promo</div>
-            <div class="pdesc">The Van Gogh crossover promo, protected and displayed in style.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Promo</a></div>
+            <h4 class="post-title">Pikachu with Grey Felt Hat SVP 085 Promo</h4>
+            <p class="post-desc">The Van Gogh crossover promo, protected and displayed in style.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 6 月前</span>
+              <span class="stat">&#128065; 25.6K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 25.6K</span><span>&#11088; 87</span></span>
             </div>
           </div>
         </a>
 
-        <a class="rp-pc" href="/products/psyduck-226-display-case">
-          <div class="media">
-            <div class="flags"><span class="flag new">NEW</span></div>
+        <a class="post-item" href="/products/psyduck-226-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-new">新</span></div>
             <span class="ph">PSY</span>
           </div>
-          <div class="body">
-            <div class="cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
-            <div class="pname">Psyduck 226-217 IR AR Ascended Heroes</div>
-            <div class="pdesc">IR art extended background case for the charming Psyduck.</div>
-            <div class="meta">
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
+            <h4 class="post-title">Psyduck 226-217 IR AR Ascended Heroes</h4>
+            <p class="post-desc">IR art extended background case for the charming Psyduck.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 刚刚</span>
+              <span class="stat">&#128065; 1.9K</span>
               <span class="price">$29.99</span>
-              <span class="stats"><span>&#128065; 1.9K</span><span>&#11088; 14</span></span>
+            </div>
+          </div>
+        </a>
+
+        <a class="post-item" href="/products/mega-dragonite-ex-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-best">BEST</span></div>
+            <span class="ph">DRG</span>
+          </div>
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Ascended Heroes</a></div>
+            <h4 class="post-title">Mega Dragonite EX SAR SIR Ascended Heroes</h4>
+            <p class="post-desc">Stunning SAR art displayed in an ultra-clear collector case.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 1 年前</span>
+              <span class="stat">&#128065; 8.3K</span>
+              <span class="price">$29.99</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="post-item" href="/products/mega-charizard-y-ex-display-case">
+          <div class="post-media">
+            <div class="post-flags"><span class="flag flag-new">新</span></div>
+            <span class="ph">CHY</span>
+          </div>
+          <div class="post-body">
+            <div class="post-cats"><a href="#">Pokémon</a><a href="#">Hyper Rare</a></div>
+            <h4 class="post-title">Mega Charizard Y ex 294-217 Hyper Rare MUR</h4>
+            <p class="post-desc">The Hyper Rare MUR variant, protected and showcased like a trophy.</p>
+            <div class="post-meta">
+              <span class="stat">&#128337; 刚刚</span>
+              <span class="stat">&#128065; 5.2K</span>
+              <span class="price">$29.99</span>
             </div>
           </div>
         </a>
@@ -562,43 +555,43 @@
     </div>
   </section>
 
-  {% comment %} ---------- REVIEWS ---------- {% endcomment %}
-  <section class="rp-sec" style="padding-top:0;">
-    <div class="rp-wrap">
-      <div class="sec-head">
-        <h2>Collectors Love Us</h2>
-        <p>Lay your eyes on our awesome extended backgrounds, tailored for Pokémon fans and exclusively found here.</p>
+  {% comment %} ===== REVIEWS ===== {% endcomment %}
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <h3>收藏家好评</h3>
+        <p>来自全球玩家的真实反馈</p>
       </div>
-      <div class="rp-rev-grid">
-        <div class="rp-rev">
+      <div class="rev-grid">
+        <div class="rev">
           <div class="stars">★★★★★</div>
           <p>"The case is crystal clear and the magnetic close feels premium. My Charizard SIR has never looked better on the shelf."</p>
           <div class="who">— Ethan R. · verified buyer</div>
         </div>
-        <div class="rp-rev">
+        <div class="rev">
           <div class="stars">★★★★★</div>
           <p>"Fast worldwide shipping, packaging was perfect. The UV protection gives me peace of mind for my graded cards."</p>
           <div class="who">— Maya K. · verified buyer</div>
         </div>
-        <div class="rp-rev">
+        <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"Clean, modern look. The recessed slot holds my sleeved card perfectly. Already ordered three more for the rest of the set."</p>
+          <p>"Clean, modern look. The recessed slot holds my sleeved card perfectly. Already ordered three more."</p>
           <div class="who">— Jordan L. · verified buyer</div>
         </div>
       </div>
     </div>
   </section>
 
-  {% comment %} ---------- CTA ---------- {% endcomment %}
-  <section class="rp-sec rp-cta" style="padding-top:0;">
-    <div class="rp-wrap">
-      <div class="panel">
-        <span class="rp-eyebrow"><span class="dot"></span> Collector's Club</span>
-        <h2>Join the Collector's Club</h2>
-        <p>Don't miss the next drop! Get early access to new extended art designs, member-only discounts, and sneak peeks for Pokémon, Lorcana, and One Piece.</p>
-        <form class="rp-sub" action="/account" method="post">
+  {% comment %} ===== CTA ===== {% endcomment %}
+  <section>
+    <div class="container">
+      <div class="cta-panel">
+        <span class="eyebrow">Collector's Club</span>
+        <h2>加入收藏家俱乐部</h2>
+        <p>Don't miss the next drop! Get early access to new extended art designs, member-only discounts, and sneak peeks.</p>
+        <form class="sub-form" action="/account" method="post">
           <input type="email" name="email" placeholder="you@example.com" required>
-          <button type="submit">Join now →</button>
+          <button type="submit">立即加入</button>
         </form>
       </div>
     </div>
