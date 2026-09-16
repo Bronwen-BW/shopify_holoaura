@@ -1,269 +1,229 @@
 {% comment %}
-  Scrydex — Category / Expansions page.
-  Pixel 8-bit theme matching scrydex-home.liquid.
-  Hero header → newest expansions strip → full filterable table of collections.
-  Data source: Shopify collections (collection.title / handle / products_count / image / published_at).
-  Release date can be overridden via collection.metafields.custom.release_date.
+  Scrydex — Category / Expansions page (matches scrydex.com/pokemon/expansions).
+  Dark doc-style layout: left sidebar nav + main hero + logo grid.
+  Data: Shopify collections (title / handle / products_count / image / published_at).
+  Sidebar menu: pick a linklist in settings, otherwise fallback sample groups render.
+  Release date override: collection.metafields.custom.release_date.
 {% endcomment %}
 
 {% assign source = section.settings.source_collection | default: collections.all %}
-{% assign featured_count = section.settings.featured_count | default: 8 %}
-{% assign show_cards = section.settings.show_cards %}
-{% assign show_date = section.settings.show_date %}
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
 <style>
-.px-cats{
-  --bg:#0d0b1a; --panel:#1a1636; --panel2:#221d47;
-  --line:#2e2656; --line2:#3d3373;
-  --text:#e8e6ff; --text2:#9a94c7; --text3:#5e5888;
-  --pink:#ff2e88; --cyan:#00f0ff; --gold:#ffd600;
-  --red:#ff4757; --purple:#b14aed;
+.sx-cats{
+  --bg:#000; --surface:#0d0d0f; --surface2:#161618;
+  --border:#1f1f23; --text:#ffffff; --text2:#9ca3af; --text3:#6b7280;
+  --accent:#a855f7; --accent-soft:#c084fc; --red:#ee3a43;
   background:var(--bg); color:var(--text);
-  font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+  font-size:16px; line-height:1.5;
 }
-.px-cats *,.px-cats *::before,.px-cats *::after{box-sizing:border-box}
-.px-cats a{color:inherit;text-decoration:none}
-.px-cats img{max-width:100%;display:block}
-.px-cats .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.sx-cats *,.sx-cats *::before,.sx-cats *::after{box-sizing:border-box}
+.sx-cats a{color:inherit;text-decoration:none}
+.sx-cats img{max-width:100%;display:block}
+
+/* ── layout ── */
+.sx-cats .sx-layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sx-cats .sx-main{min-width:0}
+
+/* ── sidebar ── */
+.sx-cats .sx-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--text);cursor:pointer;user-select:none}
+.sx-cats .sx-group-head .sx-glyph{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:11px;margin-right:10px;flex:0 0 auto}
+.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:10px;color:var(--text3)}
+.sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
+.sx-cats .sx-group.closed .sx-children{display:none}
+.sx-cats .sx-item{display:block;padding:7px 20px 7px 44px;color:var(--text2);font-size:14px;border-left:2px solid transparent;transition:background .12s,color .12s}
+.sx-cats .sx-item:hover{color:var(--text);background:var(--surface2)}
+.sx-cats .sx-item.active{color:var(--accent-soft);border-left-color:var(--accent);background:rgba(168,85,247,.08)}
 
 /* ── hero ── */
-.px-cats .hero{position:relative;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a);padding:56px 0 48px;overflow:hidden}
-.px-cats .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
-.px-cats .hero .wrap{position:relative;z-index:1}
-.px-cats .crumbs{display:inline-block;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);background:var(--panel);border:2px solid #000;padding:8px 12px;box-shadow:3px 3px 0 #000;margin-bottom:20px}
-.px-cats .hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(20px,3.6vw,34px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
-.px-cats .hero h1 .c{color:var(--cyan)}
-.px-cats .hero .lead{font-size:20px;color:var(--text2);max-width:680px;margin:22px 0 0}
-.px-cats .hero .lead b{color:var(--gold)}
+.sx-cats .sx-hero{position:relative;overflow:hidden;padding:48px 40px 56px;border-bottom:1px solid var(--border)}
+.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:clamp(120px,20vw,300px);font-weight:900;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:-.04em;line-height:1}
+.sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:760px}
+.sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.sx-cats .sx-ball{width:42px;height:42px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:2px solid #000;position:relative;flex:0 0 auto;box-shadow:0 0 0 2px #2a2a2a}
+.sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:7px;background:#000;transform:translateY(-50%)}
+.sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:13px;height:13px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
+.sx-cats .sx-hero h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.01em}
+.sx-cats .sx-hero p{font-size:17px;color:var(--text2);margin:0;max-width:680px}
 
-/* ── section header ── */
-.px-cats section{padding:48px 0}
-.px-cats .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.px-cats .sec-head h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.2vw,20px);margin:0;color:#fff;line-height:1.3}
-.px-cats .sec-head h2 .blk{color:var(--pink)}
-.px-cats .sec-head .more{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);border:2px solid var(--cyan);padding:8px 14px;box-shadow:3px 3px 0 #000}
-.px-cats .sec-head .more:hover{background:var(--cyan);color:#001a1a}
+/* ── section ── */
+.sx-cats .sx-section{padding:36px 40px 64px}
+.sx-cats .sx-section-title{font-size:22px;font-weight:800;margin:0 0 28px;letter-spacing:.01em}
 
-/* ── newest strip ── */
-.px-cats .strip-wrap{position:relative}
-.px-cats .strip-track{display:flex;gap:18px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 12px}
-.px-cats .strip-track::-webkit-scrollbar{display:none}
-.px-cats .exp{position:relative;flex:0 0 calc((100% - 54px)/4);min-height:180px;display:flex;align-items:flex-end;overflow:hidden;border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s;background:var(--panel2)}
-.px-cats .exp:hover{transform:translateY(-4px)}
-.px-cats .exp .exp-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(160deg,#2a2255,#141030)}
-.px-cats .exp .exp-img img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .3s}
-.px-cats .exp:hover .exp-img img{transform:scale(1.06)}
-.px-cats .exp .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.85))}
-.px-cats .exp .et{position:relative;z-index:2;padding:16px;width:100%}
-.px-cats .exp .et h3{font-family:"Press Start 2P",monospace;font-size:12px;color:#fff;margin:0 0 6px;line-height:1.4;text-shadow:2px 2px 0 #000}
-.px-cats .exp .et .date{display:inline-block;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:4px 8px;color:var(--gold)}
-.px-cats .pnav{position:absolute;top:45%;transform:translateY(-50%);width:42px;height:42px;background:rgba(13,11,26,.9);border:3px solid #000;color:var(--gold);font-size:18px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;box-shadow:4px 4px 0 rgba(0,0,0,.6)}
-.px-cats .pnav:hover{background:var(--pink);color:#fff}
-.px-cats .pnav.prev{left:-21px}
-.px-cats .pnav.next{right:-21px}
-
-/* ── toolbar (search) ── */
-.px-cats .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
-.px-cats .search-box{flex:1;min-width:240px;display:flex;align-items:center;background:var(--panel);border:3px solid #000;box-shadow:4px 4px 0 rgba(0,0,0,.5);padding:0 14px}
-.px-cats .search-box .ico{color:var(--cyan);margin-right:10px;font-family:"Press Start 2P",monospace;font-size:12px}
-.px-cats .search-box input{flex:1;background:transparent;border:0;outline:none;color:var(--text);font-family:"VT323",monospace;font-size:18px;padding:12px 0}
-.px-cats .search-box input::placeholder{color:var(--text3)}
-.px-cats .count-pill{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--gold);background:var(--panel);border:2px solid #000;padding:9px 12px;box-shadow:3px 3px 0 #000;white-space:nowrap}
-
-/* ── table ── */
-.px-cats .table-scroll{overflow-x:auto;border:3px solid #000;box-shadow:8px 8px 0 rgba(0,0,0,.5);background:var(--panel)}
-.px-cats table.cattab{width:100%;border-collapse:collapse;min-width:680px}
-.px-cats table.cattab thead th{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--bg);background:var(--gold);text-align:left;padding:14px 16px;border-right:2px solid #000;white-space:nowrap}
-.px-cats table.cattab thead th:last-child{border-right:0}
-.px-cats table.cattab tbody td{padding:12px 16px;border-top:2px solid var(--line);vertical-align:middle;color:var(--text)}
-.px-cats table.cattab tbody tr{transition:background .12s}
-.px-cats table.cattab tbody tr:hover{background:var(--panel2)}
-.px-cats table.cattab tbody tr.empty-row{display:none}
-.px-cats .cell-exp{display:flex;align-items:center;gap:14px}
-.px-cats .cell-exp .logo{width:56px;height:56px;flex:0 0 56px;border:2px solid #000;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.px-cats .cell-exp .logo img{max-width:100%;max-height:100%;object-fit:contain}
-.px-cats .cell-exp .logo .ph{font-size:26px}
-.px-cats .cell-exp .nm{font-size:18px;color:#fff;font-weight:bold;line-height:1.2}
-.px-cats .cell-exp .nm a:hover{color:var(--cyan)}
-.px-cats .cell-id{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan)}
-.px-cats .cell-cnt{font-family:"Press Start 2P",monospace;font-size:11px;color:var(--gold)}
-.px-cats .cell-date{color:var(--text2);font-size:16px}
-.px-cats .no-results{padding:32px 16px;text-align:center;color:var(--text3);font-size:18px}
+/* ── logo grid ── */
+.sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:28px 20px}
+.sx-cats .sx-tile{display:flex;flex-direction:column;align-items:center;text-align:center}
+.sx-cats .sx-tile-logo{height:110px;width:100%;display:flex;align-items:center;justify-content:center}
+.sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .15s}
+.sx-cats .sx-tile:hover .sx-tile-logo img{opacity:.85}
+.sx-cats .sx-tile-logo .sx-ph{font-size:44px;filter:grayscale(.2)}
+.sx-cats .sx-tile-name{color:var(--text);font-size:14px;margin-top:14px;line-height:1.35;min-height:2.6em}
+.sx-cats .sx-tile:hover .sx-tile-name{color:var(--accent-soft)}
+.sx-cats .sx-tile-date{color:var(--text3);font-size:13px;margin-top:6px}
 
 /* ── responsive ── */
-@media (max-width:1024px){
-  .px-cats .exp{flex:0 0 calc((100% - 36px)/3)}
+@media (max-width:1100px){
+  .sx-cats .sx-grid{grid-template-columns:repeat(4,1fr)}
 }
-@media (max-width:768px){
-  .px-cats .exp{flex:0 0 calc((100% - 18px)/2)}
-  .px-cats .pnav.prev{left:4px}
-  .px-cats .pnav.next{right:4px}
+@media (max-width:900px){
+  .sx-cats .sx-layout{grid-template-columns:1fr}
+  .sx-cats .sx-sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+  .sx-cats .sx-grid{grid-template-columns:repeat(3,1fr)}
+  .sx-cats .sx-hero,.sx-cats .sx-section{padding-left:20px;padding-right:20px}
 }
-@media (max-width:480px){
-  .px-cats .exp{flex:0 0 80%}
+@media (max-width:560px){
+  .sx-cats .sx-grid{grid-template-columns:repeat(2,1fr);gap:24px 14px}
+  .sx-cats .sx-tile-logo{height:80px}
 }
 </style>
 
-<div class="px-cats">
+<div class="sx-cats">
+  <div class="sx-layout">
 
-  <!-- hero -->
-  <section class="hero">
-    <div class="wrap">
-      <span class="crumbs">♦ HOME / {{ section.settings.hero_crumb | default: 'EXPANSIONS' }}</span>
-      <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
-      <p class="lead">{{ section.settings.hero_subtitle | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." }}</p>
-    </div>
-  </section>
-
-  <!-- newest expansions strip -->
-  {% if source.size > 0 %}
-  <section style="padding-bottom:24px">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// {{ section.settings.featured_title | default: 'NEWEST EXPANSIONS' }}</h2>
-      </div>
-      <div class="strip-wrap">
-        <span class="pnav prev" data-exp-prev>&#8249;</span>
-        <div class="strip-track">
-          {%- for collection in source limit: featured_count -%}
-            {%- assign rel_date = collection.metafields.custom.release_date | default: collection.published_at -%}
-            <a class="exp" href="{{ collection.url }}">
-              <div class="exp-img">
-                {%- if collection.image -%}
-                  <img src="{{ collection.image | image_url: width:400, height:300, crop:'center' }}" alt="{{ collection.title | escape }}" loading="lazy" onerror="this.style.display='none'">
-                {%- else -%}
-                  <span class="ph">🎴</span>
-                {%- endif -%}
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sx-sidebar">
+      {%- if section.settings.sidebar_menu -%}
+        {%- for link in section.settings.sidebar_menu.links -%}
+          <div class="sx-group">
+            <div class="sx-group-head" data-sx-toggle>
+              <span><span class="sx-glyph">▣</span>{{ link.title }}</span>
+              <span class="sx-caret">▼</span>
+            </div>
+            {%- if link.links.size > 0 -%}
+              <div class="sx-children">
+                {%- for child in link.links -%}
+                  <a class="sx-item {% if child.active %}active{% endif %}" href="{{ child.url }}">{{ child.title }}</a>
+                {%- endfor -%}
               </div>
-              <div class="shade"></div>
-              <div class="et">
-                <h3>{{ collection.title }}</h3>
-                {%- if rel_date -%}<span class="date">{{ rel_date | date: '%Y/%m/%d' }}</span>{%- endif -%}
-              </div>
-            </a>
-          {%- endfor -%}
-        </div>
-        <span class="pnav next" data-exp-next>&#8250;</span>
-      </div>
-    </div>
-  </section>
-  {% endif %}
-
-  <!-- full table -->
-  <section>
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// ALL <span class="blk">EXPANSIONS</span></h2>
-        <span class="count-pill" data-count-pill>{{ source.size }} TOTAL</span>
-      </div>
-
-      <div class="toolbar">
-        <label class="search-box">
-          <span class="ico">🔍</span>
-          <input type="text" data-exp-search placeholder="{{ section.settings.search_placeholder | default: 'Filter expansions by name…' }}" aria-label="Filter expansions">
-        </label>
-      </div>
-
-      <div class="table-scroll">
-        <table class="cattab">
-          <thead>
-            <tr>
-              <th>Expansion Name</th>
-              {% if section.settings.show_id %}<th>ID</th>{% endif %}
-              {% if show_cards %}<th>Cards</th>{% endif %}
-              {% if show_date %}<th>Release Date</th>{% endif %}
-            </tr>
-          </thead>
-          <tbody data-exp-tbody>
-            {%- if source.size > 0 -%}
-              {%- for collection in source -%}
-                {%- assign rel_date = collection.metafields.custom.release_date | default: collection.published_at -%}
-                <tr data-row data-name="{{ collection.title | downcase | escape }}">
-                  <td>
-                    <div class="cell-exp">
-                      <div class="logo">
-                        {%- if collection.image -%}
-                          <img src="{{ collection.image | image_url: width:160, height:160, crop:'center' }}" alt="{{ collection.title | escape }}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;ph&quot;>🎴</span>'">
-                        {%- else -%}
-                          <span class="ph">🎴</span>
-                        {%- endif -%}
-                      </div>
-                      <span class="nm"><a href="{{ collection.url }}">{{ collection.title }}</a></span>
-                    </div>
-                  </td>
-                  {% if section.settings.show_id %}<td class="cell-id">{{ collection.handle }}</td>{% endif %}
-                  {% if show_cards %}<td class="cell-cnt">{{ collection.products_count }}</td>{% endif %}
-                  {% if show_date %}<td class="cell-date">{% if rel_date %}{{ rel_date | date: '%Y/%m/%d' }}{% else %}—{% endif %}</td>{% endif %}
-                </tr>
-              {%- endfor -%}
-            {%- else -%}
-              {% comment %} Fallback demo rows so the page renders nicely before collections are set up {% endcomment %}
-              {% assign demo_expansions = "30th Celebration: Classic Collection|me55c|30|2026/09/16;30th Celebration|me55|161|2026/09/16;Pitch Black|me5|120|2026/07/17;Chaos Rising|me4|110|2026/05/22;Perfect Order|me3|108|2026/03/27;Ascended Heroes|me2|99|2026/01/30;Phantasmal Flames|me1|90|2025/11/14;Mega Evolution|mega|140|2025/09/26" | split: ';' %}
-              {%- for row in demo_expansions -%}
-                {% assign parts = row | split: '|' %}
-                <tr data-row data-name="{{ parts[0] | downcase | escape }}">
-                  <td>
-                    <div class="cell-exp">
-                      <div class="logo"><span class="ph">🎴</span></div>
-                      <span class="nm"><a href="/collections/{{ parts[1] }}">{{ parts[0] }}</a></span>
-                    </div>
-                  </td>
-                  {% if section.settings.show_id %}<td class="cell-id">{{ parts[1] }}</td>{% endif %}
-                  {% if show_cards %}<td class="cell-cnt">{{ parts[2] }}</td>{% endif %}
-                  {% if show_date %}<td class="cell-date">{{ parts[3] }}</td>{% endif %}
-                </tr>
-              {%- endfor -%}
             {%- endif -%}
-          </tbody>
-        </table>
-        <div class="no-results" data-no-results style="display:none">No expansions match your filter.</div>
-      </div>
-    </div>
-  </section>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {% comment %} Fallback sidebar matching the reference screenshot {% endcomment %}
+        <div class="sx-group">
+          <div class="sx-group-head" data-sx-toggle>
+            <span><span class="sx-glyph" style="color:#ee3a43">◉</span>POKÉMON</span>
+            <span class="sx-caret">▼</span>
+          </div>
+          <div class="sx-children">
+            <a class="sx-item active" href="#">Latest English Expansions <span style="float:right">→</span></a>
+            <a class="sx-item" href="#">30th Celebration</a>
+            <a class="sx-item" href="#">30th Celebration: Classic C…</a>
+            <a class="sx-item" href="#">Pitch Black</a>
+            <a class="sx-item" href="#">Chaos Rising</a>
+          </div>
+        </div>
+        <div class="sx-group">
+          <div class="sx-group-head" data-sx-toggle>
+            <span>&nbsp;</span>
+          </div>
+          <div class="sx-children">
+            <a class="sx-item" href="#" style="padding-left:20px">Latest Japanese Expansions</a>
+            <a class="sx-item" href="#">30th Celebration</a>
+            <a class="sx-item" href="#">Storm Emerald</a>
+            <a class="sx-item" href="#">Abyss Eye</a>
+          </div>
+        </div>
+        <div class="sx-group">
+          <div class="sx-group-head" data-sx-toggle>
+            <span>&nbsp;</span>
+          </div>
+          <div class="sx-children">
+            <a class="sx-item" href="#" style="padding-left:20px">Latest TCG Pocket Expansions</a>
+            <a class="sx-item" href="#">Team Rocket's Ambition</a>
+            <a class="sx-item" href="#">Everyday Wonders</a>
+            <a class="sx-item" href="#">Pulsing Aura</a>
+            <a class="sx-item" href="#" style="padding-left:20px">API Docs</a>
+          </div>
+        </div>
+        <div class="sx-group">
+          <div class="sx-group-head" data-sx-toggle>
+            <span><span class="sx-glyph" style="color:#c084fc">◆</span>LORCANA</span>
+            <span class="sx-caret">▼</span>
+          </div>
+          <div class="sx-children">
+            <a class="sx-item" href="#" style="padding-left:20px">Latest Expansions</a>
+            <a class="sx-item" href="#">Attack of the Vine!</a>
+            <a class="sx-item" href="#">Wilds Unknown</a>
+            <a class="sx-item" href="#">Winterspell</a>
+            <a class="sx-item" href="#" style="padding-left:20px">API Docs</a>
+          </div>
+        </div>
+        <div class="sx-group closed">
+          <div class="sx-group-head" data-sx-toggle>
+            <span><span class="sx-glyph" style="color:#60a5fa">✦</span>MAGIC: THE GATHERING</span>
+            <span class="sx-caret">▼</span>
+          </div>
+        </div>
+      {%- endif -%}
+    </aside>
 
+    <!-- ============ MAIN ============ -->
+    <main class="sx-main">
+
+      <!-- hero -->
+      <section class="sx-hero">
+        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
+        <div class="sx-hero-inner">
+          <div class="sx-hero-title-row">
+            <span class="sx-ball" aria-hidden="true"></span>
+            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
+          </div>
+          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." }}</p>
+        </div>
+      </section>
+
+      <!-- logo grid -->
+      <section class="sx-section">
+        <h2 class="sx-section-title">{{ section.settings.section_title | default: 'Mega Evolution' }}</h2>
+        <div class="sx-grid">
+          {%- if source.size > 0 -%}
+            {%- for collection in source -%}
+              {%- assign rel_date = collection.metafields.custom.release_date | default: collection.published_at -%}
+              <a class="sx-tile" href="{{ collection.url }}">
+                <div class="sx-tile-logo">
+                  {%- if collection.image -%}
+                    <img src="{{ collection.image | image_url: width:400, height:240, crop:'center' }}" alt="{{ collection.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                    <span class="sx-ph" style="display:none">🎴</span>
+                  {%- else -%}
+                    <span class="sx-ph">🎴</span>
+                  {%- endif -%}
+                </div>
+                <div class="sx-tile-name">{{ collection.title }}</div>
+                {%- if section.settings.show_date and rel_date -%}
+                  <div class="sx-tile-date">{{ rel_date | date: '%Y/%m/%d' }}</div>
+                {%- endif -%}
+              </a>
+            {%- endfor -%}
+          {%- else -%}
+            {% comment %} Fallback tiles matching the reference screenshot {% endcomment %}
+            {% assign demo_tiles = "30th Celebration: Classic Collection|2026/09/16;30th Celebration|2026/09/16;Pitch Black|2026/07/17;Chaos Rising|2026/05/22;Perfect Order|2026/03/27;Ascended Heroes|2026/01/30;Phantasmal Flames|2025/11/14;Mega Evolution|2025/09/26;Mega Evolution Energies|2025/09/26;Mega Evolution Black Star Promos|2025/09/26" | split: ';' %}
+            {%- for row in demo_tiles -%}
+              {% assign parts = row | split: '|' %}
+              <a class="sx-tile" href="#">
+                <div class="sx-tile-logo"><span class="sx-ph">🎴</span></div>
+                <div class="sx-tile-name">{{ parts[0] }}</div>
+                {%- if section.settings.show_date -%}<div class="sx-tile-date">{{ parts[1] }}</div>{%- endif -%}
+              </a>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </section>
+
+    </main>
+  </div>
 </div>
 
 <script>
 (function(){
-  /* Newest expansions horizontal strip */
-  document.querySelectorAll('.px-cats .strip-wrap').forEach(function(wrap){
-    var track = wrap.querySelector('.strip-track');
-    var prev = wrap.querySelector('[data-exp-prev]');
-    var next = wrap.querySelector('[data-exp-next]');
-    if (!track) return;
-    function step(){
-      var card = track.querySelector('.exp');
-      return card ? card.getBoundingClientRect().width + 18 : 280;
-    }
-    if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
-    if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
+  /* Sidebar collapse toggle */
+  document.querySelectorAll('.sx-cats [data-sx-toggle]').forEach(function(head){
+    head.addEventListener('click', function(){
+      var g = head.parentElement;
+      if (g) g.classList.toggle('closed');
+    });
   });
-
-  /* Live filter on the table */
-  var root = document.querySelector('.px-cats');
-  if (root){
-    var input = root.querySelector('[data-exp-search]');
-    var rows = root.querySelectorAll('[data-row]');
-    var pill = root.querySelector('[data-count-pill]');
-    var noRes = root.querySelector('[data-no-results]');
-    if (input){
-      input.addEventListener('input', function(){
-        var q = input.value.trim().toLowerCase();
-        var visible = 0;
-        rows.forEach(function(r){
-          var match = !q || (r.getAttribute('data-name') || '').indexOf(q) !== -1;
-          r.style.display = match ? '' : 'none';
-          if (match) visible++;
-        });
-        if (pill) pill.textContent = visible + ' / ' + rows.length + (q ? ' FILTERED' : ' TOTAL');
-        if (noRes) noRes.style.display = visible === 0 ? 'block' : 'none';
-      });
-    }
-  }
 })();
 </script>
 
@@ -272,18 +232,15 @@
   "name": "Categories",
   "settings": [
     { "type": "header", "content": "Hero" },
-    { "type": "text", "id": "hero_crumb", "label": "Breadcrumb text", "default": "EXPANSIONS" },
     { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokémon TCG" },
-    { "type": "richtext", "id": "hero_subtitle", "label": "Hero subtitle", "default": "<p>Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.</p>" },
-    { "type": "header", "content": "Data" },
-    { "type": "collection", "id": "source_collection", "label": "Collections source", "info": "The collection whose child/listed collections are shown. Leave empty to list all collections." },
-    { "type": "range", "id": "featured_count", "label": "Newest strip count", "min": 2, "max": 16, "step": 1, "default": 8 },
-    { "type": "text", "id": "featured_title", "label": "Newest strip heading", "default": "NEWEST EXPANSIONS" },
-    { "type": "header", "content": "Table columns" },
-    { "type": "checkbox", "id": "show_id", "label": "Show ID column", "default": true },
-    { "type": "checkbox", "id": "show_cards", "label": "Show Cards count column", "default": true },
-    { "type": "checkbox", "id": "show_date", "label": "Show Release Date column", "default": true },
-    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Filter expansions by name…" }
+    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." },
+    { "type": "text", "id": "watermark_text", "label": "Background watermark", "default": "Pokémon" },
+    { "type": "header", "content": "Grid" },
+    { "type": "text", "id": "section_title", "label": "Grid heading", "default": "Mega Evolution" },
+    { "type": "collection", "id": "source_collection", "label": "Expansions source", "info": "Collections shown as logo tiles. Leave empty to list all collections." },
+    { "type": "checkbox", "id": "show_date", "label": "Show release date", "default": true },
+    { "type": "header", "content": "Sidebar" },
+    { "type": "link_list", "id": "sidebar_menu", "label": "Sidebar menu", "info": "Top-level links = game groups; their nested links = expansion items. Leave empty for sample placeholder." }
   ],
   "presets": [
     { "name": "Categories" }
