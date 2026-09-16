@@ -7,54 +7,63 @@
 {% endcomment %}
 
 {% liquid
-  assign source_collections = collections.all
-  if source_collections == blank
-    assign source_collections = collections
-  endif
-
+  assign all = collections.all
   assign default_group = section.settings.default_group_name | default: 'All Expansions'
-  assign unique_groups = ''
-
-  for collection in source_collections
-    assign g = collection.metafields.custom.group | default: collection.metafields.custom.generation | default: default_group
-    if g != blank
-      unless unique_groups contains g
-        assign unique_groups = unique_groups | append: g | append: '||'
-      endunless
-    endif
-  endfor
-  assign group_names = unique_groups | split: '||'
+  assign group_titles = ''
 %}
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-
-<div
-  class="section section--page-width color-{{ section.settings.color_scheme }} expansions-list"
-  style="{% render 'spacing-style', settings: section.settings %}"
->
-  {%- if source_collections.size == 0 -%}
+{%- if all == blank or all.size == 0 -%}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div
+    class="section section--page-width color-{{ section.settings.color_scheme }} expansions-list"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
     <div class="expansions-list__empty">
-      <p>{{ section.settings.empty_text | default: 'No expansions found yet.' }}</p>
+      <p>{{ section.settings.empty_text | default: 'No expansions found yet. Add some collections, then assign the metafield "custom.group" to organise them into eras.' }}</p>
     </div>
-  {%- else -%}
-    {%- for group_name in group_names -%}
-      {%- if group_name == blank -%}{%- continue -%}{%- endif -%}
+  </div>
+{%- else -%}
+  {%- comment -%} First pass: collect unique group titles {%- endcomment -%}
+  {%- for collection in all -%}
+    {%- assign g = default_group -%}
+    {%- if collection.metafields.custom.group != blank -%}
+      {%- assign g = collection.metafields.custom.group -%}
+    {%- elsif collection.metafields.custom.generation != blank -%}
+      {%- assign g = collection.metafields.custom.generation -%}
+    {%- endif -%}
+    {%- if group_titles == '' -%}
+      {%- assign group_titles = g -%}
+    {%- elsif group_titles contains g -%}
+    {%- else -%}
+      {%- assign group_titles = group_titles | append: '||' | append: g -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign group_list = group_titles | split: '||' -%}
 
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div
+    class="section section--page-width color-{{ section.settings.color_scheme }} expansions-list"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    {%- for group_name in group_list -%}
+      {%- if group_name == blank -%}{%- continue -%}{%- endif -%}
       <div class="expansions-group" data-group="{{ group_name | handleize }}">
         <h2 class="expansions-group__heading">{{ group_name }}</h2>
-
         <div class="expansions-grid columns-{{ section.settings.columns }}">
-          {%- for collection in source_collections -%}
-            {%- assign g = collection.metafields.custom.group | default: collection.metafields.custom.generation | default: default_group -%}
+          {%- for collection in all -%}
+            {%- assign g = default_group -%}
+            {%- if collection.metafields.custom.group != blank -%}
+              {%- assign g = collection.metafields.custom.group -%}
+            {%- elsif collection.metafields.custom.generation != blank -%}
+              {%- assign g = collection.metafields.custom.generation -%}
+            {%- endif -%}
             {%- if g != group_name -%}{%- continue -%}{%- endif -%}
-
             <a class="expansion-card" href="{{ collection.url }}">
               <div class="expansion-card__inner">
                 <div class="expansion-card__logo">
                   {%- if collection.image -%}
                     <img
                       src="{{ collection.image | image_url: width: 400, height: 200, crop: 'center' }}"
-                      srcset="{{ collection.image | image_url: width: 400 }} 1x, {{ collection.image | image_url: width: 800 }} 2x"
                       alt="{{ collection.title | escape }}"
                       loading="lazy"
                       width="400"
@@ -78,18 +87,18 @@
         </div>
       </div>
     {%- endfor -%}
-  {%- endif -%}
-</div>
+  </div>
+{%- endif -%}
 
 {% stylesheet %}
   .expansions-list {
     display: flex;
     flex-direction: column;
-    gap: var(--margin-2xl);
+    gap: var(--margin-2xl, 48px);
   }
 
   .expansions-group__heading {
-    margin: 0 0 var(--margin-md);
+    margin: 0 0 var(--margin-md, 24px);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 1.25rem;
@@ -100,13 +109,15 @@
   .expansions-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gap, 16px);
+    gap: 16px;
   }
 
   @media screen and (min-width: 750px) {
-    .expansions-grid.columns-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .expansions-grid.columns-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .expansions-grid.columns-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .expansions-grid.columns-3,
+    .expansions-grid.columns-4,
+    .expansions-grid.columns-5 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   @media screen and (min-width: 990px) {
@@ -122,13 +133,13 @@
     display: block;
     padding: 24px;
     border: 1px solid transparent;
+    border-radius: 4px;
     transition: background-color 0.2s ease, border-color 0.2s ease;
-    border-radius: var(--style-border-radius-buttons, 4px);
   }
 
   .expansion-card:hover {
-    background-color: rgb(from var(--color-primary, var(--color-foreground)) r g b / 14%);
-    border-color: var(--color-primary, var(--color-foreground));
+    background-color: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    border-color: var(--color-foreground);
     text-decoration: none;
   }
 
@@ -186,12 +197,12 @@
 
   .expansion-card__date {
     color: var(--color-foreground);
-    opacity: var(--opacity-subdued-text);
+    opacity: 0.6;
     font-size: 0.8rem;
   }
 
   .expansions-list__empty p {
-    opacity: var(--opacity-subdued-text);
+    opacity: 0.6;
   }
 {% endstylesheet %}
 
