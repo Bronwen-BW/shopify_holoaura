@@ -1,17 +1,12 @@
 {% comment %}
-  Pixel Anime Card Display CASE SHOP home — ecommerce storefront.
-  Pixel/8-bit skin with real Shopify images: category images, product
-  images, and an auto-rotating hero carousel.
+  Pixel Anime Card Display Case Shop — homepage section.
+  Dark pixel/8-bit theme. Hero auto-carousel, horizontal product carousels,
+  category tiles, features, reviews, newsletter CTA.
 {% endcomment %}
 
-{% assign best_coll = section.settings.best_collection %}
-{% unless best_coll %}{% assign best_coll = collections['best-sellers'] %}{% endunless %}
-{% unless best_coll %}{% assign best_coll = collections.all %}{% endunless %}
-
-{% assign new_coll = section.settings.new_collection %}
-{% unless new_coll %}{% assign new_coll = collections['new-arrivals'] %}{% endunless %}
-{% unless new_coll %}{% assign new_coll = collections['new'] %}{% endunless %}
-{% unless new_coll %}{% assign new_coll = collections.all %}{% endunless %}
+{% assign best_coll = section.settings.best_collection | default: collections['best-sellers'] | default: collections.all %}
+{% assign new_coll  = section.settings.new_collection  | default: collections['new-arrivals'] | default: collections['new'] | default: collections.all %}
+{% assign hero_products = best_coll.products %}
 
 <div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,331 +15,189 @@
 
 <style>
 .px-shop{
-  --px-bg:#0d0b1a;
-  --px-bg-2:#14112b;
-  --px-panel:#1a1636;
-  --px-panel-2:#221d47;
-  --px-line:#2e2656;
-  --px-line-2:#3d3373;
-  --px-text:#e8e6ff;
-  --px-text-2:#9a94c7;
-  --px-text-3:#5e5888;
-  --px-pink:#ff2e88;
-  --px-cyan:#00f0ff;
-  --px-gold:#ffd600;
-  --px-purple:#b14aed;
-  --px-green:#00ff88;
-  --px-red:#ff4757;
-  --px-blue:#4a9eff;
-  background:var(--px-bg);
-  color:var(--px-text);
-  font-family:"VT323", ui-monospace, "Courier New", monospace;
-  font-size:18px;line-height:1.5;overflow:hidden;
+  --bg:#0d0b1a; --panel:#1a1636; --panel2:#221d47;
+  --line:#2e2656; --line2:#3d3373;
+  --text:#e8e6ff; --text2:#9a94c7; --text3:#5e5888;
+  --pink:#ff2e88; --cyan:#00f0ff; --gold:#ffd600;
+  --red:#ff4757; --purple:#b14aed;
+  background:var(--bg); color:var(--text);
+  font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
 }
-.px-shop *, .px-shop *::before, .px-shop *::after{box-sizing:border-box}
+.px-shop *,.px-shop *::before,.px-shop *::after{box-sizing:border-box}
 .px-shop a{color:inherit;text-decoration:none}
 .px-shop img{max-width:100%;display:block}
 .px-shop .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
 
-/* ===== ANNOUNCEMENT ===== */
-.px-shop .announce{
-  background:#000;border-bottom:2px solid var(--px-pink);
-  overflow:hidden;white-space:nowrap;
-  font-family:"Press Start 2P",monospace;font-size:10px;
-  color:var(--px-gold);padding:9px 0;
-}
-.px-shop .announce .in{display:inline-block;padding-left:100%;animation:px-scroll 30s linear infinite}
-@keyframes px-scroll{to{transform:translateX(-100%)}}
+/* ── announcement ticker ── */
+.px-shop .announce{background:#000;border-bottom:2px solid var(--pink);overflow:hidden;white-space:nowrap;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--gold);padding:9px 0}
+.px-shop .announce .in{display:inline-block;padding-left:100%;animation:px-tick 30s linear infinite}
+@keyframes px-tick{to{transform:translateX(-100%)}}
 .px-shop .announce span{margin-right:60px}
-.px-shop .announce .p{color:var(--px-pink)} .px-shop .announce .c{color:var(--px-cyan)}
+.px-shop .announce .p{color:var(--pink)} .px-shop .announce .c{color:var(--cyan)}
 
-/* ===== HERO ===== */
-.px-shop .hero{
-  position:relative;
-  background:
-    radial-gradient(60% 80% at 25% 20%, rgba(177,74,237,.28), transparent 60%),
-    radial-gradient(50% 70% at 85% 75%, rgba(255,46,136,.22), transparent 60%),
-    linear-gradient(180deg,#1a1240 0%, #0d0b1a 100%);
-  padding:64px 0 72px;overflow:hidden;
-}
-.px-shop .hero::before{
-  content:"";position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:32px 32px;pointer-events:none;
-}
+/* ── hero ── */
+.px-shop .hero{position:relative;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a);padding:64px 0 72px;overflow:hidden}
+.px-shop .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
 .px-shop .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.px-shop .hero .crumbs{
-  display:inline-block;font-family:"Press Start 2P",monospace;font-size:10px;
-  color:var(--px-cyan);background:var(--px-panel);border:2px solid #000;
-  padding:8px 12px;box-shadow:3px 3px 0 #000;margin-bottom:20px;
-}
-.px-shop .hero h1{
-  font-family:"Press Start 2P",monospace;
-  font-size:clamp(20px,3.6vw,36px);line-height:1.3;margin:0;
-  color:#fff;text-shadow:4px 4px 0 var(--px-pink), 8px 8px 0 rgba(0,0,0,.5);
-}
-.px-shop .hero h1 .c{color:var(--px-cyan)}
-.px-shop .hero p.lead{font-size:20px;color:var(--px-text-2);max-width:560px;margin:22px 0 0}
-.px-shop .hero p.lead b{color:var(--px-gold)}
+.px-shop .crumbs{display:inline-block;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);background:var(--panel);border:2px solid #000;padding:8px 12px;box-shadow:3px 3px 0 #000;margin-bottom:20px}
+.px-shop .hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(20px,3.6vw,36px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
+.px-shop .hero h1 .c{color:var(--cyan)}
+.px-shop .hero .lead{font-size:20px;color:var(--text2);max-width:560px;margin:22px 0 0}
+.px-shop .hero .lead b{color:var(--gold)}
 .px-shop .cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
-.px-shop .pbtn{
-  font-family:"Press Start 2P",monospace;font-size:12px;
-  padding:14px 22px;border:2px solid #000;cursor:pointer;
-  display:inline-flex;align-items:center;gap:10px;transition:transform .1s;
-}
+.px-shop .pbtn{font-family:"Press Start 2P",monospace;font-size:12px;padding:14px 22px;border:2px solid #000;display:inline-flex;align-items:center;gap:10px;transition:transform .1s}
 .px-shop .pbtn:active{transform:translate(2px,2px)}
-.px-shop .pbtn.pk{background:var(--px-pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
-.px-shop .pbtn.cy{background:var(--px-cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
+.px-shop .pbtn.pk{background:var(--pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
+.px-shop .pbtn.cy{background:var(--cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
 
-/* hero carousel */
-.px-shop .carousel{
-  background:var(--px-panel);border:3px solid #000;
-  box-shadow:8px 8px 0 rgba(0,0,0,.5);padding:18px;
-}
-.px-shop .carousel .car-head{
-  display:flex;justify-content:space-between;font-family:"Press Start 2P",monospace;font-size:9px;
-  color:var(--px-gold);margin-bottom:12px;
-}
-.px-shop .car-viewport{
-  position:relative;aspect-ratio:1;overflow:hidden;border:3px solid #000;background:#000;
-}
-.px-shop .car-slide{
-  position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
-  display:flex;align-items:center;justify-content:center;
-}
+/* ── hero carousel (no arrows, dots only) ── */
+.px-shop .carousel{background:var(--panel);border:3px solid #000;box-shadow:8px 8px 0 rgba(0,0,0,.5);padding:18px}
+.px-shop .car-head{display:flex;justify-content:space-between;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--gold);margin-bottom:12px}
+.px-shop .car-viewport{position:relative;aspect-ratio:1;overflow:hidden;border:3px solid #000;background:#000}
+.px-shop .car-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s;display:flex;align-items:center;justify-content:center}
 .px-shop .car-slide.active{opacity:1}
-.px-shop .car-slide img{width:100%;height:100%;object-fit:cover}
-.px-shop .car-slide .ph{font-size:80px}
-.px-shop .car-slide .glow{
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.15), transparent 65%);
-}
-.px-shop .car-slide.s1{background:linear-gradient(160deg,#3a1f5e,#1a1437)}
-.px-shop .car-slide.s2{background:linear-gradient(160deg,#1e3a6b,#142447)}
-.px-shop .car-slide.s3{background:linear-gradient(160deg,#5e1f3a,#37142a)}
-.px-shop .car-slide.s4{background:linear-gradient(160deg,#5e4a1f,#372e14)}
-.px-shop .car-nav{
-  position:absolute;top:50%;transform:translateY(-50%);
-  width:34px;height:34px;background:rgba(0,0,0,.6);border:2px solid #000;
-  color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-family:"Press Start 2P",monospace;z-index:3;
-}
-.px-shop .car-nav:hover{background:var(--px-pink)}
-.px-shop .car-nav.prev{left:8px} .px-shop .car-nav.next{right:8px}
-.px-shop .car-foot{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-top:12px;gap:12px;
-}
+.px-shop .car-slide img,.px-shop .car-slide .ph{width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:80px}
+.px-shop .car-slide .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.15),transparent 65%)}
+.px-shop .car-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px}
 .px-shop .car-meta{min-width:0}
-.px-shop .car-meta .t{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--px-text);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-.px-shop .car-meta .s{font-size:14px;color:var(--px-text-3);margin-top:3px;display:block}
-.px-shop .car-price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--px-gold);flex-shrink:0}
+.px-shop .car-meta .t{font-family:"Press Start 2P",monospace;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.px-shop .car-meta .s{font-size:14px;color:var(--text3);margin-top:3px;display:block}
+.px-shop .car-price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--gold);flex-shrink:0}
 .px-shop .car-dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
-.px-shop .car-dots .dot{
-  width:10px;height:10px;background:var(--px-line-2);border:1px solid #000;cursor:pointer;
-}
-.px-shop .car-dots .dot.active{background:var(--px-pink)}
+.px-shop .car-dots .dot{width:10px;height:10px;background:var(--line2);border:1px solid #000;cursor:pointer}
+.px-shop .car-dots .dot.active{background:var(--pink)}
 
-/* ===== SECTION HEAD ===== */
+/* ── section header ── */
 .px-shop section{padding:56px 0}
 .px-shop .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-.px-shop .sec-head h2{
-  font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.2vw,20px);
-  margin:0;color:#fff;line-height:1.3;
-}
-.px-shop .sec-head h2 .blk{color:var(--px-pink)}
-.px-shop .sec-head .more{
-  font-family:"Press Start 2P",monospace;font-size:10px;
-  color:var(--px-cyan);border:2px solid var(--px-cyan);padding:8px 14px;
-  box-shadow:3px 3px 0 #000;
-}
-.px-shop .sec-head .more:hover{background:var(--px-cyan);color:#001a1a}
+.px-shop .sec-head h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.2vw,20px);margin:0;color:#fff;line-height:1.3}
+.px-shop .sec-head h2 .blk{color:var(--pink)}
+.px-shop .sec-head .more{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);border:2px solid var(--cyan);padding:8px 14px;box-shadow:3px 3px 0 #000}
+.px-shop .sec-head .more:hover{background:var(--cyan);color:#001a1a}
 
-/* ===== CATEGORY TILES (with real images) ===== */
+/* ── category tiles ── */
 .px-shop .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.px-shop .cat{
-  position:relative;border:3px solid #000;min-height:200px;
-  display:flex;align-items:flex-end;overflow:hidden;
-  box-shadow:6px 6px 0 rgba(0,0,0,.5);
-  transition:transform .15s;
-}
+.px-shop .cat{position:relative;border:3px solid #000;min-height:200px;display:flex;align-items:flex-end;overflow:hidden;box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s}
 .px-shop .cat:hover{transform:translateY(-4px)}
-.px-shop .cat .cat-bg{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  transition:transform .3s;
-}
+.px-shop .cat .cat-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
 .px-shop .cat:hover .cat-bg{transform:scale(1.06)}
 .px-shop .cat.c1 .cat-bg{background:linear-gradient(135deg,#f7b733,#fc4a1a)}
 .px-shop .cat.c2 .cat-bg{background:linear-gradient(135deg,#e53935,#7f1d1d)}
 .px-shop .cat.c3 .cat-bg{background:linear-gradient(135deg,#6a11cb,#2575fc)}
 .px-shop .cat.c4 .cat-bg{background:linear-gradient(135deg,#11998e,#38ef7d)}
-.px-shop .cat .cat-shade{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.82) 100%);
-}
-.px-shop .cat .cat-content{position:relative;z-index:2;padding:18px;width:100%}
-.px-shop .cat .cat-content h3{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;margin:0 0 6px;text-shadow:2px 2px 0 #000}
-.px-shop .cat .cat-content p{margin:0;color:rgba(255,255,255,.85);font-size:15px}
-.px-shop .cat .cat-content .cnt{
-  display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;
-  background:rgba(0,0,0,.6);padding:4px 8px;color:var(--px-gold);
-}
+.px-shop .cat .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.82))}
+.px-shop .cat .ct{position:relative;z-index:2;padding:18px;width:100%}
+.px-shop .cat .ct h3{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;margin:0 0 6px;text-shadow:2px 2px 0 #000}
+.px-shop .cat .ct p{margin:0;color:rgba(255,255,255,.85);font-size:15px}
+.px-shop .cat .ct .cnt{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:4px 8px;color:var(--gold)}
 
-/* ===== PRODUCT GRID — full-bleed image, info on hover ===== */
-.px-shop .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.px-shop .prod{
-  position:relative;aspect-ratio:1;overflow:hidden;
-  border:3px solid #000;background:var(--px-panel-2);
-  box-shadow:6px 6px 0 rgba(0,0,0,.5);
-  transition:transform .15s;display:block;
-}
+/* ── product carousel (horizontal scroll, rectangular cards) ── */
+.px-shop .prod-wrap{position:relative}
+.px-shop .prod-track{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 12px}
+.px-shop .prod-track::-webkit-scrollbar{display:none}
+.px-shop .prod{position:relative;flex:0 0 calc((100% - 60px)/4);aspect-ratio:4/5;overflow:hidden;border:3px solid #000;background:var(--panel2);box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s;display:block}
 .px-shop .prod:hover{transform:translateY(-4px)}
-.px-shop .prod .img{
-  position:absolute;inset:0;
-}
-.px-shop .prod .img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.px-shop .prod:hover .img img{transform:scale(1.05)}
-.px-shop .prod .img .ph{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;
-}
-.px-shop .prod .img .tag{
-  position:absolute;top:10px;left:10px;z-index:2;
-  font-family:"Press Start 2P",monospace;font-size:9px;
-  padding:5px 9px;color:#fff;border:2px solid #000;
-}
-.px-shop .prod .img .tag.hot{background:var(--px-red)}
-.px-shop .prod .img .tag.new{background:var(--px-gold);color:#1a1205}
-.px-shop .prod .img .tag.best{background:#000;color:var(--px-gold)}
-.px-shop .prod .i1{background:linear-gradient(160deg,#3a1f5e,#1a1437)}
-.px-shop .prod .i2{background:linear-gradient(160deg,#1e3a6b,#142447)}
-.px-shop .prod .i3{background:linear-gradient(160deg,#5e1f3a,#37142a)}
-.px-shop .prod .i4{background:linear-gradient(160deg,#5e4a1f,#372e14)}
+.px-shop .prod .pimg{position:absolute;inset:0}
+.px-shop .prod .pimg img,.px-shop .prod .pimg .ph{width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:72px}
+.px-shop .prod .pimg img{transition:transform .3s}
+.px-shop .prod:hover .pimg img{transform:scale(1.05)}
+.px-shop .prod .tag{position:absolute;top:10px;left:10px;z-index:2;font-family:"Press Start 2P",monospace;font-size:9px;padding:5px 9px;color:#fff;border:2px solid #000}
+.px-shop .prod .tag.hot{background:var(--red)}
+.px-shop .prod .tag.new{background:var(--gold);color:#1a1205}
+.px-shop .prod .tag.best{background:#000;color:var(--gold)}
+.px-shop .prod .g1{background:linear-gradient(160deg,#3a1f5e,#1a1437)}
+.px-shop .prod .g2{background:linear-gradient(160deg,#1e3a6b,#142447)}
+.px-shop .prod .g3{background:linear-gradient(160deg,#5e1f3a,#37142a)}
+.px-shop .prod .g4{background:linear-gradient(160deg,#5e4a1f,#372e14)}
+/* hover overlay */
+.px-shop .prod .info{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:40px 14px 14px;background:linear-gradient(180deg,rgba(10,8,25,0),rgba(10,8,25,.92) 35%);transform:translateY(100%);transition:transform .28s;display:flex;flex-direction:column;gap:6px}
+.px-shop .prod:hover .info,.px-shop .prod:focus-within .info{transform:translateY(0)}
+.px-shop .prod .pname{font-size:17px;font-weight:bold;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.px-shop .prod .pseries{font-size:13px;color:var(--text2)}
+.px-shop .prod .prow{margin-top:6px;display:flex;justify-content:space-between;align-items:center;border-top:2px dashed var(--line2);padding-top:8px}
+.px-shop .prod .pprice{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--gold)}
+.px-shop .prod .padd{font-family:"Press Start 2P",monospace;font-size:10px;background:var(--pink);color:#fff;border:2px solid #000;padding:8px 13px;box-shadow:3px 3px 0 #7a0f44}
+.px-shop .prod .padd:hover{background:var(--cyan);color:#001a1a}
+/* product carousel nav buttons */
+.px-shop .pnav{position:absolute;top:45%;transform:translateY(-50%);width:42px;height:42px;background:rgba(13,11,26,.9);border:3px solid #000;color:var(--gold);font-size:18px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;box-shadow:4px 4px 0 rgba(0,0,0,.6)}
+.px-shop .pnav:hover{background:var(--pink);color:#fff}
+.px-shop .pnav.prev{left:-21px}
+.px-shop .pnav.next{right:-21px}
 
-/* hover overlay — slides up from bottom */
-.px-shop .prod .info{
-  position:absolute;left:0;right:0;bottom:0;z-index:3;
-  padding:40px 14px 14px;
-  background:linear-gradient(180deg, rgba(10,8,25,0) 0%, rgba(10,8,25,.92) 35%);
-  transform:translateY(100%);
-  transition:transform .28s ease;
-  display:flex;flex-direction:column;gap:6px;
-}
-.px-shop .prod:hover .info,
-.px-shop .prod:focus-within .info{transform:translateY(0)}
-.px-shop .prod .name{font-size:17px;font-weight:bold;color:#fff;line-height:1.3;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.px-shop .prod .series{font-size:13px;color:var(--px-text-2)}
-.px-shop .prod .row{
-  margin-top:6px;display:flex;justify-content:space-between;align-items:center;
-  border-top:2px dashed var(--px-line-2);padding-top:8px;
-}
-.px-shop .prod .price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--px-gold)}
-.px-shop .prod .add{
-  font-family:"Press Start 2P",monospace;font-size:10px;
-  background:var(--px-pink);color:#fff;border:2px solid #000;
-  padding:8px 13px;cursor:pointer;box-shadow:3px 3px 0 #7a0f44;
-}
-.px-shop .prod .add:hover{background:var(--px-cyan);color:#001a1a;box-shadow:3px 3px 0 #007a8a}
-
-/* ===== FEATURES ===== */
+/* ── features ── */
 .px-shop .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.px-shop .feat{
-  background:var(--px-panel);border:3px solid #000;
-  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:22px;text-align:center;
-}
-.px-shop .feat .fico{
-  width:64px;height:64px;margin:0 auto 14px;
-  display:flex;align-items:center;justify-content:center;font-size:32px;
-  background:var(--px-panel-2);border:2px solid #000;
-}
+.px-shop .feat{background:var(--panel);border:3px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:22px;text-align:center}
+.px-shop .feat .fico{width:64px;height:64px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:32px;background:var(--panel2);border:2px solid #000}
 .px-shop .feat h4{font-family:"Press Start 2P",monospace;font-size:12px;color:#fff;margin:0 0 8px;line-height:1.4}
-.px-shop .feat p{margin:0;color:var(--px-text-2);font-size:15px}
+.px-shop .feat p{margin:0;color:var(--text2);font-size:15px}
 
-/* ===== REVIEWS ===== */
+/* ── reviews ── */
 .px-shop .revs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.px-shop .rev{
-  background:var(--px-panel);border:3px solid #000;
-  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:20px;
-}
-.px-shop .rev .stars{color:var(--px-gold);letter-spacing:2px}
-.px-shop .rev p{margin:10px 0 0;font-size:16px;color:var(--px-text)}
-.px-shop .rev .who{margin-top:10px;font-size:14px;color:var(--px-text-3)}
+.px-shop .rev{background:var(--panel);border:3px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:20px}
+.px-shop .rev .stars{color:var(--gold);letter-spacing:2px}
+.px-shop .rev p{margin:10px 0 0;font-size:16px;color:var(--text)}
+.px-shop .rev .who{margin-top:10px;font-size:14px;color:var(--text3)}
 
-/* ===== CTA ===== */
-.px-shop .cta{
-  position:relative;text-align:center;
-  background:
-    radial-gradient(60% 100% at 50% 0%, rgba(255,46,136,.3), transparent 70%),
-    linear-gradient(180deg,#2a1447,#0d0b1a);
-  border:3px solid var(--px-pink);
-  box-shadow:0 0 0 3px #000, 8px 8px 0 rgba(0,0,0,.5);
-  padding:60px 24px;
-}
-.px-shop .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.6vw,24px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--px-pink)}
-.px-shop .cta p{color:var(--px-text-2);max-width:560px;margin:16px auto 0;font-size:18px}
+/* ── CTA ── */
+.px-shop .cta{text-align:center;background:radial-gradient(60% 100% at 50% 0%,rgba(255,46,136,.3),transparent 70%),linear-gradient(180deg,#2a1447,#0d0b1a);border:3px solid var(--pink);box-shadow:0 0 0 3px #000,8px 8px 0 rgba(0,0,0,.5);padding:60px 24px}
+.px-shop .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.6vw,24px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--pink)}
+.px-shop .cta p{color:var(--text2);max-width:560px;margin:16px auto 0;font-size:18px}
 .px-shop .cta .sub{display:flex;gap:12px;max-width:480px;margin:26px auto 0}
-.px-shop .cta .sub input{
-  flex:1;background:#000;border:2px solid var(--px-cyan);color:var(--px-text);
-  padding:12px 16px;font-family:"VT323",monospace;font-size:18px;outline:none;
-}
-.px-shop .cta .sub button{
-  font-family:"Press Start 2P",monospace;font-size:11px;
-  background:var(--px-cyan);color:#001a1a;border:2px solid #000;
-  padding:0 22px;cursor:pointer;box-shadow:4px 4px 0 #007a8a;
-}
+.px-shop .cta .sub input{flex:1;background:#000;border:2px solid var(--cyan);color:var(--text);padding:12px 16px;font-family:"VT323",monospace;font-size:18px;outline:none}
+.px-shop .cta .sub button{font-family:"Press Start 2P",monospace;font-size:11px;background:var(--cyan);color:#001a1a;border:2px solid #000;padding:0 22px;cursor:pointer;box-shadow:4px 4px 0 #007a8a}
 
+/* ── responsive ── */
 @media (max-width:1024px){
   .px-shop .hero .wrap{grid-template-columns:1fr}
-  .px-shop .grid{grid-template-columns:repeat(3,1fr)}
+  .px-shop .prod{flex:0 0 calc((100% - 40px)/3)}
   .px-shop .cats{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:768px){
-  .px-shop .grid{grid-template-columns:repeat(2,1fr)}
+  .px-shop .prod{flex:0 0 calc((100% - 20px)/2)}
   .px-shop .feats,.px-shop .revs{grid-template-columns:1fr}
   .px-shop .cta .sub{flex-direction:column}
+  .px-shop .pnav.prev{left:4px}
+  .px-shop .pnav.next{right:4px}
 }
 @media (max-width:480px){
-  .px-shop .grid,.px-shop .cats{grid-template-columns:1fr}
+  .px-shop .prod{flex:0 0 100%}
+  .px-shop .cats{grid-template-columns:1fr}
 }
 </style>
 
-  {% comment %} ===== ANNOUNCEMENT ===== {% endcomment %}
+  <!-- announcement ticker -->
   <div class="announce">
     <div class="in">
       <span>★ <span class="p">FREE WORLDWIDE SHIPPING</span> over $50</span>
       <span>✦ NEW: <span class="c">ASCENDED HEROES</span> extended art cases now live</span>
-      <span>♦ Limited stock — <span class="p">UMBREON SIR</span> case restocked</span>
-      <span>♥ 30-day money-back guarantee on every display case</span>
-      <span>★ UV-protected, archival-quality materials on all orders</span>
+      <span>♦ Limited stock — <span class="p">UMBREON SIR</span> restocked</span>
+      <span>♥ 30-day money-back guarantee</span>
+      <span>★ UV-protected archival materials</span>
     </div>
   </div>
 
-  {% comment %} ===== HERO + CAROUSEL ===== {% endcomment %}
+  <!-- hero + featured carousel -->
   <section class="hero">
     <div class="wrap">
       <div>
         <span class="crumbs">♦ HOME / EXTENDED ART DISPLAY CASES</span>
         <h1>PROTECT &amp; <span class="c">SHOWCASE</span><br>YOUR RAREST<br>CARDS.</h1>
-        <p class="lead">Ultra-clear <b>extended-art display cases</b> for Pokémon, One Piece &amp; Lorcana. Magnetic-close, UV-protected, built so your SIR / SAR cards look flawless on the shelf.</p>
+        <p class="lead">Ultra-clear <b>extended-art display cases</b> for Pokémon, One Piece &amp; Lorcana. Magnetic-close, UV-protected, built so your SIR / SAR cards look flawless.</p>
         <div class="cta-row">
           <a class="pbtn pk" href="#best-sellers">▶ SHOP BEST SELLERS</a>
           <a class="pbtn cy" href="#categories">▸ BROWSE CATEGORIES</a>
         </div>
       </div>
 
-      <div class="carousel" data-px-carousel>
+      <div class="carousel" data-hero-carousel>
         <div class="car-head"><span>★ FEATURED ROTATION</span><span class="c">AUTO</span></div>
         <div class="car-viewport">
-          {%- assign carousel_products = best_coll.products -%}
-          {%- if carousel_products.size >= 1 -%}
-            {%- for product in carousel_products limit: 4 -%}
+          {%- if hero_products.size >= 1 -%}
+            {%- for product in hero_products limit:4 -%}
               <div class="car-slide {% if forloop.first %}active{% endif %}">
                 <div class="glow"></div>
                 {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 800, height: 800, crop: 'center' }}" alt="{{ product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <img src="{{ product.featured_image | image_url: width:800, height:800, crop:'center' }}" alt="{{ product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                   <span class="ph" style="display:none">🎴</span>
                 {%- else -%}
                   <span class="ph">🎴</span>
@@ -352,34 +205,28 @@
               </div>
             {%- endfor -%}
           {%- else -%}
-            <div class="car-slide s1 active"><div class="glow"></div><span class="ph">🔥</span></div>
-            <div class="car-slide s2"><div class="glow"></div><span class="ph">🌙</span></div>
-            <div class="car-slide s3"><div class="glow"></div><span class="ph">✨</span></div>
-            <div class="car-slide s4"><div class="glow"></div><span class="ph">⚡</span></div>
+            <div class="car-slide g1 active"><div class="glow"></div><span class="ph">🔥</span></div>
+            <div class="car-slide g2"><div class="glow"></div><span class="ph">🌙</span></div>
+            <div class="car-slide g3"><div class="glow"></div><span class="ph">✨</span></div>
+            <div class="car-slide g4"><div class="glow"></div><span class="ph">⚡</span></div>
           {%- endif -%}
-          <span class="car-nav prev" data-car-prev>‹</span>
-          <span class="car-nav next" data-car-next>›</span>
         </div>
         <div class="car-foot">
           <div class="car-meta">
-            {%- if carousel_products.size >= 1 -%}
-              {%- for product in carousel_products limit: 1 -%}
-                <span class="t">{{ product.title }}</span>
-                <span class="s">{{ product.type }} · {% if product.available %}In stock{% else %}Sold out{% endif %}</span>
-              {%- endfor -%}
+            {%- if hero_products.size >= 1 -%}
+              <span class="t">{{ hero_products.first.title }}</span>
+              <span class="s">{{ hero_products.first.type }} · {% if hero_products.first.available %}In stock{% else %}Sold out{% endif %}</span>
             {%- else -%}
               <span class="t">Featured Display Cases</span>
               <span class="s">Extended Art · In stock</span>
             {%- endif -%}
           </div>
-          <span class="car-price">
-            {%- if carousel_products.size >= 1 -%}{{ carousel_products.first.price | money }}{%- else -%}$29.99{%- endif -%}
-          </span>
+          <span class="car-price">{% if hero_products.size >= 1 %}{{ hero_products.first.price | money }}{% else %}$29.99{% endif %}</span>
         </div>
         <div class="car-dots">
-          {%- if carousel_products.size >= 1 -%}
-            {%- for product in carousel_products limit: 4 -%}
-              <span class="dot {% if forloop.first %}active{% endif %}" data-car-dot="{{ forloop.index0 }}"></span>
+          {%- if hero_products.size >= 1 -%}
+            {%- for product in hero_products limit:4 -%}
+              <span class="dot {% if forloop.first %}active{% endif %}" data-dot="{{ forloop.index0 }}"></span>
             {%- endfor -%}
           {%- else -%}
             <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -389,7 +236,7 @@
     </div>
   </section>
 
-  {% comment %} ===== CATEGORIES WITH IMAGES ===== {% endcomment %}
+  <!-- categories -->
   <section id="categories">
     <div class="wrap">
       <div class="sec-head">
@@ -398,13 +245,11 @@
       </div>
       <div class="cats">
         {%- if collections.all.size > 0 -%}
-          {%- for collection in collections.all limit: 4 -%}
+          {%- for collection in collections.all limit:4 -%}
             <a class="cat c{{ forloop.index }}" href="{{ collection.url }}">
-              <div class="cat-bg"
-                {%- if collection.image -%}style="background-image:url('{{ collection.image | image_url: width: 800, height: 500, crop: 'center' }}')"{%- endif -%}>
-              </div>
-              <div class="cat-shade"></div>
-              <div class="cat-content">
+              <div class="cat-bg" {% if collection.image %}style="background-image:url('{{ collection.image | image_url: width:800, height:500, crop:'center' }}')"{% endif %}></div>
+              <div class="shade"></div>
+              <div class="ct">
                 <h3>{{ collection.title }}</h3>
                 <p>Extended art &amp; display cases</p>
                 <span class="cnt">{{ collection.products_count }}+ ITEMS</span>
@@ -412,57 +257,71 @@
             </a>
           {%- endfor -%}
         {%- else -%}
-          <a class="cat c1" href="/collections/pokemon"><div class="cat-bg"></div><div class="cat-shade"></div><div class="cat-content"><h3>Pokémon</h3><p>SIR / SAR display cases</p><span class="cnt">48+ ITEMS</span></div></a>
-          <a class="cat c2" href="/collections/one-piece"><div class="cat-bg"></div><div class="cat-shade"></div><div class="cat-content"><h3>One Piece</h3><p>Manga &amp; OP card cases</p><span class="cnt">24+ ITEMS</span></div></a>
-          <a class="cat c3" href="/collections/lorcana"><div class="cat-bg"></div><div class="cat-shade"></div><div class="cat-content"><h3>Lorcana</h3><p>Ravensburger TCG cases</p><span class="cnt">32+ ITEMS</span></div></a>
-          <a class="cat c4" href="/collections/accessories"><div class="cat-bg"></div><div class="cat-shade"></div><div class="cat-content"><h3>Accessories</h3><p>Sleeves, slabs, storage</p><span class="cnt">18+ ITEMS</span></div></a>
+          <a class="cat c1" href="/collections/pokemon"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Pokémon</h3><p>SIR / SAR display cases</p><span class="cnt">48+ ITEMS</span></div></a>
+          <a class="cat c2" href="/collections/one-piece"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>One Piece</h3><p>Manga &amp; OP card cases</p><span class="cnt">24+ ITEMS</span></div></a>
+          <a class="cat c3" href="/collections/lorcana"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Lorcana</h3><p>Ravensburger TCG cases</p><span class="cnt">32+ ITEMS</span></div></a>
+          <a class="cat c4" href="/collections/accessories"><div class="cat-bg"></div><div class="shade"></div><div class="ct"><h3>Accessories</h3><p>Sleeves, slabs, storage</p><span class="cnt">18+ ITEMS</span></div></a>
         {%- endif -%}
       </div>
     </div>
   </section>
 
-  {% comment %} ===== BEST SELLERS WITH IMAGES ===== {% endcomment %}
+  <!-- best sellers -->
   <section id="best-sellers" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
         <h2>// BEST <span class="blk">SELLERS</span></h2>
         <a class="more" href="{{ best_coll.url | default: '/collections/all' }}">SEE MORE →</a>
       </div>
-      <div class="grid">
-        {%- if best_coll.products.size > 0 -%}
-          {%- for product in best_coll.products limit: 8 -%}
-            <a class="prod" href="{{ product.url }}">
-              <div class="img i{{ forloop.index0 | plus: 1 | modulo: 4 | plus: 1 }}">
-                {%- if forloop.first -%}<span class="tag hot">HOT</span>{%- elsif forloop.index == 2 -%}<span class="tag best">BEST</span>{%- elsif forloop.index == 4 -%}<span class="tag new">NEW</span>{%- endif -%}
-                {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <span class="ph" style="display:none">🎴</span>
-                {%- else -%}
-                  <span class="ph">🎴</span>
-                {%- endif -%}
-              </div>
-              <div class="info">
-                <div class="name">{{ product.title }}</div>
-                <div class="series">{{ product.type | default: 'Extended Art' }}</div>
-                <div class="row"><span class="price">{{ product.price | money }}</span><span class="add">ADD +</span></div>
-              </div>
-            </a>
-          {%- endfor -%}
-        {%- else -%}
-          <a class="prod" href="/products/mega-charizard-x-ex-display-case"><div class="img i1"><span class="tag hot">HOT</span><span class="ph">🔥</span></div><div class="info"><div class="name">Mega Charizard X ex 125-094 SIR SAR Display Case</div><div class="series">Phantasmal Flames</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/umbreon-161-sir-display-case"><div class="img i2"><span class="tag best">BEST</span><span class="ph">🌙</span></div><div class="info"><div class="name">Umbreon 161-131 SIR SAR Prismatic Evolutions</div><div class="series">Prismatic Evolutions</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/mew-ex-232-display-case"><div class="img i3"><span class="tag hot">HOT</span><span class="ph">✨</span></div><div class="info"><div class="name">Mew ex 232-091 SIR SAR Paldean Fates Case</div><div class="series">Paldean Fates</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/pikachu-ex-276-display-case"><div class="img i4"><span class="tag new">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="name">Pikachu ex 276-217 SIR SAR Ascended Heroes</div><div class="series">Ascended Heroes</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/mega-gengar-ex-284-display-case"><div class="img i3"><span class="tag best">BEST</span><span class="ph">👻</span></div><div class="info"><div class="name">Mega Gengar ex 284-217 SIR SAR Ascended Heroes</div><div class="series">Ascended Heroes</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/mega-dragonite-ex-display-case"><div class="img i1"><span class="tag new">NEW</span><span class="ph">🐉</span></div><div class="info"><div class="name">Mega Dragonite EX SAR SIR Ascended Heroes</div><div class="series">SAR</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/pikachu-grey-felt-hat-display-case"><div class="img i2"><span class="tag best">BEST</span><span class="ph">🎨</span></div><div class="info"><div class="name">Pikachu with Grey Felt Hat SVP 085 Promo</div><div class="series">Black Star Promo</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/moltres-zapdos-articuno-gx-display-case"><div class="img i4"><span class="tag hot">HOT</span><span class="ph">🕊️</span></div><div class="info"><div class="name">Moltres &amp; Zapdos &amp; Articuno GX SM210 Promo</div><div class="series">Legendary Birds</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-        {%- endif -%}
+      <div class="prod-wrap">
+        <span class="pnav prev" data-prev>‹</span>
+        <div class="prod-track">
+          {%- if best_coll.products.size > 0 -%}
+            {%- for product in best_coll.products limit:16 -%}
+              <a class="prod" href="{{ product.url }}">
+                <div class="pimg g{{ forloop.index0 | modulo:4 | plus:1 }}">
+                  {%- if forloop.first -%}<span class="tag hot">HOT</span>
+                  {%- elsif forloop.index == 2 -%}<span class="tag best">BEST</span>
+                  {%- elsif forloop.index == 4 -%}<span class="tag new">NEW</span>{%- endif -%}
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width:600, height:750, crop:'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <span class="ph" style="display:none">🎴</span>
+                  {%- else -%}
+                    <span class="ph">🎴</span>
+                  {%- endif -%}
+                </div>
+                <div class="info">
+                  <div class="pname">{{ product.title }}</div>
+                  <div class="pseries">{{ product.type | default: 'Extended Art' }}</div>
+                  <div class="prow"><span class="pprice">{{ product.price | money }}</span><span class="padd">ADD +</span></div>
+                </div>
+              </a>
+            {%- endfor -%}
+          {%- else -%}
+            <a class="prod" href="/products/charizard-x-display"><div class="pimg g1"><span class="tag hot">HOT</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard ex SIR SAR Display Case</div><div class="pseries">Phantasmal Flames</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/umbreon-display"><div class="pimg g2"><span class="tag best">BEST</span><span class="ph">🌙</span></div><div class="info"><div class="pname">Umbreon SIR SAR Prismatic Evolutions</div><div class="pseries">Prismatic Evolutions</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/mew-ex-display"><div class="pimg g3"><span class="tag hot">HOT</span><span class="ph">✨</span></div><div class="info"><div class="pname">Mew ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/pikachu-ex-display"><div class="pimg g4"><span class="tag new">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Pikachu ex SIR SAR Ascended Heroes</div><div class="pseries">Ascended Heroes</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/gengar-ex-display"><div class="pimg g3"><span class="tag best">BEST</span><span class="ph">👻</span></div><div class="info"><div class="pname">Gengar ex SIR SAR Ascended Heroes</div><div class="pseries">Ascended Heroes</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/dragonite-ex-display"><div class="pimg g1"><span class="tag new">NEW</span><span class="ph">🐉</span></div><div class="info"><div class="pname">Dragonite EX SAR SIR Display Case</div><div class="pseries">SAR</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/pikachu-felt-display"><div class="pimg g2"><span class="tag best">BEST</span><span class="ph">🎨</span></div><div class="info"><div class="pname">Pikachu Grey Felt Hat SVP 085</div><div class="pseries">Black Star Promo</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/legendary-birds-display"><div class="pimg g4"><span class="tag hot">HOT</span><span class="ph">🕊️</span></div><div class="info"><div class="pname">Moltres Zapdos Articuno GX SM210</div><div class="pseries">Legendary Birds</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/blastoise-ex-display"><div class="pimg g2"><span class="tag best">BEST</span><span class="ph">🐢</span></div><div class="info"><div class="pname">Blastoise ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/charizard-ex-twilight"><div class="pimg g3"><span class="tag hot">HOT</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard ex SIR SAR Twilight Masquerade</div><div class="pseries">Twilight Masquerade</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/lucario-vstar-display"><div class="pimg g1"><span class="tag new">NEW</span><span class="ph">🥋</span></div><div class="info"><div class="pname">Lucario VSTAR Crown Zenith SIR Case</div><div class="pseries">Crown Zenith</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/gardevoir-ex-display"><div class="pimg g4"><span class="tag best">BEST</span><span class="ph">🔮</span></div><div class="info"><div class="pname">Gardevoir ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/alakazam-ex-display"><div class="pimg g3"><span class="tag new">NEW</span><span class="ph">🧙</span></div><div class="info"><div class="pname">Alakazam ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/rayquaza-vmax-display"><div class="pimg g1"><span class="tag hot">HOT</span><span class="ph">🐲</span></div><div class="info"><div class="pname">Rayquaza VMAX Climax SIR Case</div><div class="pseries">VMAX Climax</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/espeon-vmax-display"><div class="pimg g4"><span class="tag best">BEST</span><span class="ph">🌅</span></div><div class="info"><div class="pname">Espeon VMAX Fusion Strike SIR Case</div><div class="pseries">Fusion Strike</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/sylveon-vmax-display"><div class="pimg g2"><span class="tag new">NEW</span><span class="ph">🎀</span></div><div class="info"><div class="pname">Sylveon VMAX Evolving Skies SIR</div><div class="pseries">Evolving Skies</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
+          {%- endif -%}
+        </div>
+        <span class="pnav next" data-next>›</span>
       </div>
     </div>
   </section>
 
-  {% comment %} ===== FEATURES ===== {% endcomment %}
+  <!-- features -->
   <section style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
@@ -477,44 +336,52 @@
     </div>
   </section>
 
-  {% comment %} ===== NEW ARRIVALS WITH IMAGES ===== {% endcomment %}
+  <!-- new arrivals -->
   <section style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
         <h2>// NEW <span class="blk">ARRIVALS</span></h2>
         <a class="more" href="{{ new_coll.url | default: '/collections/new' }}">SEE MORE →</a>
       </div>
-      <div class="grid">
-        {%- if new_coll.products.size > 0 -%}
-          {%- for product in new_coll.products limit: 4 -%}
-            <a class="prod" href="{{ product.url }}">
-              <div class="img i{{ forloop.index0 | plus: 1 | modulo: 4 | plus: 1 }}">
-                <span class="tag new">NEW</span>
-                {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <span class="ph" style="display:none">🎴</span>
-                {%- else -%}
-                  <span class="ph">🎴</span>
-                {%- endif -%}
-              </div>
-              <div class="info">
-                <div class="name">{{ product.title }}</div>
-                <div class="series">{{ product.type | default: 'Just dropped' }}</div>
-                <div class="row"><span class="price">{{ product.price | money }}</span><span class="add">ADD +</span></div>
-              </div>
-            </a>
-          {%- endfor -%}
-        {%- else -%}
-          <a class="prod" href="/products/mega-charizard-y-ex-display-case"><div class="img i1"><span class="tag new">NEW</span><span class="ph">🔥</span></div><div class="info"><div class="name">Mega Charizard Y ex 294-217 Hyper Rare MUR Case</div><div class="series">Hyper Rare</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/psyduck-226-display-case"><div class="img i2"><span class="tag new">NEW</span><span class="ph">🦆</span></div><div class="info"><div class="name">Psyduck 226-217 IR AR Ascended Heroes</div><div class="series">IR Art</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/pikachu-277-display-case"><div class="img i3"><span class="tag new">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="name">Pikachu ex 277-217 SIR SAR Ascended Heroes</div><div class="series">SIR SAR</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-          <a class="prod" href="/products/mega-gengar-269-display-case"><div class="img i4"><span class="tag new">NEW</span><span class="ph">👻</span></div><div class="info"><div class="name">Mega Gengar ex 269-217 Attack Rare Ascended Heroes</div><div class="series">Attack Rare</div><div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div></div></a>
-        {%- endif -%}
+      <div class="prod-wrap">
+        <span class="pnav prev" data-prev>‹</span>
+        <div class="prod-track">
+          {%- if new_coll.products.size > 0 -%}
+            {%- for product in new_coll.products limit:8 -%}
+              <a class="prod" href="{{ product.url }}">
+                <div class="pimg g{{ forloop.index0 | modulo:4 | plus:1 }}">
+                  <span class="tag new">NEW</span>
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width:600, height:750, crop:'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <span class="ph" style="display:none">🎴</span>
+                  {%- else -%}
+                    <span class="ph">🎴</span>
+                  {%- endif -%}
+                </div>
+                <div class="info">
+                  <div class="pname">{{ product.title }}</div>
+                  <div class="pseries">{{ product.type | default: 'Just dropped' }}</div>
+                  <div class="prow"><span class="pprice">{{ product.price | money }}</span><span class="padd">ADD +</span></div>
+                </div>
+              </a>
+            {%- endfor -%}
+          {%- else -%}
+            <a class="prod" href="/products/charizard-y-display"><div class="pimg g1"><span class="tag new">NEW</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard Y ex Hyper Rare MUR Case</div><div class="pseries">Hyper Rare</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/psyduck-display"><div class="pimg g2"><span class="tag new">NEW</span><span class="ph">🦆</span></div><div class="info"><div class="pname">Psyduck IR AR Ascended Heroes</div><div class="pseries">IR Art</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/pikachu-ex-277-display"><div class="pimg g3"><span class="tag new">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Pikachu ex SIR SAR Ascended Heroes</div><div class="pseries">SIR SAR</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/gengar-ex-269-display"><div class="pimg g4"><span class="tag new">NEW</span><span class="ph">👻</span></div><div class="info"><div class="pname">Gengar ex Attack Rare Ascended Heroes</div><div class="pseries">Attack Rare</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/greninja-ex-display"><div class="pimg g3"><span class="tag new">NEW</span><span class="ph">🥷</span></div><div class="info"><div class="pname">Greninja ex SIR SAR Twilight Masquerade</div><div class="pseries">Twilight Masquerade</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/mewtwo-ex-display"><div class="pimg g1"><span class="tag new">NEW</span><span class="ph">🧬</span></div><div class="info"><div class="pname">Mewtwo ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/kyogre-ex-display"><div class="pimg g2"><span class="tag new">NEW</span><span class="ph">🌊</span></div><div class="info"><div class="pname">Kyogre ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+            <a class="prod" href="/products/zapdos-ex-display"><div class="pimg g4"><span class="tag new">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Zapdos ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
+          {%- endif -%}
+        </div>
+        <span class="pnav next" data-next>›</span>
       </div>
     </div>
   </section>
 
-  {% comment %} ===== REVIEWS ===== {% endcomment %}
+  <!-- reviews -->
   <section style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
@@ -528,11 +395,11 @@
     </div>
   </section>
 
-  {% comment %} ===== CTA ===== {% endcomment %}
+  <!-- CTA -->
   <section style="padding-top:0">
     <div class="wrap">
       <div class="cta">
-        <h2>JOIN THE <span style="color:var(--px-cyan)">COLLECTOR'S CLUB</span></h2>
+        <h2>JOIN THE <span style="color:var(--cyan)">COLLECTOR'S CLUB</span></h2>
         <p>Get early access to new extended-art drops, member-only discounts, and sneak peeks before anyone else.</p>
         <form class="sub" action="/account" method="post">
           <input type="email" name="email" placeholder="you@example.com" required>
@@ -546,28 +413,38 @@
 
 <script>
 (function(){
-  document.querySelectorAll('[data-px-carousel]').forEach(function(root){
+  /* Hero carousel: auto-rotate, dots clickable, no arrows */
+  document.querySelectorAll('[data-hero-carousel]').forEach(function(root){
     var slides = root.querySelectorAll('.car-slide');
     var dots = root.querySelectorAll('.car-dots .dot');
-    var prev = root.querySelector('[data-car-prev]');
-    var next = root.querySelector('[data-car-next]');
     if (!slides.length) return;
-    var i = 0, timer;
+    var idx = 0, timer;
     function show(n){
-      slides[i].classList.remove('active');
-      if (dots[i]) dots[i].classList.remove('active');
-      i = (n + slides.length) % slides.length;
-      slides[i].classList.add('active');
-      if (dots[i]) dots[i].classList.add('active');
+      slides[idx].classList.remove('active');
+      if (dots[idx]) dots[idx].classList.remove('active');
+      idx = (n + slides.length) % slides.length;
+      slides[idx].classList.add('active');
+      if (dots[idx]) dots[idx].classList.add('active');
     }
-    function auto(){ timer = setInterval(function(){ show(i+1); }, 3000); }
-    function reset(){ clearInterval(timer); auto(); }
-    if (prev) prev.addEventListener('click', function(){ show(i-1); reset(); });
-    if (next) next.addEventListener('click', function(){ show(i+1); reset(); });
+    function start(){ timer = setInterval(function(){ show(idx+1); }, 3000); }
     dots.forEach(function(d, k){
-      d.addEventListener('click', function(){ show(k); reset(); });
+      d.addEventListener('click', function(){ show(k); clearInterval(timer); start(); });
     });
-    auto();
+    start();
+  });
+
+  /* Product carousels: scroll by one card width */
+  document.querySelectorAll('.prod-wrap').forEach(function(wrap){
+    var track = wrap.querySelector('.prod-track');
+    var prev = wrap.querySelector('[data-prev]');
+    var next = wrap.querySelector('[data-next]');
+    if (!track) return;
+    function step(){
+      var card = track.querySelector('.prod');
+      return card ? card.getBoundingClientRect().width + 20 : 300;
+    }
+    if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
+    if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
   });
 })();
 </script>
@@ -576,38 +453,12 @@
 {
   "name": "Pixel Card Shop Home",
   "settings": [
-    {
-      "type": "header",
-      "content": "Collections"
-    },
-    {
-      "type": "collection",
-      "id": "best_collection",
-      "label": "Best Sellers collection",
-      "info": "Products shown in the Best Sellers grid and hero carousel."
-    },
-    {
-      "type": "collection",
-      "id": "new_collection",
-      "label": "New Arrivals collection",
-      "info": "Products shown in the New Arrivals grid."
-    },
-    {
-      "type": "header",
-      "content": "Section padding"
-    },
-    {
-      "type": "range",
-      "id": "padding-block-start",
-      "label": "Top padding",
-      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding-block-end",
-      "label": "Bottom padding",
-      "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0
-    }
+    { "type": "header", "content": "Collections" },
+    { "type": "collection", "id": "best_collection", "label": "Best Sellers collection", "info": "Products in the Best Sellers carousel and hero rotation." },
+    { "type": "collection", "id": "new_collection", "label": "New Arrivals collection", "info": "Products in the New Arrivals carousel." },
+    { "type": "header", "content": "Section padding" },
+    { "type": "range", "id": "padding_block_start", "label": "Top padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_block_end", "label": "Bottom padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
   ],
   "presets": [
     { "name": "Pixel Card Shop Home" }
