@@ -41,6 +41,11 @@
 .sx-cats .sx-item{display:block;padding:7px 20px 7px 40px;color:var(--text2);font-size:17px;border-left:3px solid transparent;transition:background .12s,color .12s}
 .sx-cats .sx-item:hover{color:var(--text);background:var(--panel2)}
 .sx-cats .sx-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
+.sx-cats .sx-subhead{display:flex;align-items:center;justify-content:space-between;padding:7px 20px 7px 28px;color:var(--cyan);font-size:16px;cursor:pointer;user-select:none}
+.sx-cats .sx-subhead .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
+.sx-cats .sx-subgroup.closed .sx-caret{transform:rotate(-90deg)}
+.sx-cats .sx-subgroup.closed .sx-sublinks{display:none}
+.sx-cats .sx-lvl3{padding-left:56px;font-size:16px}
 
 /* ── hero ── */
 .sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
@@ -100,15 +105,27 @@
           <div class="sx-group">
             <div class="sx-group-head" data-sx-toggle>
               <span><span class="sx-glyph">▣</span>{{ link.title }}</span>
-              <span class="sx-caret">▼</span>
+              {%- if link.links.size > 0 -%}<span class="sx-caret">▼</span>{%- endif -%}
             </div>
-            {%- if link.links.size > 0 -%}
-              <div class="sx-children">
-                {%- for child in link.links -%}
+            <div class="sx-children">
+              {%- for child in link.links -%}
+                {%- if child.links.size > 0 -%}
+                  <div class="sx-subgroup">
+                    <div class="sx-subhead" data-sx-toggle>
+                      <span>{{ child.title }}</span>
+                      <span class="sx-caret">▼</span>
+                    </div>
+                    <div class="sx-sublinks">
+                      {%- for g in child.links -%}
+                        <a class="sx-item sx-lvl3 {% if g.active %}active{% endif %}" href="{{ g.url }}">{{ g.title }}</a>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- else -%}
                   <a class="sx-item {% if child.active %}active{% endif %}" href="{{ child.url }}">{{ child.title }}</a>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
           </div>
         {%- endfor -%}
       {%- else -%}
