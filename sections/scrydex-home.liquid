@@ -344,7 +344,8 @@
               <div class="car-slide {% if forloop.first %}active{% endif %}">
                 <div class="glow"></div>
                 {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 800, height: 800, crop: 'center' }}" alt="{{ product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                  <img src="{{ product.featured_image | image_url: width: 800, height: 800, crop: 'center' }}" alt="{{ product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <span class="ph" style="display:none">🎴</span>
                 {%- else -%}
                   <span class="ph">🎴</span>
                 {%- endif -%}
@@ -434,7 +435,8 @@
               <div class="img i{{ forloop.index0 | plus: 1 | modulo: 4 | plus: 1 }}">
                 {%- if forloop.first -%}<span class="tag hot">HOT</span>{%- elsif forloop.index == 2 -%}<span class="tag best">BEST</span>{%- elsif forloop.index == 4 -%}<span class="tag new">NEW</span>{%- endif -%}
                 {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy">
+                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <span class="ph" style="display:none">🎴</span>
                 {%- else -%}
                   <span class="ph">🎴</span>
                 {%- endif -%}
@@ -489,7 +491,8 @@
               <div class="img i{{ forloop.index0 | plus: 1 | modulo: 4 | plus: 1 }}">
                 <span class="tag new">NEW</span>
                 {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy">
+                  <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <span class="ph" style="display:none">🎴</span>
                 {%- else -%}
                   <span class="ph">🎴</span>
                 {%- endif -%}
