@@ -1,0 +1,266 @@
+{% comment %}
+  Expansions list section.
+  Structure mirrors https://scrydex.com/pokemon/expansions :
+    - era/generation group heading (h2, uppercase, tracking-wider)
+    - responsive grid of expansion cards (centered logo + name + release date)
+    - cards link to the matching Shopify collection.
+{% endcomment %}
+
+{% liquid
+  assign source_collections = collections.all
+  if source_collections == blank
+    assign source_collections = collections
+  endif
+
+  assign default_group = section.settings.default_group_name | default: 'All Expansions'
+  assign unique_groups = ''
+
+  for collection in source_collections
+    assign g = collection.metafields.custom.group | default: collection.metafields.custom.generation | default: default_group
+    if g != blank
+      unless unique_groups contains g
+        assign unique_groups = unique_groups | append: g | append: '||'
+      endunless
+    endif
+  endfor
+  assign group_names = unique_groups | split: '||'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<div
+  class="section section--page-width color-{{ section.settings.color_scheme }} expansions-list"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  {%- if source_collections.size == 0 -%}
+    <div class="expansions-list__empty">
+      <p>{{ section.settings.empty_text | default: 'No expansions found yet.' }}</p>
+    </div>
+  {%- else -%}
+    {%- for group_name in group_names -%}
+      {%- if group_name == blank -%}{%- continue -%}{%- endif -%}
+
+      <div class="expansions-group" data-group="{{ group_name | handleize }}">
+        <h2 class="expansions-group__heading">{{ group_name }}</h2>
+
+        <div class="expansions-grid columns-{{ section.settings.columns }}">
+          {%- for collection in source_collections -%}
+            {%- assign g = collection.metafields.custom.group | default: collection.metafields.custom.generation | default: default_group -%}
+            {%- if g != group_name -%}{%- continue -%}{%- endif -%}
+
+            <a class="expansion-card" href="{{ collection.url }}">
+              <div class="expansion-card__inner">
+                <div class="expansion-card__logo">
+                  {%- if collection.image -%}
+                    <img
+                      src="{{ collection.image | image_url: width: 400, height: 200, crop: 'center' }}"
+                      srcset="{{ collection.image | image_url: width: 400 }} 1x, {{ collection.image | image_url: width: 800 }} 2x"
+                      alt="{{ collection.title | escape }}"
+                      loading="lazy"
+                      width="400"
+                      height="200"
+                    >
+                  {%- else -%}
+                    <div class="expansion-card__placeholder">{{ collection.title | slice: 0, 1 }}</div>
+                  {%- endif -%}
+                </div>
+                <div class="expansion-card__meta">
+                  <span class="expansion-card__name">{{ collection.title }}</span>
+                  {%- if collection.published_at != blank -%}
+                    <span class="expansion-card__date">{{ collection.published_at | date: '%Y/%m/%d' }}</span>
+                  {%- elsif collection.products_count > 0 -%}
+                    <span class="expansion-card__date">{{ collection.products_count }} items</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .expansions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--margin-2xl);
+  }
+
+  .expansions-group__heading {
+    margin: 0 0 var(--margin-md);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-foreground-heading, var(--color-foreground));
+  }
+
+  .expansions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap, 16px);
+  }
+
+  @media screen and (min-width: 750px) {
+    .expansions-grid.columns-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .expansions-grid.columns-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .expansions-grid.columns-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media screen and (min-width: 990px) {
+    .expansions-grid.columns-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .expansions-grid.columns-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .expansions-grid.columns-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+
+  .expansion-card {
+    display: block;
+    padding: 24px;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border-radius: var(--style-border-radius-buttons, 4px);
+  }
+
+  .expansion-card:hover {
+    background-color: rgb(from var(--color-primary, var(--color-foreground)) r g b / 14%);
+    border-color: var(--color-primary, var(--color-foreground));
+    text-decoration: none;
+  }
+
+  .expansion-card__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+  }
+
+  .expansion-card__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 90px;
+  }
+
+  .expansion-card__logo img {
+    max-width: 100%;
+    max-height: 120px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .expansion-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+  }
+
+  .expansion-card__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .expansion-card__name {
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  .expansion-card__date {
+    color: var(--color-foreground);
+    opacity: var(--opacity-subdued-text);
+    font-size: 0.8rem;
+  }
+
+  .expansions-list__empty p {
+    opacity: var(--opacity-subdued-text);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Expansions List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "default_group_name",
+      "label": "Default group name",
+      "info": "Used when a collection has no custom.group metafield.",
+      "default": "All Expansions"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "No expansions found yet."
+    },
+    {
+      "type": "header",
+      "content": "t:content.cards_layout"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "t:settings.columns",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "header",
+      "content": "t:content.section_layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}
