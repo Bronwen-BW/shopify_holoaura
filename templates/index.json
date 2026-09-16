@@ -6,13 +6,16 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "sc_home_main": {
       "type": "scrydex-home",
       "settings": {
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "best_collection": "",
+        "new_collection": "",
+        "padding_block_start": 0,
+        "padding_block_end": 0
       }
     }
   },
