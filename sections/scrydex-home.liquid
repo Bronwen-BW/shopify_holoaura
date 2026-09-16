@@ -1,17 +1,18 @@
 {% comment %}
-  Pixel Anime Card Archive home — retro 8-bit game UI aesthetic.
-  Dark pixel-noir palette, Press Start 2P headings, pixel borders,
-  HP/EXP bars, rarity tiers (N/R/SR/SSR/UR), daily check-in, leaderboard.
-  All styles scoped under .px-home.
+  Pixel Anime Card Display CASE SHOP home — ecommerce, not a game.
+  Pixel/8-bit visual skin applied to a conversion-focused storefront:
+  announcement bar, hero product pitch, category tiles, best-seller
+  product grid, feature selling points, new arrivals, reviews, CTA.
+  All styles scoped under .px-shop.
 {% endcomment %}
 
-<div class="px-home" style="{% render 'spacing-padding', settings: section.settings %}">
+<div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
 <style>
-.px-home{
+.px-shop{
   --px-bg:#0d0b1a;
   --px-bg-2:#14112b;
   --px-panel:#1a1636;
@@ -31,267 +32,201 @@
   background:var(--px-bg);
   color:var(--px-text);
   font-family:"VT323", ui-monospace, "Courier New", monospace;
-  font-size:18px;
-  line-height:1.5;
-  overflow:hidden;
-  image-rendering:pixelated;
+  font-size:18px;line-height:1.5;overflow:hidden;
 }
-.px-home *, .px-home *::before, .px-home *::after{box-sizing:border-box}
-.px-home a{color:inherit;text-decoration:none}
-.px-home img{max-width:100%;display:block}
-.px-home .px-wrap{max-width:1280px;margin:0 auto;padding:0 20px}
-.px-home .px-font{font-family:"Press Start 2P", monospace}
+.px-shop *, .px-shop *::before, .px-shop *::after{box-sizing:border-box}
+.px-shop a{color:inherit;text-decoration:none}
+.px-shop img{max-width:100%;display:block}
+.px-shop .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
 
-/* pixel hard shadow helper */
-.px-home .hard{box-shadow:0 0 0 2px #000, 6px 6px 0 0 rgba(0,0,0,.45)}
-.px-home .hard-sm{box-shadow:0 0 0 2px #000, 4px 4px 0 0 rgba(0,0,0,.4)}
-
-/* ===== TICKER ===== */
-.px-home .ticker{
+/* ===== ANNOUNCEMENT BAR ===== */
+.px-shop .announce{
   background:#000;border-bottom:2px solid var(--px-pink);
   overflow:hidden;white-space:nowrap;
-  font-family:"Press Start 2P",monospace;font-size:11px;
-  color:var(--px-gold);padding:10px 0;
+  font-family:"Press Start 2P",monospace;font-size:10px;
+  color:var(--px-gold);padding:9px 0;
 }
-.px-home .ticker .in{display:inline-block;padding-left:100%;animation:px-scroll 28s linear infinite}
+.px-shop .announce .in{display:inline-block;padding-left:100%;animation:px-scroll 30s linear infinite}
 @keyframes px-scroll{to{transform:translateX(-100%)}}
-.px-home .ticker span{margin-right:60px}
-.px-home .ticker .p{color:var(--px-pink)} .px-home .ticker .c{color:var(--px-cyan)}
+.px-shop .announce span{margin-right:60px}
+.px-shop .announce .p{color:var(--px-pink)} .px-shop .announce .c{color:var(--px-cyan)}
 
 /* ===== HERO ===== */
-.px-home .hero{
+.px-shop .hero{
   position:relative;
   background:
-    radial-gradient(60% 80% at 20% 20%, rgba(177,74,237,.25), transparent 60%),
-    radial-gradient(50% 70% at 85% 70%, rgba(255,46,136,.22), transparent 60%),
+    radial-gradient(60% 80% at 25% 20%, rgba(177,74,237,.28), transparent 60%),
+    radial-gradient(50% 70% at 85% 75%, rgba(255,46,136,.22), transparent 60%),
     linear-gradient(180deg,#1a1240 0%, #0d0b1a 100%);
-  padding:60px 0 70px;
-  overflow:hidden;
+  padding:64px 0 72px;overflow:hidden;
 }
-.px-home .hero::before{
+.px-shop .hero::before{
   content:"";position:absolute;inset:0;
   background-image:
     linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:32px 32px;
-  pointer-events:none;
+  background-size:32px 32px;pointer-events:none;
 }
-.px-home .hero .px-wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
-.px-home .hero .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.px-home .chip{
-  font-family:"Press Start 2P",monospace;font-size:10px;
-  padding:8px 12px;border:2px solid #000;background:var(--px-panel);
-  color:var(--px-cyan);box-shadow:3px 3px 0 #000;
+.px-shop .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.px-shop .hero .crumbs{
+  display:inline-block;font-family:"Press Start 2P",monospace;font-size:10px;
+  color:var(--px-cyan);background:var(--px-panel);border:2px solid #000;
+  padding:8px 12px;box-shadow:3px 3px 0 #000;margin-bottom:20px;
 }
-.px-home .chip.pk{color:var(--px-pink)} .px-home .chip.gd{color:var(--px-gold)}
-.px-home .hero h1{
+.px-shop .hero h1{
   font-family:"Press Start 2P",monospace;
-  font-size:clamp(22px,4vw,42px);line-height:1.25;margin:0;
+  font-size:clamp(20px,3.8vw,38px);line-height:1.3;margin:0;
   color:#fff;text-shadow:4px 4px 0 var(--px-pink), 8px 8px 0 rgba(0,0,0,.5);
 }
-.px-home .hero h1 .c{color:var(--px-cyan)}
-.px-home .hero p.lead{font-size:20px;color:var(--px-text-2);max-width:560px;margin:22px 0 0}
-.px-home .hero p.lead b{color:var(--px-gold)}
-.px-home .cta-row{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
-.px-home .pbtn{
-  font-family:"Press Start 2P",monospace;font-size:13px;
+.px-shop .hero h1 .c{color:var(--px-cyan)}
+.px-shop .hero p.lead{font-size:20px;color:var(--px-text-2);max-width:560px;margin:22px 0 0}
+.px-shop .hero p.lead b{color:var(--px-gold)}
+.px-shop .cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.px-shop .pbtn{
+  font-family:"Press Start 2P",monospace;font-size:12px;
   padding:14px 22px;border:2px solid #000;cursor:pointer;
   display:inline-flex;align-items:center;gap:10px;transition:transform .1s;
 }
-.px-home .pbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
-.px-home .pbtn.pk{background:var(--px-pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
-.px-home .pbtn.cy{background:var(--px-cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
-.px-home .pbtn.ol{background:var(--px-panel);color:var(--px-text);box-shadow:4px 4px 0 #000}
+.px-shop .pbtn:active{transform:translate(2px,2px)}
+.px-shop .pbtn.pk{background:var(--px-pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
+.px-shop .pbtn.cy{background:var(--px-cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
 
-/* hero player card */
-.px-home .pcard{
-  background:var(--px-panel);border:3px solid #000;
-  box-shadow:8px 8px 0 rgba(0,0,0,.5);
-  padding:18px;
+/* hero product mockup — pixel display case */
+.px-shop .showcase{
+  position:relative;background:var(--px-panel);border:3px solid #000;
+  box-shadow:8px 8px 0 rgba(0,0,0,.5);padding:24px;
 }
-.px-home .pcard .top{display:flex;justify-content:space-between;align-items:center;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--px-gold)}
-.px-home .pcard .avatar{
-  width:100%;aspect-ratio:1;
-  background:
-    linear-gradient(135deg, var(--px-purple), var(--px-pink));
-  border:2px solid #000;margin:14px 0;
-  display:flex;align-items:center;justify-content:center;font-size:64px;
+.px-shop .showcase .sw-head{
+  display:flex;justify-content:space-between;font-family:"Press Start 2P",monospace;font-size:9px;
+  color:var(--px-gold);margin-bottom:14px;
 }
-.px-home .bar{height:14px;background:#000;border:2px solid #000;position:relative;margin:6px 0 4px}
-.px-home .bar .fill{height:100%}
-.px-home .bar.hp .fill{width:78%;background:var(--px-green)}
-.px-home .bar.mp .fill{width:54%;background:var(--px-blue)}
-.px-home .bar.exp .fill{width:92%;background:var(--px-gold)}
-.px-home .bar-label{display:flex;justify-content:space-between;font-size:14px;color:var(--px-text-2);font-family:"Press Start 2P",monospace;font-size:9px}
+.px-shop .showcase .case{
+  position:relative;aspect-ratio:3/4;
+  background:linear-gradient(160deg,#2a1f5e,#14112b);
+  border:3px solid #000;overflow:hidden;
+}
+.px-shop .showcase .case .card-art{
+  position:absolute;inset:14px;
+  background:linear-gradient(135deg,#ff2e88 0%,#b14aed 60%,#4a9eff 100%);
+  border:2px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:72px;
+}
+.px-shop .showcase .case .shine{
+  position:absolute;top:0;left:0;width:40%;height:100%;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);
+}
+.px-shop .showcase .sw-foot{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:14px;font-family:"Press Start 2P",monospace;font-size:10px;
+}
+.px-shop .showcase .sw-foot .price{color:var(--px-gold);font-size:13px}
+.px-shop .showcase .sw-foot .badge{color:var(--px-green)}
 
 /* ===== SECTION HEAD ===== */
-.px-home section{padding:56px 0}
-.px-home .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-.px-home .sec-head h2{
-  font-family:"Press Start 2P",monospace;font-size:clamp(16px,2.4vw,22px);
+.px-shop section{padding:56px 0}
+.px-shop .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.px-shop .sec-head h2{
+  font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.2vw,20px);
   margin:0;color:#fff;line-height:1.3;
 }
-.px-home .sec-head h2 .blk{color:var(--px-pink)}
-.px-home .sec-head .more{
+.px-shop .sec-head h2 .blk{color:var(--px-pink)}
+.px-shop .sec-head .more{
   font-family:"Press Start 2P",monospace;font-size:10px;
   color:var(--px-cyan);border:2px solid var(--px-cyan);padding:8px 14px;
-  background:transparent;box-shadow:3px 3px 0 #000;
+  box-shadow:3px 3px 0 #000;
 }
-.px-home .sec-head .more:hover{background:var(--px-cyan);color:#001a1a}
+.px-shop .sec-head .more:hover{background:var(--px-cyan);color:#001a1a}
 
-/* ===== BANNER STRIP (events) ===== */
-.px-home .banners{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.px-home .banner{
-  position:relative;border:3px solid #000;overflow:hidden;
-  padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;
-  box-shadow:6px 6px 0 rgba(0,0,0,.5);
-}
-.px-home .banner .tag{
-  position:absolute;top:12px;left:12px;
-  font-family:"Press Start 2P",monospace;font-size:9px;
-  padding:5px 9px;background:#000;color:var(--px-gold);
-}
-.px-home .banner.b1{background:linear-gradient(135deg,#b14aed,#ff2e88)}
-.px-home .banner.b2{background:linear-gradient(135deg,#00f0ff,#4a9eff)}
-.px-home .banner.b3{background:linear-gradient(135deg,#ffd600,#ff7a00)}
-.px-home .banner h3{font-family:"Press Start 2P",monospace;font-size:14px;color:#fff;margin:0 0 8px;text-shadow:2px 2px 0 #000}
-.px-home .banner p{margin:0;color:rgba(255,255,255,.9);font-size:16px}
-.px-home .banner .count{
-  margin-top:10px;font-family:"Press Start 2P",monospace;font-size:10px;
-  background:rgba(0,0,0,.5);padding:6px 10px;display:inline-block;color:#fff;align-self:flex-start;
-}
-
-/* ===== RARITY TIERS ===== */
-.px-home .rarities{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-.px-home .rar{
-  border:3px solid #000;padding:18px 12px;text-align:center;
-  background:var(--px-panel);box-shadow:5px 5px 0 rgba(0,0,0,.5);
+/* ===== CATEGORY TILES ===== */
+.px-shop .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.px-shop .cat{
+  position:relative;border:3px solid #000;min-height:180px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:18px;overflow:hidden;box-shadow:6px 6px 0 rgba(0,0,0,.5);
   transition:transform .15s;
 }
-.px-home .rar:hover{transform:translateY(-4px)}
-.px-home .rar .letter{font-family:"Press Start 2P",monospace;font-size:26px;margin-bottom:8px}
-.px-home .rar .stars{color:var(--px-gold);letter-spacing:2px;font-size:14px}
-.px-home .rar .desc{font-size:14px;color:var(--px-text-2);margin-top:6px}
-.px-home .rar.n .letter{color:#9a94c7}
-.px-home .rar.r .letter{color:var(--px-blue)}
-.px-home .rar.sr .letter{color:var(--px-purple)}
-.px-home .rar.ssr .letter{color:var(--px-gold)}
-.px-home .rar.ur .letter{color:var(--px-pink);text-shadow:0 0 12px var(--px-pink)}
+.px-shop .cat:hover{transform:translateY(-4px)}
+.px-shop .cat .ic{position:absolute;top:14px;right:16px;font-size:40px;opacity:.9}
+.px-shop .cat h3{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;margin:0 0 6px;text-shadow:2px 2px 0 #000}
+.px-shop .cat p{margin:0;color:rgba(255,255,255,.85);font-size:15px}
+.px-shop .cat .cnt{
+  display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;
+  background:rgba(0,0,0,.5);padding:4px 8px;align-self:flex-start;color:var(--px-gold);
+}
+.px-shop .cat.c1{background:linear-gradient(135deg,#f7b733,#fc4a1a)}
+.px-shop .cat.c2{background:linear-gradient(135deg,#e53935,#7f1d1d)}
+.px-shop .cat.c3{background:linear-gradient(135deg,#6a11cb,#2575fc)}
+.px-shop .cat.c4{background:linear-gradient(135deg,#11998e,#38ef7d)}
 
-/* ===== CARD GRID ===== */
-.px-home .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.px-home .card{
+/* ===== PRODUCT GRID ===== */
+.px-shop .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.px-shop .prod{
   background:var(--px-panel);border:3px solid #000;
   box-shadow:6px 6px 0 rgba(0,0,0,.5);
   display:flex;flex-direction:column;overflow:hidden;
   transition:transform .15s;
 }
-.px-home .card:hover{transform:translateY(-4px)}
-.px-home .card .art{
-  position:relative;aspect-ratio:3/4;border-bottom:3px solid #000;
-  display:flex;align-items:center;justify-content:center;
-  font-size:64px;
+.px-shop .prod:hover{transform:translateY(-4px)}
+.px-shop .prod .img{
+  position:relative;aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;font-size:72px;
+  border-bottom:3px solid #000;
 }
-.px-home .card .art .glow{
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.18), transparent 65%);
-}
-.px-home .card .rar-tag{
-  position:absolute;top:8px;left:8px;
+.px-shop .prod .img .tag{
+  position:absolute;top:10px;left:10px;
   font-family:"Press Start 2P",monospace;font-size:9px;
-  padding:4px 8px;color:#fff;border:2px solid #000;
+  padding:5px 9px;color:#fff;border:2px solid #000;
 }
-.px-home .card .lvl{
-  position:absolute;top:8px;right:8px;
-  font-family:"Press Start 2P",monospace;font-size:9px;
-  background:#000;color:var(--px-gold);padding:4px 8px;
-}
-.px-home .card.r-n .rar-tag{background:#6b6890}
-.px-home .card.r-r .rar-tag{background:var(--px-blue)}
-.px-home .card.r-sr .rar-tag{background:var(--px-purple)}
-.px-home .card.r-ssr .rar-tag{background:var(--px-gold);color:#1a1205}
-.px-home .card.r-ur .rar-tag{background:var(--px-pink)}
-.px-home .card.r-n .art{background:linear-gradient(160deg,#2a2550,#1a1636)}
-.px-home .card.r-r .art{background:linear-gradient(160deg,#1e3a6b,#142447)}
-.px-home .card.r-sr .art{background:linear-gradient(160deg,#4a1e6b,#2a1447)}
-.px-home .card.r-ssr .art{background:linear-gradient(160deg,#6b5a1e,#473a14)}
-.px-home .card.r-ur .art{background:linear-gradient(160deg,#6b1e3a,#47142a)}
-.px-home .card .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
-.px-home .card .cname{font-size:17px;font-weight:bold;color:#fff;line-height:1.25}
-.px-home .card .cmeta{font-size:14px;color:var(--px-text-2)}
-.px-home .card .cstats{display:flex;gap:10px;font-size:13px;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--px-text-2)}
-.px-home .card .cstats .hp{color:var(--px-green)} .px-home .card .cstats .at{color:var(--px-red)}
-.px-home .card .buy{
+.px-shop .prod .img .tag.hot{background:var(--px-red)}
+.px-shop .prod .img .tag.new{background:var(--px-gold);color:#1a1205}
+.px-shop .prod .img .tag.best{background:#000;color:var(--px-gold)}
+.px-shop .prod .i1{background:linear-gradient(160deg,#3a1f5e,#1a1437)}
+.px-shop .prod .i2{background:linear-gradient(160deg,#1e3a6b,#142447)}
+.px-shop .prod .i3{background:linear-gradient(160deg,#5e1f3a,#37142a)}
+.px-shop .prod .i4{background:linear-gradient(160deg,#5e4a1f,#372e14)}
+.px-shop .prod .info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.px-shop .prod .name{font-size:18px;font-weight:bold;color:#fff;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.px-shop .prod .series{font-size:14px;color:var(--px-text-3)}
+.px-shop .prod .row{
   margin-top:auto;display:flex;justify-content:space-between;align-items:center;
   border-top:2px dashed var(--px-line-2);padding-top:10px;
 }
-.px-home .card .price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--px-gold)}
-.px-home .card .buy-btn{
-  font-family:"Press Start 2P",monospace;font-size:9px;
+.px-shop .prod .price{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--px-gold)}
+.px-shop .prod .price s{color:var(--px-text-3);font-size:10px;margin-right:6px}
+.px-shop .prod .add{
+  font-family:"Press Start 2P",monospace;font-size:10px;
   background:var(--px-pink);color:#fff;border:2px solid #000;
-  padding:7px 12px;cursor:pointer;box-shadow:3px 3px 0 #7a0f44;
+  padding:8px 13px;cursor:pointer;box-shadow:3px 3px 0 #7a0f44;
 }
-.px-home .card .buy-btn:hover{background:var(--px-cyan);color:#001a1a;box-shadow:3px 3px 0 #007a8a}
+.px-shop .prod .add:hover{background:var(--px-cyan);color:#001a1a;box-shadow:3px 3px 0 #007a8a}
 
-/* ===== DECK / TWO-COLUMN ===== */
-.px-home .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.px-home .panel{
+/* ===== FEATURES ===== */
+.px-shop .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.px-shop .feat{
   background:var(--px-panel);border:3px solid #000;
-  box-shadow:6px 6px 0 rgba(0,0,0,.5);
+  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:22px;text-align:center;
 }
-.px-home .panel .panel-head{
-  font-family:"Press Start 2P",monospace;font-size:12px;
-  background:#000;color:var(--px-cyan);padding:12px 16px;
-  border-bottom:3px solid #000;display:flex;justify-content:space-between;align-items:center;
+.px-shop .feat .fico{
+  width:64px;height:64px;margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;font-size:32px;
+  background:var(--px-panel-2);border:2px solid #000;
 }
-.px-home .panel .panel-body{padding:18px}
-
-/* daily check-in grid */
-.px-home .checkin{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.px-home .day{
-  aspect-ratio:1;border:2px solid var(--px-line-2);background:var(--px-bg-2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:11px;color:var(--px-text-3);text-align:center;gap:2px;
-}
-.px-home .day .d{font-family:"Press Start 2P",monospace;font-size:8px}
-.px-home .day .g{font-size:18px}
-.px-home .day.done{background:#1d3a2a;border-color:var(--px-green);color:var(--px-green)}
-.px-home .day.today{background:var(--px-pink);border-color:#000;color:#fff;animation:px-blink 1.2s infinite}
-@keyframes px-blink{50%{opacity:.7}}
-.px-home .day.today .d,.px-home .day.today .g{color:#fff}
-
-/* leaderboard */
-.px-home .lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:2px dashed var(--px-line-2)}
-.px-home .lb-row:last-child{border-bottom:0}
-.px-home .lb-rank{font-family:"Press Start 2P",monospace;font-size:12px;width:36px;text-align:center}
-.px-home .lb-rank.r1{color:var(--px-gold)} .px-home .lb-rank.r2{color:#c0c0c0} .px-home .lb-rank.r3{color:#cd7f32}
-.px-home .lb-ava{width:36px;height:36px;background:var(--px-panel-2);border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:18px}
-.px-home .lb-name{flex:1;font-size:17px;color:#fff}
-.px-home .lb-name small{display:block;color:var(--px-text-3);font-size:13px}
-.px-home .lb-score{font-family:"Press Start 2P",monospace;font-size:11px;color:var(--px-cyan)}
-
-/* ===== NEWS LIST ===== */
-.px-home .news{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.px-home .news-item{
-  background:var(--px-panel);border:3px solid #000;
-  box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:18px;
-}
-.px-home .news-item .ndate{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--px-pink)}
-.px-home .news-item h4{margin:10px 0 8px;font-size:19px;color:#fff}
-.px-home .news-item p{margin:0;color:var(--px-text-2);font-size:15px}
+.px-shop .feat h4{font-family:"Press Start 2P",monospace;font-size:12px;color:#fff;margin:0 0 8px;line-height:1.4}
+.px-shop .feat p{margin:0;color:var(--px-text-2);font-size:15px}
 
 /* ===== REVIEWS ===== */
-.px-home .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.px-home .rev{
+.px-shop .revs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.px-shop .rev{
   background:var(--px-panel);border:3px solid #000;
   box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:20px;
 }
-.px-home .rev .stars{color:var(--px-gold);letter-spacing:2px}
-.px-home .rev p{margin:10px 0 0;font-size:16px;color:var(--px-text)}
-.px-home .rev .who{margin-top:10px;font-size:14px;color:var(--px-text-3)}
+.px-shop .rev .stars{color:var(--px-gold);letter-spacing:2px}
+.px-shop .rev p{margin:10px 0 0;font-size:16px;color:var(--px-text)}
+.px-shop .rev .who{margin-top:10px;font-size:14px;color:var(--px-text-3)}
 
 /* ===== CTA ===== */
-.px-home .cta{
+.px-shop .cta{
   position:relative;text-align:center;
   background:
     radial-gradient(60% 100% at 50% 0%, rgba(255,46,136,.3), transparent 70%),
@@ -300,269 +235,247 @@
   box-shadow:0 0 0 3px #000, 8px 8px 0 rgba(0,0,0,.5);
   padding:60px 24px;
 }
-.px-home .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(16px,3vw,26px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--px-pink)}
-.px-home .cta p{color:var(--px-text-2);max-width:560px;margin:16px auto 0;font-size:18px}
-.px-home .cta .sub-form{display:flex;gap:12px;max-width:480px;margin:26px auto 0}
-.px-home .cta .sub-form input{
+.px-shop .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.6vw,24px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--px-pink)}
+.px-shop .cta p{color:var(--px-text-2);max-width:560px;margin:16px auto 0;font-size:18px}
+.px-shop .cta .sub{display:flex;gap:12px;max-width:480px;margin:26px auto 0}
+.px-shop .cta .sub input{
   flex:1;background:#000;border:2px solid var(--px-cyan);color:var(--px-text);
   padding:12px 16px;font-family:"VT323",monospace;font-size:18px;outline:none;
 }
-.px-home .cta .sub-form button{
-  font-family:"Press Start 2P",monospace;font-size:12px;
+.px-shop .cta .sub button{
+  font-family:"Press Start 2P",monospace;font-size:11px;
   background:var(--px-cyan);color:#001a1a;border:2px solid #000;
   padding:0 22px;cursor:pointer;box-shadow:4px 4px 0 #007a8a;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width:1024px){
-  .px-home .hero .px-wrap{grid-template-columns:1fr}
-  .px-home .cards{grid-template-columns:repeat(3,1fr)}
-  .px-home .rarities{grid-template-columns:repeat(5,1fr)}
+  .px-shop .hero .wrap{grid-template-columns:1fr}
+  .px-shop .grid{grid-template-columns:repeat(3,1fr)}
+  .px-shop .cats{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:768px){
-  .px-home .banners,.px-home .two-col,.px-home .news,.px-home .rev-grid{grid-template-columns:1fr}
-  .px-home .cards{grid-template-columns:repeat(2,1fr)}
-  .px-home .rarities{grid-template-columns:repeat(3,1fr)}
-  .px-home .checkin{grid-template-columns:repeat(4,1fr)}
-  .px-home .cta .sub-form{flex-direction:column}
+  .px-shop .grid{grid-template-columns:repeat(2,1fr)}
+  .px-shop .feats,.px-shop .revs{grid-template-columns:1fr}
+  .px-shop .cta .sub{flex-direction:column}
 }
 @media (max-width:480px){
-  .px-home .cards{grid-template-columns:1fr}
-  .px-home .rarities{grid-template-columns:repeat(2,1fr)}
-  .px-home .checkin{grid-template-columns:repeat(3,1fr)}
+  .px-shop .grid,.px-shop .cats{grid-template-columns:1fr}
 }
 </style>
 
-  {% comment %} ===== TICKER ===== {% endcomment %}
-  <div class="ticker">
+  {% comment %} ===== ANNOUNCEMENT ===== {% endcomment %}
+  <div class="announce">
     <div class="in">
-      <span>★ NEW DROP: <span class="p">CHARIZARD EX UR</span> IS LIVE NOW!</span>
-      <span>✦ <span class="c">SERVER 8</span> IS NOW OPEN</span>
-      <span>♦ LIMITED PACK: <span class="p">UMBREON SIR</span> 70% OFF</span>
-      <span>♥ WELCOME NEW PLAYER: get 10 FREE GACHA PULLS</span>
-      <span>★ MAINTENANCE COMPLETE — thank you for waiting</span>
-      <span>✦ TOP DEAL: <span class="c">MEWTWO SAR</span> restocked</span>
+      <span>★ <span class="p">FREE WORLDWIDE SHIPPING</span> over $50</span>
+      <span>✦ NEW: <span class="c">ASCENDED HEROES</span> extended art cases now live</span>
+      <span>♦ Limited stock — <span class="p">UMBREON SIR</span> case restocked</span>
+      <span>♥ 30-day money-back guarantee on every display case</span>
+      <span>★ UV-protected, archival-quality materials on all orders</span>
     </div>
   </div>
 
   {% comment %} ===== HERO ===== {% endcomment %}
   <section class="hero">
-    <div class="px-wrap">
+    <div class="wrap">
       <div>
-        <div class="badge-row">
-          <span class="chip">v2.4.1 ONLINE</span>
-          <span class="chip pk">★ UR RATE-UP</span>
-          <span class="chip gd">♦ 12,847 PLAYERS</span>
-        </div>
-        <h1>CARD<br><span class="c">ARCHIVE</span><br>EX:</h1>
-        <p class="lead">The ultimate <b>extended-art display archive</b> for serious collectors. Pull, organize, and showcase your rarest cards in pure 8-bit glory. No duplicates, no compromises.</p>
+        <span class="crumbs">♦ HOME / EXTENDED ART DISPLAY CASES</span>
+        <h1>PROTECT &amp; <span class="c">SHOWCASE</span><br>YOUR RAREST<br>CARDS.</h1>
+        <p class="lead">Ultra-clear <b>extended-art display cases</b> for Pokémon, One Piece &amp; Lorcana. Magnetic-close, UV-protected, built so your SIR / SAR cards look flawless on the shelf.</p>
         <div class="cta-row">
-          <a class="pbtn pk" href="#cards">▶ START COLLECTING</a>
-          <a class="pbtn ol" href="#decks">▸ VIEW DECK</a>
+          <a class="pbtn pk" href="#best-sellers">▶ SHOP BEST SELLERS</a>
+          <a class="pbtn cy" href="#categories">▸ BROWSE CATEGORIES</a>
         </div>
       </div>
       <div>
-        <div class="pcard hard">
-          <div class="top"><span>LV.47</span><span class="c">★★★★★</span></div>
-          <div class="avatar">🎴</div>
-          <div class="bar-label"><span>HP</span><span>3850 / 4900</span></div>
-          <div class="bar hp"><div class="fill"></div></div>
-          <div class="bar-label"><span>MP</span><span>120 / 220</span></div>
-          <div class="bar mp"><div class="fill"></div></div>
-          <div class="bar-label"><span>EXP</span><span>92%</span></div>
-          <div class="bar exp"><div class="fill"></div></div>
+        <div class="showcase">
+          <div class="sw-head"><span>FEATURED ITEM</span><span class="c">#AHX-284</span></div>
+          <div class="case">
+            <div class="card-art">🔥</div>
+            <div class="shine"></div>
+          </div>
+          <div class="sw-foot">
+            <span class="badge">● IN STOCK</span>
+            <span class="price">$29.99</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  {% comment %} ===== EVENT BANNERS ===== {% endcomment %}
-  <section>
-    <div class="px-wrap">
-      <div class="banners">
-        <div class="banner b1">
-          <span class="tag">EVENT</span>
-          <h3>✦ NEON GACHA FEST</h3>
-          <p>Double UR drop rate for 72 hours. New exclusive art skins.</p>
-          <span class="count">⏱ ENDS IN 2D 14:09</span>
-        </div>
-        <div class="banner b2">
-          <span class="tag">NEW</span>
-          <h3>✦ ASCENDED HEROES SET</h3>
-          <p>8 new SAR cards just dropped. Collect the full wave.</p>
-          <span class="count">● JUST RELEASED</span>
-        </div>
-        <div class="banner b3">
-          <span class="tag">SALE</span>
-          <h3>♦ HOLIDAY PACK BUNDLE</h3>
-          <p>Buy 3 cases, get 1 free. Limited stock worldwide.</p>
-          <span class="count">♦ 42% LEFT IN STOCK</span>
-        </div>
+  {% comment %} ===== CATEGORIES ===== {% endcomment %}
+  <section id="categories">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>// SHOP BY <span class="blk">CATEGORY</span></h2>
+        <a class="more" href="/collections/all">ALL →</a>
+      </div>
+      <div class="cats">
+        {%- if collections.all.size > 0 -%}
+          {%- for collection in collections.all limit: 4 -%}
+            <a class="cat c{{ forloop.index }}" href="{{ collection.url }}">
+              <span class="ic">🎴</span>
+              <h3>{{ collection.title }}</h3>
+              <p>Extended art &amp; display cases</p>
+              <span class="cnt">{{ collection.products_count }}+ ITEMS</span>
+            </a>
+          {%- endfor -%}
+        {%- else -%}
+          <a class="cat c1" href="/collections/pokemon"><span class="ic">🔥</span><h3>Pokémon</h3><p>SIR / SAR / SIR display cases</p><span class="cnt">48+ ITEMS</span></a>
+          <a class="cat c2" href="/collections/one-piece"><span class="ic">🏴‍☠️</span><h3>One Piece</h3><p>Manga &amp; OP card cases</p><span class="cnt">24+ ITEMS</span></a>
+          <a class="cat c3" href="/collections/lorcana"><span class="ic">🧙</span><h3>Lorcana</h3><p>Ravensburger TCG cases</p><span class="cnt">32+ ITEMS</span></a>
+          <a class="cat c4" href="/collections/accessories"><span class="ic">🛡️</span><h3>Accessories</h3><p>Sleeves, slabs, storage</p><span class="cnt">18+ ITEMS</span></a>
+        {%- endif -%}
       </div>
     </div>
   </section>
 
-  {% comment %} ===== RARITY TIERS ===== {% endcomment %}
+  {% comment %} ===== BEST SELLERS ===== {% endcomment %}
+  <section id="best-sellers" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>// BEST <span class="blk">SELLERS</span></h2>
+        <a class="more" href="/collections/best-sellers">SEE MORE →</a>
+      </div>
+      <div class="grid">
+        <a class="prod" href="/products/mega-charizard-x-ex-display-case">
+          <div class="img i1"><span class="tag hot">HOT</span>🔥</div>
+          <div class="info">
+            <div class="name">Mega Charizard X ex 125-094 SIR SAR Display Case</div>
+            <div class="series">Phantasmal Flames · Extended Art</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/umbreon-161-sir-display-case">
+          <div class="img i2"><span class="tag best">BEST</span>🌙</div>
+          <div class="info">
+            <div class="name">Umbreon 161-131 SIR SAR Prismatic Evolutions</div>
+            <div class="series">Prismatic Evolutions · Holo</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/mew-ex-232-display-case">
+          <div class="img i3"><span class="tag hot">HOT</span>✨</div>
+          <div class="info">
+            <div class="name">Mew ex 232-091 SIR SAR Paldean Fates Case</div>
+            <div class="series">Paldean Fates · Extended Art</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/pikachu-ex-276-display-case">
+          <div class="img i4"><span class="tag new">NEW</span>⚡</div>
+          <div class="info">
+            <div class="name">Pikachu ex 276-217 SIR SAR Ascended Heroes</div>
+            <div class="series">Ascended Heroes · Extended Art</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/mega-gengar-ex-284-display-case">
+          <div class="img i3"><span class="tag best">BEST</span>👻</div>
+          <div class="info">
+            <div class="name">Mega Gengar ex 284-217 SIR SAR Ascended Heroes</div>
+            <div class="series">Ascended Heroes · Extended Art</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/mega-dragonite-ex-display-case">
+          <div class="img i1"><span class="tag new">NEW</span>🐉</div>
+          <div class="info">
+            <div class="name">Mega Dragonite EX SAR SIR Ascended Heroes</div>
+            <div class="series">Ascended Heroes · SAR</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/pikachu-grey-felt-hat-display-case">
+          <div class="img i2"><span class="tag best">BEST</span>🎨</div>
+          <div class="info">
+            <div class="name">Pikachu with Grey Felt Hat SVP 085 Promo</div>
+            <div class="series">Black Star Promo · Van Gogh</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/moltres-zapdos-articuno-gx-display-case">
+          <div class="img i4"><span class="tag hot">HOT</span>🕊️</div>
+          <div class="info">
+            <div class="name">Moltres &amp; Zapdos &amp; Articuno GX SM210 Promo</div>
+            <div class="series">Legendary Birds · Promo</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {% comment %} ===== FEATURES ===== {% endcomment %}
   <section style="padding-top:0">
-    <div class="px-wrap">
+    <div class="wrap">
       <div class="sec-head">
-        <h2>// RARITY <span class="blk">SYSTEM</span></h2>
-        <a class="more" href="/collections/all">VIEW ALL →</a>
+        <h2>// WHY <span class="blk">COLLECTORS CHOOSE US</span></h2>
       </div>
-      <div class="rarities">
-        <div class="rar n"><div class="letter">N</div><div class="stars">★</div><div class="desc">Common<br>Base pulls</div></div>
-        <div class="rar r"><div class="letter">R</div><div class="stars">★★</div><div class="desc">Rare<br>Skill cards</div></div>
-        <div class="rar sr"><div class="letter">SR</div><div class="stars">★★★</div><div class="desc">Super Rare<br>Alt art</div></div>
-        <div class="rar ssr"><div class="letter">SSR</div><div class="stars">★★★★</div><div class="desc">SSR<br>Holo foil</div></div>
-        <div class="rar ur"><div class="letter">UR</div><div class="stars">★★★★★</div><div class="desc">Ultra Rare<br>One of a kind</div></div>
-      </div>
-    </div>
-  </section>
-
-  {% comment %} ===== CARD GRID ===== {% endcomment %}
-  <section id="cards" style="padding-top:0">
-    <div class="px-wrap">
-      <div class="sec-head">
-        <h2>// LATEST <span class="blk">CARDS</span></h2>
-        <a class="more" href="/collections/all">SEE MORE →</a>
-      </div>
-      <div class="cards">
-        <a class="card r-ur" href="/products/charizard-ex">
-          <div class="art"><div class="glow"></div><span class="rar-tag">UR</span><span class="lvl">LV.99</span>🔥</div>
-          <div class="info">
-            <div class="cname">Mega Charizard X EX</div>
-            <div class="cmeta">Phantasmal Flames · SIR SAR</div>
-            <div class="cstats"><span class="hp">HP 9800</span><span class="at">ATK 1250</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-ssr" href="/products/umbreon-sir">
-          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.88</span>🌙</div>
-          <div class="info">
-            <div class="cname">Umbreon 161 SIR</div>
-            <div class="cmeta">Prismatic Evolutions</div>
-            <div class="cstats"><span class="hp">HP 8200</span><span class="at">ATK 980</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-sr" href="/products/pikachu-ex">
-          <div class="art"><div class="glow"></div><span class="rar-tag">SR</span><span class="lvl">LV.76</span>⚡</div>
-          <div class="info">
-            <div class="cname">Pikachu ex AHR-276</div>
-            <div class="cmeta">Ascended Heroes</div>
-            <div class="cstats"><span class="hp">HP 6800</span><span class="at">ATK 1100</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-ur" href="/products/mew-ex">
-          <div class="art"><div class="glow"></div><span class="rar-tag">UR</span><span class="lvl">LV.95</span>✨</div>
-          <div class="info">
-            <div class="cname">Mew ex 232 SIR</div>
-            <div class="cmeta">Paldean Fates · Holo</div>
-            <div class="cstats"><span class="hp">HP 9100</span><span class="at">ATK 1400</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-ssr" href="/products/gengar-ex">
-          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.82</span>👻</div>
-          <div class="info">
-            <div class="cname">Mega Gengar ex 284</div>
-            <div class="cmeta">Ascended Heroes</div>
-            <div class="cstats"><span class="hp">HP 7600</span><span class="at">ATK 1050</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-r" href="/products/psyduck">
-          <div class="art"><div class="glow"></div><span class="rar-tag">R</span><span class="lvl">LV.45</span>🦆</div>
-          <div class="info">
-            <div class="cname">Psyduck 226 IR</div>
-            <div class="cmeta">Ascended Heroes</div>
-            <div class="cstats"><span class="hp">HP 3200</span><span class="at">ATK 280</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-sr" href="/products/dragonite">
-          <div class="art"><div class="glow"></div><span class="rar-tag">SR</span><span class="lvl">LV.71</span>🐉</div>
-          <div class="info">
-            <div class="cname">Mega Dragonite EX SAR</div>
-            <div class="cmeta">Ascended Heroes</div>
-            <div class="cstats"><span class="hp">HP 7200</span><span class="at">ATK 950</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-        <a class="card r-ssr" href="/products/van-gogh-pikachu">
-          <div class="art"><div class="glow"></div><span class="rar-tag">SSR</span><span class="lvl">LV.90</span>🎨</div>
-          <div class="info">
-            <div class="cname">Pikachu Grey Felt Hat</div>
-            <div class="cmeta">SVP 085 Black Star Promo</div>
-            <div class="cstats"><span class="hp">HP 8800</span><span class="at">ATK 1150</span></div>
-            <div class="buy"><span class="price">$29.99</span><span class="buy-btn">ADD +</span></div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {% comment %} ===== DAILY + LEADERBOARD ===== {% endcomment %}
-  <section id="decks" style="padding-top:0">
-    <div class="px-wrap">
-      <div class="two-col">
-        <div class="panel">
-          <div class="panel-head"><span>⌂ DAILY CHECK-IN</span><span class="c" style="color:var(--px-gold)">DAY 12 / 30</span></div>
-          <div class="panel-body">
-            <div class="checkin">
-              <div class="day done"><span class="d">D1</span><span class="g">♦</span></div>
-              <div class="day done"><span class="d">D2</span><span class="g">♦</span></div>
-              <div class="day done"><span class="d">D3</span><span class="g">♥</span></div>
-              <div class="day done"><span class="d">D4</span><span class="g">♦</span></div>
-              <div class="day done"><span class="d">D5</span><span class="g">★</span></div>
-              <div class="day today"><span class="d">TODAY</span><span class="g">✚</span></div>
-              <div class="day"><span class="d">D7</span><span class="g">?</span></div>
-              <div class="day"><span class="d">D8</span><span class="g">?</span></div>
-              <div class="day"><span class="d">D9</span><span class="g">?</span></div>
-              <div class="day"><span class="d">D10</span><span class="g">?</span></div>
-              <div class="day"><span class="d">D11</span><span class="g">?</span></div>
-              <div class="day"><span class="d">D12</span><span class="g">?</span></div>
-            </div>
-            <p style="margin:16px 0 0;color:var(--px-text-2);font-size:15px">Sign in daily to earn free pulls, gems, and exclusive border skins. Missed a day? Use a <b style="color:var(--px-gold)">Chrono Ticket</b> to claim back.</p>
-          </div>
+      <div class="feats">
+        <div class="feat">
+          <div class="fico">🛡️</div>
+          <h4>UV PROTECTION</h4>
+          <p>Archival, fade-safe acrylic keeps your SIR cards crystal clear for years.</p>
         </div>
-        <div class="panel">
-          <div class="panel-head"><span>♔ WEEKLY TOP PLAYERS</span><span>RESET IN 3D</span></div>
-          <div class="panel-body" style="padding-top:6px;padding-bottom:6px">
-            <div class="lb-row"><span class="lb-rank r1">01</span><span class="lb-ava">🐉</span><span class="lb-name">DragonMaster_99<small>Just pulled UR Charizard</small></span><span class="lb-score">98,240</span></div>
-            <div class="lb-row"><span class="lb-rank r2">02</span><span class="lb-ava">🌙</span><span class="lb-name">MoonCollector<small>Full Eeveelution set</small></span><span class="lb-score">94,118</span></div>
-            <div class="lb-row"><span class="lb-rank r3">03</span><span class="lb-ava">⚡</span><span class="lb-name">VoltBolt<small>128 consecutive wins</small></span><span class="lb-score">91,804</span></div>
-            <div class="lb-row"><span class="lb-rank">04</span><span class="lb-ava">👻</span><span class="lb-name">GengarMain<small>Completed Pokédex 72%</small></span><span class="lb-score">88,355</span></div>
-            <div class="lb-row"><span class="lb-rank">05</span><span class="lb-ava">✨</span><span class="lb-name">MewTwilight<small>100+ graded slabs</small></span><span class="lb-score">86,912</span></div>
-          </div>
+        <div class="feat">
+          <div class="fico">🧲</div>
+          <h4>MAGNETIC CLOSE</h4>
+          <p>Snap-shut magnetic lid holds your card securely with a premium feel.</p>
+        </div>
+        <div class="feat">
+          <div class="fico">🔍</div>
+          <h4>ULTRA-CLEAR FRONT</h4>
+          <p>Extended-art window shows the full card illustration, no cropped borders.</p>
+        </div>
+        <div class="feat">
+          <div class="fico">🚚</div>
+          <h4>WORLDWIDE SHIPPING</h4>
+          <p>Discreet, tracked delivery. Free shipping on orders over $50.</p>
         </div>
       </div>
     </div>
   </section>
 
-  {% comment %} ===== NEWS ===== {% endcomment %}
+  {% comment %} ===== NEW ARRIVALS ===== {% endcomment %}
   <section style="padding-top:0">
-    <div class="px-wrap">
+    <div class="wrap">
       <div class="sec-head">
-        <h2>// SYSTEM <span class="blk">NEWS</span></h2>
-        <a class="more" href="/blogs/news">ALL NEWS →</a>
+        <h2>// NEW <span class="blk">ARRIVALS</span></h2>
+        <a class="more" href="/collections/new">SEE MORE →</a>
       </div>
-      <div class="news">
-        <a class="news-item" href="#">
-          <div class="ndate">2026.09.15</div>
-          <h4>Patch 2.4.1 — Balance Update</h4>
-          <p>UR drop rates adjusted, new border skins added, and daily rewards doubled for all active players.</p>
+      <div class="grid">
+        <a class="prod" href="/products/mega-charizard-y-ex-display-case">
+          <div class="img i1"><span class="tag new">NEW</span>🔥</div>
+          <div class="info">
+            <div class="name">Mega Charizard Y ex 294-217 Hyper Rare MUR Case</div>
+            <div class="series">Ascended Heroes · Hyper Rare</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
         </a>
-        <a class="news-item" href="#">
-          <div class="ndate">2026.09.12</div>
-          <h4>New Set: Ascended Heroes Wave 2</h4>
-          <p>8 new SAR cards revealed. Pre-order bundles now live with early-access bonus packs.</p>
+        <a class="prod" href="/products/psyduck-226-display-case">
+          <div class="img i2"><span class="tag new">NEW</span>🦆</div>
+          <div class="info">
+            <div class="name">Psyduck 226-217 IR AR Ascended Heroes</div>
+            <div class="series">Ascended Heroes · IR Art</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
         </a>
-        <a class="news-item" href="#">
-          <div class="ndate">2026.09.08</div>
-          <h4>Server Merge EU + US</h4>
-          <p>Cross-region trading enabled. Leaderboards reset, top 100 players get exclusive avatar frames.</p>
+        <a class="prod" href="/products/pikachu-277-display-case">
+          <div class="img i3"><span class="tag new">NEW</span>⚡</div>
+          <div class="info">
+            <div class="name">Pikachu ex 277-217 SIR SAR Ascended Heroes</div>
+            <div class="series">Ascended Heroes · SIR SAR</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
+        </a>
+        <a class="prod" href="/products/mega-gengar-269-display-case">
+          <div class="img i4"><span class="tag new">NEW</span>👻</div>
+          <div class="info">
+            <div class="name">Mega Gengar ex 269-217 Attack Rare Ascended Heroes</div>
+            <div class="series">Ascended Heroes · Attack Rare</div>
+            <div class="row"><span class="price">$29.99</span><span class="add">ADD +</span></div>
+          </div>
         </a>
       </div>
     </div>
@@ -570,25 +483,25 @@
 
   {% comment %} ===== REVIEWS ===== {% endcomment %}
   <section style="padding-top:0">
-    <div class="px-wrap">
+    <div class="wrap">
       <div class="sec-head">
-        <h2>// PLAYER <span class="blk">REVIEWS</span></h2>
+        <h2>// COLLECTORS <span class="blk">REVIEWS</span></h2>
       </div>
-      <div class="rev-grid">
+      <div class="revs">
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"This is the only archive that gets my SIR cards right. The pixel aesthetic is insane and the cases feel premium."</p>
-          <div class="who">— Ethan_R · LV.52 · verified</div>
+          <p>"The case is crystal clear and the magnetic close feels premium. My Charizard SIR has never looked better on the shelf."</p>
+          <div class="who">— Ethan R. · verified buyer</div>
         </div>
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"I ordered 12 cases. Every single one arrived flawless. The HP bar UI on the site is too addictive."</p>
-          <div class="who">— Maya_K · LV.48 · verified</div>
+          <p>"Fast worldwide shipping, packaging was perfect. The UV protection gives me peace of mind for my graded cards."</p>
+          <div class="who">— Maya K. · verified buyer</div>
         </div>
         <div class="rev">
           <div class="stars">★★★★★</div>
-          <p>"Finally a store that treats my collection like a game. Daily check-in, leaderboards — 10/10."</p>
-          <div class="who">— Jordan_L · LV.61 · verified</div>
+          <p>"Clean, modern look. The recessed slot holds my sleeved card perfectly. Already ordered three more."</p>
+          <div class="who">— Jordan L. · verified buyer</div>
         </div>
       </div>
     </div>
@@ -596,12 +509,12 @@
 
   {% comment %} ===== CTA ===== {% endcomment %}
   <section style="padding-top:0">
-    <div class="px-wrap">
+    <div class="wrap">
       <div class="cta">
-        <h2>▶ READY TO <span style="color:var(--px-cyan)">LOG IN?</span></h2>
-        <p>Join 12,847 collectors. Get 10 free gacha pulls on your first order, plus weekly drop alerts before anyone else.</p>
-        <form class="sub-form" action="/account" method="post">
-          <input type="email" name="email" placeholder="player@guild.xyz" required>
+        <h2>JOIN THE <span style="color:var(--px-cyan)">COLLECTOR'S CLUB</span></h2>
+        <p>Get early access to new extended-art drops, member-only discounts, and sneak peeks before anyone else.</p>
+        <form class="sub" action="/account" method="post">
+          <input type="email" name="email" placeholder="you@example.com" required>
           <button type="submit">SIGN UP ▸</button>
         </form>
       </div>
@@ -612,7 +525,7 @@
 
 {% schema %}
 {
-  "name": "Pixel Card Home",
+  "name": "Pixel Card Shop Home",
   "settings": [
     {
       "type": "header",
@@ -641,7 +554,7 @@
   ],
   "presets": [
     {
-      "name": "Pixel Card Home"
+      "name": "Pixel Card Shop Home"
     }
   ]
 }
