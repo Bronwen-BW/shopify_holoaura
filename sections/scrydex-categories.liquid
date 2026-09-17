@@ -1,10 +1,7 @@
 {% comment %}
   Scrydex — Category / Expansions page.
-  Supports blocks:
-    - main_category: 主分类（侧边栏一级项），点击切换右侧子分类面板
-    - category_item: 子分类卡片（在"归属主分类"里填写主分类名称即可挂到对应主分类下）
-    - sidebar_group: 旧版侧边栏分组（无 main_category 时作为兼容 fallback）
-  Blocks 优先于自动列出 collections 的行为。
+  配置由 WinForms 编辑器生成。下方 capture sx_config_json 块内是 JSON 数据，
+  请勿手动编辑，用配套的 CategoryEditor.exe 修改。
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,21 +26,8 @@
 .sx-cats .sx-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
 .sx-cats .sx-main{min-width:0}
 
-/* ---------- Sidebar ---------- */
 .sx-cats .sx-sidebar{background:var(--panel);border-right:3px solid #000;padding:24px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sx-cats .sx-sidebar-label{padding:8px 20px 12px;font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
-
-/* 旧版折叠分组 */
-.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase}
-.sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
-.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
-.sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
-.sx-cats .sx-group.closed .sx-children{display:none}
-.sx-cats .sx-item{display:block;padding:7px 20px 7px 40px;color:var(--text2);font-size:17px;border-left:3px solid transparent;transition:background .12s,color .12s}
-.sx-cats .sx-item:hover{color:var(--text);background:var(--panel2)}
-.sx-cats .sx-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
-
-/* 新版：主分类 tab */
 .sx-cats .sx-main-cat{
   display:flex;width:100%;align-items:center;justify-content:space-between;
   padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;
@@ -55,7 +39,6 @@
 .sx-cats .sx-main-cat:hover{color:var(--text);background:var(--panel2)}
 .sx-cats .sx-main-cat.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
 
-/* ---------- Hero ---------- */
 .sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
 .sx-cats .sx-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
 .sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
@@ -67,7 +50,6 @@
 .sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(18px,2.6vw,28px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
 .sx-cats .sx-hero p{font-size:20px;color:var(--text2);margin:0;max-width:700px}
 
-/* ---------- Section / panels ---------- */
 .sx-cats .sx-section{padding:40px 40px 64px}
 .sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:clamp(14px,2vw,18px);margin:0 0 28px;color:#fff;line-height:1.3}
 .sx-cats .sx-panel{display:none}
@@ -99,167 +81,83 @@
 }
 </style>
 
-{%- comment -%} 把 blocks 按类型分组 {%- endcomment -%}
-{%- assign main_cat_blocks = section.blocks | where: "type", "main_category" -%}
-{%- assign sidebar_blocks  = section.blocks | where: "type", "sidebar_group" -%}
-{%- assign cat_blocks      = section.blocks | where: "type", "category_item" -%}
+{%- comment -%} ============ 配置数据（由 CategoryEditor.exe 维护） ============ {%- endcomment -%}
+{%- capture sx_config_json -%}
+[
+  {
+    "title": "Sword & Shield",
+    "items": [
+      { "title": "Brilliant Stars", "url": "/collections/brilliant-stars", "image": "", "date": "2022/02/25" },
+      { "title": "Astral Radiance", "url": "/collections/astral-radiance", "image": "", "date": "2022/05/27" }
+    ]
+  },
+  {
+    "title": "Scarlet & Violet",
+    "items": [
+      { "title": "Scarlet Base Set", "url": "/collections/scarlet", "image": "", "date": "2023/03/31" },
+      { "title": "Violet Base Set", "url": "/collections/violet", "image": "", "date": "2023/03/31" }
+    ]
+  }
+]
+{%- endcapture -%}
+{%- assign sx_config = sx_config_json | parse_json -%}
+{%- assign sx_total_cats = sx_config.size -%}
 
 <div class="sx-cats">
   <div class="sx-layout">
 
     <!-- ============ SIDEBAR ============ -->
     <aside class="sx-sidebar">
-      {%- if main_cat_blocks.size > 0 -%}
-        <div class="sx-sidebar-label">MENU</div>
-        {%- for block in main_cat_blocks -%}
-          {%- assign gid = block.id -%}
-          {%- comment -%} 统计该主分类下子分类数量 {%- endcomment -%}
-          {%- assign gtitle = block.settings.group_title | strip -%}
-          {%- assign gcount = 0 -%}
-          {%- for item in cat_blocks -%}
-            {%- assign ip = item.settings.parent_group | strip -%}
-            {%- if ip == gtitle or (ip == '' and forloop.parentloop.first) -%}
-              {%- assign gcount = gcount | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-          <button type="button" class="sx-main-cat {% if forloop.first %}active{% endif %}" data-sx-group="{{ gid }}">
-            <span><span class="sx-glyph">▣</span>{{ gtitle | default: 'GROUP' }}</span>
-            <span class="sx-count">{{ gcount }}</span>
-          </button>
-        {%- endfor -%}
-      {%- elsif sidebar_blocks.size > 0 -%}
-        {%- for block in sidebar_blocks -%}
-          <div class="sx-group">
-            <div class="sx-group-head" data-sx-toggle>
-              <span><span class="sx-glyph">▣</span>{{ block.settings.group_title | default: 'GROUP' }}</span>
-              {%- assign line_count = block.settings.links | strip | newline_to_br | split: '<br />' | size -%}
-              {%- if line_count > 0 -%}<span class="sx-caret">▼</span>{%- endif -%}
-            </div>
-            <div class="sx-children">
-              {%- assign lines = block.settings.links | strip | split: newline -%}
-              {%- for line in lines -%}
-                {%- assign parts = line | strip | split: '|' -%}
-                {%- if parts.size >= 2 -%}
-                  <a class="sx-item" href="{{ parts[1] | strip }}">{{ parts[0] | strip }}</a>
-                {%- elsif parts.size == 1 and parts[0] != '' -%}
-                  <a class="sx-item" href="#">{{ parts[0] | strip }}</a>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endfor -%}
-      {%- else -%}
-        {%- comment -%} Fallback: auto-list collections {%- endcomment -%}
-        <div class="sx-group">
-          <div class="sx-group-head" data-sx-toggle>
-            <span><span class="sx-glyph" style="color:var(--red)">◉</span>{{ section.settings.sidebar_title | default: 'EXPANSIONS' }}</span>
-            <span class="sx-caret">▼</span>
-          </div>
-          <div class="sx-children">
-            {%- if collections.all.size > 0 -%}
-              {%- for collection in collections.all -%}
-                <a class="sx-item {% if request.path == collection.url %}active{% endif %}" href="{{ collection.url }}">{{ collection.title }}</a>
-              {%- endfor -%}
-            {%- else -%}
-              <a class="sx-item" href="#">30th Celebration: Classic Collection</a>
-              <a class="sx-item" href="#">30th Celebration</a>
-              <a class="sx-item" href="#">Pitch Black</a>
-            {%- endif -%}
-          </div>
-        </div>
-      {%- endif -%}
+      <div class="sx-sidebar-label">MENU</div>
+      {%- for cat in sx_config -%}
+        <button type="button" class="sx-main-cat {% if forloop.first %}active{% endif %}" data-sx-group="cat-{{ forloop.index }}">
+          <span><span class="sx-glyph">▣</span>{{ cat.title }}</span>
+          <span class="sx-count">{{ cat.items.size }}</span>
+        </button>
+      {%- endfor -%}
     </aside>
 
     <!-- ============ MAIN ============ -->
     <main class="sx-main">
 
       <section class="sx-hero">
-        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
+        <div class="sx-watermark" aria-hidden="true">Pokémon</div>
         <div class="sx-hero-inner">
           <div class="sx-hero-title-row">
             <span class="sx-ball" aria-hidden="true"></span>
-            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
+            <h1>Pokémon TCG</h1>
           </div>
-          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game." }}</p>
+          <p>Catch 'em all. Explore every expansion in the Pokémon Trading Card Game.</p>
         </div>
       </section>
 
       <section class="sx-section">
-        {%- if main_cat_blocks.size > 0 -%}
-          {%- for block in main_cat_blocks -%}
-            {%- assign gid = block.id -%}
-            {%- assign gtitle = block.settings.group_title | strip -%}
-            <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
-              <h2 class="sx-section-title">{{ gtitle | default: 'EXPANSIONS' }}</h2>
-              {%- assign shown = 0 -%}
-              <div class="sx-grid">
-                {%- for item in cat_blocks -%}
-                  {%- assign ip = item.settings.parent_group | strip -%}
-                  {%- if ip == gtitle or (ip == '' and forloop.parentloop.first) -%}
-                    {%- assign shown = shown | plus: 1 -%}
-                    <a class="sx-tile" href="{{ item.settings.card_url | default: '#' }}">
-                      <div class="sx-tile-logo">
-                        {%- if item.settings.card_image -%}
-                          <img src="{{ item.settings.card_image | image_url: width:400, height:240, crop:'center' }}" alt="{{ item.settings.card_title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                          <span class="sx-ph" style="display:none">🎴</span>
-                        {%- else -%}
-                          <span class="sx-ph">🎴</span>
-                        {%- endif -%}
-                      </div>
-                      <div class="sx-tile-name">{{ item.settings.card_title | default: 'Expansion' }}</div>
-                      {%- if section.settings.show_date and item.settings.card_date -%}
-                        <div class="sx-tile-date">{{ item.settings.card_date }}</div>
-                      {%- endif -%}
-                    </a>
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-              {%- if shown == 0 -%}
-                <p class="sx-panel-empty">No items in this category yet.</p>
-              {%- endif -%}
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          <h2 class="sx-section-title">{{ section.settings.section_title | default: 'EXPANSIONS' }}</h2>
-          <div class="sx-grid">
-            {%- if cat_blocks.size > 0 -%}
-              {%- for block in cat_blocks -%}
-                <a class="sx-tile" href="{{ block.settings.card_url | default: '#' }}">
+        {%- for cat in sx_config -%}
+          <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="cat-{{ forloop.index }}">
+            <h2 class="sx-section-title">{{ cat.title }}</h2>
+            <div class="sx-grid">
+              {%- for item in cat.items -%}
+                <a class="sx-tile" href="{{ item.url | default: '#' }}">
                   <div class="sx-tile-logo">
-                    {%- if block.settings.card_image -%}
-                      <img src="{{ block.settings.card_image | image_url: width:400, height:240, crop:'center' }}" alt="{{ block.settings.card_title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                    {%- if item.image and item.image != '' -%}
+                      <img src="{{ item.image }}" alt="{{ item.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
                       <span class="sx-ph" style="display:none">🎴</span>
                     {%- else -%}
                       <span class="sx-ph">🎴</span>
                     {%- endif -%}
                   </div>
-                  <div class="sx-tile-name">{{ block.settings.card_title | default: 'Expansion' }}</div>
-                  {%- if section.settings.show_date and block.settings.card_date -%}
-                    <div class="sx-tile-date">{{ block.settings.card_date }}</div>
+                  <div class="sx-tile-name">{{ item.title }}</div>
+                  {%- if item.date and item.date != '' -%}
+                    <div class="sx-tile-date">{{ item.date }}</div>
                   {%- endif -%}
                 </a>
               {%- endfor -%}
-            {%- else -%}
-              {%- comment -%} Fallback: list collections {%- endcomment -%}
-              {%- assign source = section.settings.source_collection | default: collections.all -%}
-              {%- for collection in source -%}
-                <a class="sx-tile" href="{{ collection.url }}">
-                  <div class="sx-tile-logo">
-                    {%- if collection.image -%}
-                      <img src="{{ collection.image | image_url: width:400, height:240, crop:'center' }}" alt="{{ collection.title | escape }}" loading="lazy">
-                    {%- else -%}
-                      <span class="sx-ph">🎴</span>
-                    {%- endif -%}
-                  </div>
-                  <div class="sx-tile-name">{{ collection.title }}</div>
-                  {%- if section.settings.show_date -%}
-                    <div class="sx-tile-date">{{ collection.published_at | date: '%Y/%m/%d' }}</div>
-                  {%- endif -%}
-                </a>
-              {%- endfor -%}
+            </div>
+            {%- if cat.items.size == 0 -%}
+              <p class="sx-panel-empty">No items in this category yet.</p>
             {%- endif -%}
           </div>
-        {%- endif -%}
+        {%- endfor -%}
       </section>
 
     </main>
@@ -268,30 +166,17 @@
 
 <script>
 (function(){
-  // 新版：主分类 tab 切换
   var tabs = document.querySelectorAll('.sx-cats [data-sx-group]');
   var panels = document.querySelectorAll('.sx-cats [data-sx-panel]');
-  if (tabs.length && panels.length) {
-    tabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        var gid = tab.getAttribute('data-sx-group');
-        tabs.forEach(function(t){ t.classList.remove('active'); });
-        tab.classList.add('active');
-        panels.forEach(function(p){
-          if (p.getAttribute('data-sx-panel') === gid) {
-            p.classList.add('active');
-          } else {
-            p.classList.remove('active');
-          }
-        });
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var gid = tab.getAttribute('data-sx-group');
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      panels.forEach(function(p){
+        if (p.getAttribute('data-sx-panel') === gid) p.classList.add('active');
+        else p.classList.remove('active');
       });
-    });
-  }
-  // 旧版：侧边栏分组折叠
-  document.querySelectorAll('.sx-cats [data-sx-toggle]').forEach(function(head){
-    head.addEventListener('click', function(){
-      var g = head.parentElement;
-      if (g) g.classList.toggle('closed');
     });
   });
 })();
@@ -301,53 +186,10 @@
 {
   "name": "Categories",
   "settings": [
-    { "type": "header", "content": "Hero" },
-    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokémon TCG" },
-    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." },
-    { "type": "text", "id": "watermark_text", "label": "Background watermark", "default": "Pokémon" },
-    { "type": "header", "content": "Grid" },
-    { "type": "text", "id": "section_title", "label": "Grid heading (legacy mode)", "default": "EXPANSIONS" },
-    { "type": "checkbox", "id": "show_date", "label": "Show release date", "default": true },
-    { "type": "header", "content": "Sidebar (fallback)" },
-    { "type": "text", "id": "sidebar_title", "label": "Sidebar heading (auto-list)", "default": "EXPANSIONS" }
+    { "type": "paragraph", "content": "分类数据由配套的 CategoryEditor.exe 工具维护，直接在左侧菜单用工具编辑即可。本 section 无需在 Shopify 后台配置 block。" }
   ],
-  "blocks": {
-    "main_category": {
-      "name": "主分类 (Main Category)",
-      "settings": [
-        { "type": "text", "id": "group_title", "label": "主分类名称（会显示在左侧菜单）", "default": "Series" }
-      ]
-    },
-    "category_item": {
-      "name": "子分类卡片 (Subcategory)",
-      "settings": [
-        { "type": "text", "id": "parent_group", "label": "归属主分类（必须与某个主分类名称完全一致；留空则归入第一个主分类）", "default": "" },
-        { "type": "text", "id": "card_title", "label": "Card title", "default": "New Expansion" },
-        { "type": "url", "id": "card_url", "label": "Card link URL", "default": "/collections/" },
-        { "type": "image_picker", "id": "card_image", "label": "Card image" },
-        { "type": "text", "id": "card_date", "label": "Release date (YYYY/MM/DD)", "default": "" }
-      ]
-    },
-    "sidebar_group": {
-      "name": "Sidebar Group (legacy)",
-      "settings": [
-        { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
-        { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Sword & Shield|/collections/swsh\nScarlet & Violet|/collections/sv" }
-      ]
-    }
-  },
   "presets": [
-    {
-      "name": "Categories",
-      "blocks": [
-        { "type": "main_category", "settings": { "group_title": "Sword & Shield" } },
-        { "type": "category_item", "settings": { "parent_group": "Sword & Shield", "card_title": "Brilliant Stars", "card_url": "/collections/brilliant-stars" } },
-        { "type": "category_item", "settings": { "parent_group": "Sword & Shield", "card_title": "Astral Radiance", "card_url": "/collections/astral-radiance" } },
-        { "type": "main_category", "settings": { "group_title": "Scarlet & Violet" } },
-        { "type": "category_item", "settings": { "parent_group": "Scarlet & Violet", "card_title": "Scarlet Base Set", "card_url": "/collections/scarlet" } },
-        { "type": "category_item", "settings": { "parent_group": "Scarlet & Violet", "card_title": "Violet Base Set", "card_url": "/collections/violet" } }
-      ]
-    }
+    { "name": "Categories" }
   ]
 }
 {% endschema %}
