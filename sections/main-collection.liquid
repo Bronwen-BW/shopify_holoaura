@@ -113,80 +113,111 @@ ul[product-grid-view="zoom-out"] .px-card__ph{font-size:34px;}
 #shopify-section-main .facets-block-wrapper,
 #shopify-section-main .facets--drawer{background:var(--pxpanel) !important;color:var(--pxtext);}
 
-/* —— 筛选 / 排序 触发按钮（横向 summary） —— */
-#shopify-section-main .facets__summary{
-  display:inline-flex !important;align-items:center;gap:8px;
-  background:var(--pxpanel) !important;color:var(--pxtext) !important;
+/* —— 横向筛选工具条容器 —— */
+#shopify-section-main .facets--horizontal .facets__form{
+  background:linear-gradient(180deg,#1d1840 0%,#15122f 100%) !important;
   border:2px solid #000 !important;border-radius:0 !important;
-  box-shadow:3px 3px 0 rgba(0,0,0,.5) !important;
-  padding:10px 13px !important;min-height:0 !important;cursor:pointer;list-style:none;
-  font-family:"Press Start 2P",monospace !important;font-size:9px !important;
-  letter-spacing:.5px;text-transform:uppercase;line-height:1.4;
-  transition:background .12s,border-color .12s,transform .1s;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.06),4px 4px 0 rgba(0,0,0,.45) !important;
+  padding:13px 15px !important;align-items:center;
+}
+/* —— 筛选 / 排序 触发按钮（横向：立体凸起像素按钮） —— */
+#shopify-section-main .facets--horizontal .facets__summary{
+  position:relative;display:inline-flex !important;align-items:center;gap:8px;
+  background:linear-gradient(180deg,#2c2560 0%,#1b1640 100%) !important;
+  color:#ffd600 !important;border:2px solid #000 !important;border-radius:0 !important;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.16),inset -2px -2px 0 rgba(0,0,0,.5),3px 3px 0 rgba(0,0,0,.55) !important;
+  padding:12px 15px !important;margin:2px;min-height:0 !important;cursor:pointer;list-style:none;
+  font-family:"Press Start 2P","Microsoft JhengHei","微軟正黑體",monospace !important;
+  font-size:11px !important;font-weight:700;letter-spacing:.5px;line-height:1;white-space:nowrap;text-transform:uppercase;
+  transition:transform .08s,box-shadow .08s,background .12s,border-color .12s,color .12s;
 }
 #shopify-section-main .facets__summary::-webkit-details-marker{display:none;}
-#shopify-section-main .facets__summary:hover{background:var(--pxpanel2) !important;border-color:var(--pxcyan) !important;}
-#shopify-section-main details[open] > .facets__summary{background:var(--pxpanel2) !important;border-color:var(--pxcyan) !important;}
-#shopify-section-main .facets__summary .facets__label{
-  color:var(--pxgold) !important;font-family:"Press Start 2P",monospace !important;font-size:9px !important;letter-spacing:.5px;
+#shopify-section-main .facets--horizontal .facets__summary .facets__label{color:inherit !important;font:inherit !important;letter-spacing:.5px;}
+#shopify-section-main .facets--horizontal .facets__summary:hover{
+  background:linear-gradient(180deg,#372f78 0%,#221b50 100%) !important;
+  border-color:#00f0ff !important;color:#00f0ff !important;transform:translate(-1px,-1px);
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.2),inset -2px -2px 0 rgba(0,0,0,.5),4px 4px 0 rgba(0,0,0,.55) !important;
 }
-#shopify-section-main .facets__summary .facets__status,
-#shopify-section-main .facets__summary .facets__bubble{
-  color:var(--pxcyan) !important;font-family:"VT323",monospace !important;font-size:15px !important;
+#shopify-section-main .facets--horizontal details[open] > .facets__summary,
+#shopify-section-main .facets--horizontal .facets__summary:active{
+  background:linear-gradient(180deg,#14102b 0%,#1d1840 100%) !important;
+  border-color:#ff2e88 !important;color:#ff2e88 !important;transform:translate(2px,2px);
+  box-shadow:inset 2px 2px 0 rgba(0,0,0,.6),inset -2px -2px 0 rgba(255,255,255,.07),1px 1px 0 rgba(0,0,0,.4) !important;
 }
-#shopify-section-main .facets__summary .icon-caret{color:var(--pxgold) !important;width:11px;height:11px;transition:transform .2s;}
+#shopify-section-main .facets__summary .icon-caret{color:inherit !important;width:12px;height:12px;transition:transform .2s;}
 #shopify-section-main details[open] > .facets__summary .icon-caret{transform:rotate(180deg);}
-/* —— 筛选 / 排序 弹层 —— */
-#shopify-section-main .facets__inputs.facets__panel-content,
-#shopify-section-main .sorting-filter__options{
-  background:var(--pxpanel) !important;border:3px solid #000 !important;border-radius:0 !important;
-  box-shadow:6px 6px 0 rgba(0,0,0,.55) !important;color:var(--pxtext) !important;padding:12px !important;
+#shopify-section-main .facets__summary .facets__status{
+  color:#00f0ff !important;font-family:"VT323",monospace !important;font-size:16px !important;font-weight:400;
 }
-#shopify-section-main .facets__inputs .facets__header,
-#shopify-section-main .facets__inputs fieldset,
-#shopify-section-main .facets__inputs li{border-color:var(--line,#2e2656) !important;}
-#shopify-section-main .facets__inputs label,
-#shopify-section-main .sorting-filter__label{
-  font-family:"VT323",monospace !important;font-size:18px !important;color:var(--pxtext) !important;
-  display:flex;align-items:center;gap:8px;padding:5px 6px;cursor:pointer;border-radius:0;
+#shopify-section-main .facets__summary .facets__bubble{
+  background:#ff2e88 !important;color:#fff !important;border:1px solid #000 !important;border-radius:0 !important;
+  font-family:"Press Start 2P",monospace !important;font-size:9px !important;line-height:1;
+  min-width:17px;height:17px;padding:0 4px;display:inline-flex;align-items:center;justify-content:center;
 }
-#shopify-section-main .facets__inputs label:hover,
-#shopify-section-main .sorting-filter__option:hover{background:var(--pxpanel2) !important;}
-#shopify-section-main .facets__inputs label:hover,
-#shopify-section-main .sorting-filter__option:hover .sorting-filter__label{color:var(--pxcyan) !important;}
-#shopify-section-main .facets__inputs input[type="checkbox"],
-#shopify-section-main .facets__inputs input[type="radio"],
-#shopify-section-main .sorting-filter__input{accent-color:var(--pxcyan);width:14px;height:14px;}
-#shopify-section-main .facets__inputs input:checked ~ *,
-#shopify-section-main .sorting-filter__input:checked ~ .sorting-filter__label{color:var(--pxpink) !important;}
-#shopify-section-main .facets__inputs input[type="number"],
-#shopify-section-main .price-filter__input{
+/* —— 筛选 / 排序 弹层（不带 section 前缀，兼容浮层被传送至 body） —— */
+.facets__inputs.facets__panel-content,
+.sorting-filter__options{
+  background:linear-gradient(180deg,#1d1840 0%,#15122f 100%) !important;
+  border:3px solid #000 !important;border-radius:0 !important;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.08),6px 6px 0 rgba(0,0,0,.55) !important;
+  color:#e8e6ff !important;padding:13px !important;min-width:218px;z-index:60;
+}
+.facets__inputs .facets__header,
+.facets__inputs fieldset,
+.facets__inputs li{border-color:#2e2656 !important;}
+.facets__inputs label,
+.sorting-filter__label{
+  font-family:"Microsoft JhengHei","微軟正黑體","VT323",monospace !important;
+  font-size:16px !important;font-weight:700;color:#e8e6ff !important;
+  display:flex;align-items:center;gap:10px;padding:7px 9px;margin:1px 0;cursor:pointer;
+  border-left:3px solid transparent;line-height:1.2;
+}
+.facets__inputs label:hover,
+.sorting-filter__option:hover{background:#221d47 !important;}
+.facets__inputs label:hover{border-left-color:#00f0ff !important;color:#00f0ff !important;}
+.sorting-filter__option:hover{border-left:3px solid #00f0ff;}
+.sorting-filter__option:hover .sorting-filter__label{color:#00f0ff !important;}
+/* 像素勾选框 */
+.facets__inputs input[type="checkbox"],
+.facets__inputs input[type="radio"],
+.sorting-filter__input{
+  appearance:none;-webkit-appearance:none;flex:0 0 15px;width:15px !important;height:15px !important;margin:0 !important;
   background:#0d0b1a !important;border:2px solid #000 !important;border-radius:0 !important;
-  color:var(--pxtext) !important;font-family:"VT323",monospace !important;font-size:17px !important;padding:6px 8px;
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.14),1px 1px 0 rgba(0,0,0,.5);cursor:pointer;
 }
-#shopify-section-main .facets__inputs .button,
-#shopify-section-main .facets__inputs button{border-radius:0 !important;}
+.facets__inputs input:checked,
+.sorting-filter__input:checked{background:#00f0ff !important;box-shadow:inset 0 0 0 2px #0d0b1a,1px 1px 0 rgba(0,0,0,.5) !important;}
+.facets__inputs input:checked ~ *{color:#ff2e88 !important;}
+.sorting-filter__input:checked ~ .sorting-filter__label{color:#ff2e88 !important;}
+.facets__inputs input[type="number"],
+.price-filter__input{
+  background:#0d0b1a !important;border:2px solid #000 !important;border-radius:0 !important;
+  color:#e8e6ff !important;font-family:"VT323",monospace !important;font-size:17px !important;padding:6px 8px;
+}
+.facets__inputs .button,
+.facets__inputs button{border-radius:0 !important;}
 /* —— 商品计数 / 网格密度 —— */
 #shopify-section-main .products-count-wrapper,
 #shopify-section-main .products-count-wrapper span{
-  font-family:"Press Start 2P",monospace !important;font-size:10px !important;color:var(--pxtext2) !important;letter-spacing:.5px;
+  font-family:"Press Start 2P",monospace !important;font-size:10px !important;color:#9a94c7 !important;letter-spacing:.5px;
 }
 #shopify-section-main .grid-density-controls button,
 #shopify-section-main [class*="grid-density"] button{
-  background:var(--pxpanel) !important;border:2px solid #000 !important;border-radius:0 !important;
-  color:var(--pxtext2) !important;box-shadow:3px 3px 0 rgba(0,0,0,.5);padding:8px !important;
+  background:linear-gradient(180deg,#2c2560,#1b1640) !important;border:2px solid #000 !important;border-radius:0 !important;
+  color:#9a94c7 !important;box-shadow:inset 1px 1px 0 rgba(255,255,255,.14),inset -1px -1px 0 rgba(0,0,0,.45),2px 2px 0 rgba(0,0,0,.5);
+  padding:8px !important;cursor:pointer;transition:background .12s,color .12s;
 }
 #shopify-section-main .grid-density-controls button[aria-pressed="true"],
 #shopify-section-main [class*="grid-density"] button[aria-pressed="true"],
 #shopify-section-main .grid-density-controls button:hover,
 #shopify-section-main [class*="grid-density"] button:hover{
-  color:var(--pxcyan) !important;background:var(--pxpanel2) !important;
+  color:#00f0ff !important;background:linear-gradient(180deg,#372f78,#221b50) !important;
 }
 #shopify-section-main .grid-density-controls .icon,
 #shopify-section-main [class*="grid-density"] .icon{color:inherit;width:16px;height:16px;}
 /* 移动端排序 select 兜底 */
 #shopify-section-main .sorting-filter__select{
-  background:var(--pxpanel) !important;color:var(--pxtext) !important;border:2px solid #000 !important;
+  background:#1a1636 !important;color:#e8e6ff !important;border:2px solid #000 !important;
   border-radius:0 !important;font-family:"VT323",monospace !important;font-size:17px !important;padding:8px;
 }
 
