@@ -1,315 +1,52 @@
-{% comment %}
-  Scrydex — Category / Expansions page.
-  主分类 = sidebar_group block（标题 + links 每行一条子分类：标题|URL）
-  左侧点主分类 tab，右侧切换显示该组下的子分类卡片。
-  由配套的 CategoryManager 工具维护数据。
-{% endcomment %}
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-
-<style>
-.sx-cats{
-  --bg:#0d0b1a; --panel:#1a1636; --panel2:#221d47;
-  --line:#2e2656; --line2:#3d3373;
-  --text:#e8e6ff; --text2:#9a94c7; --text3:#5e5888;
-  --pink:#ff2e88; --cyan:#00f0ff; --gold:#ffd600;
-  --red:#ff4757; --purple:#b14aed;
-  background:var(--bg); color:var(--text);
-  font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
-}
-.sx-cats *,.sx-cats *::before,.sx-cats *::after{box-sizing:border-box}
-.sx-cats{
-  --f-sidebar-title:{{ section.settings.sidebar_title_font_size }}px;
-  --f-group:{{ section.settings.group_font_size }}px;
-  --f-sub:{{ section.settings.sub_font_size }}px;
-  --f-card:{{ section.settings.card_font_size }}px;
-}
-.sx-cats a{color:inherit;text-decoration:none}
-.sx-cats button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
-.sx-cats img{max-width:100%;display:block}
-
-.sx-cats .sx-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
-.sx-cats .sx-main{min-width:0}
-
-.sx-cats .sx-sidebar{background:var(--panel);border-right:3px solid #000;padding:24px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sx-cats .sx-sidebar-label{padding:8px 20px 12px;font-family:"Press Start 2P",monospace;font-size:var(--f-sidebar-title);letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
-.sx-cats .sx-main-cat{
-  display:flex;width:100%;align-items:center;justify-content:space-between;
-  padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;
-  color:var(--text2);text-transform:uppercase;text-align:left;
-  border-left:3px solid transparent;transition:background .12s,color .12s;
-}
-.sx-cats .sx-main-cat .sx-glyph{margin-right:10px;color:var(--pink)}
-.sx-cats .sx-main-cat .sx-count{font-family:"VT323",monospace;font-size:14px;color:var(--text3);letter-spacing:0}
-.sx-cats .sx-main-cat:hover{color:var(--text);background:var(--panel2)}
-.sx-cats .sx-main-cat.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
-
-/* 两级树：父分类头 + 缩进子项 */
-.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:var(--f-group);letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase;border-left:3px solid transparent;transition:background .12s,color .12s}
-.sx-cats .sx-group-head:hover{background:var(--panel2);color:#fff}
-.sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
-.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
-.sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
-.sx-cats .sx-group.closed .sx-children{display:none}
-.sx-cats .sx-sub-item{display:block;padding:5px 20px 5px 44px;color:var(--text2);font-size:var(--f-sub);border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer}
-.sx-cats .sx-sub-item:hover{color:var(--text);background:var(--panel2)}
-.sx-cats .sx-sub-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
-.sx-cats .sx-tile.hidden{display:none}
-
-.sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
-.sx-cats .sx-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
-.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
-.sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:780px}
-.sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:18px;margin-bottom:20px}
-.sx-cats .sx-ball{width:46px;height:46px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:3px solid #000;position:relative;flex:0 0 auto;box-shadow:4px 4px 0 #000}
-.sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:8px;background:#000;transform:translateY(-50%)}
-.sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:14px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
-.sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(18px,2.6vw,28px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
-.sx-cats .sx-hero p{font-size:20px;color:var(--text2);margin:0;max-width:700px}
-
-.sx-cats .sx-section{padding:40px 40px 64px}
-.sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:clamp(14px,2vw,18px);margin:0 0 28px;color:#fff;line-height:1.3}
-.sx-cats .sx-panel{display:none}
-.sx-cats .sx-panel.active{display:block}
-.sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
-
-.sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
-.sx-cats .sx-tile{background:var(--panel);border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);padding:20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .15s}
-.sx-cats .sx-tile:hover{transform:translateY(-4px)}
-.sx-cats .sx-tile-logo{height:110px;width:100%;display:flex;align-items:center;justify-content:center;background:var(--panel2);border:2px solid #000;padding:8px}
-.sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s}
-.sx-cats .sx-tile:hover .sx-tile-logo img{transform:scale(1.05)}
-.sx-cats .sx-tile-logo .sx-ph{font-size:42px}
-.sx-cats .sx-tile-name{font-family:"VT323",monospace;font-size:var(--f-card);font-weight:bold;color:#fff;margin-top:14px;line-height:1.3;min-height:2.6em}
-.sx-cats .sx-tile:hover .sx-tile-name{color:var(--cyan)}
-.sx-cats .sx-tile-date{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:5px 8px;color:var(--gold)}
-
-@media (max-width:1100px){ .sx-cats .sx-grid{grid-template-columns:repeat(4,1fr)} }
-@media (max-width:900px){
-  .sx-cats .sx-layout{grid-template-columns:1fr}
-  .sx-cats .sx-sidebar{position:relative;height:auto;border-right:0;border-bottom:3px solid #000}
-  .sx-cats .sx-grid{grid-template-columns:repeat(3,1fr)}
-  .sx-cats .sx-hero,.sx-cats .sx-section{padding-left:20px;padding-right:20px}
-}
-@media (max-width:560px){
-  .sx-cats .sx-grid{grid-template-columns:repeat(2,1fr);gap:16px}
-  .sx-cats .sx-tile-logo{height:80px}
-  .sx-cats .sx-tile-name{font-size:16px}
-}
-</style>
-
-{%- assign sidebar_blocks = section.blocks | where: "type", "sidebar_group" -%}
-
-<div class="sx-cats">
-  <div class="sx-layout">
-
-    <!-- ============ SIDEBAR ============ -->
-    <aside class="sx-sidebar">
-      <div class="sx-sidebar-label">MENU</div>
-      {%- for block in sidebar_blocks -%}
-        {%- assign gid = "group-" | append: forloop.index -%}
-        {%- assign link_lines = block.settings.links | strip | split: "
-" -%}
-        <div class="sx-group {% if forloop.first %}open{% else %}closed{% endif %}" data-sx-group-container="{{ gid }}">
-          <div class="sx-group-head" data-sx-group-head data-sx-show-group="{{ gid }}">
-            <span><span class="sx-glyph">▣</span>{{ block.settings.group_title | default: 'GROUP' }}</span>
-            <span class="sx-caret">▼</span>
-          </div>
-          <div class="sx-children">
-            {%- assign second_idx = 0 -%}
-            {%- for raw in link_lines -%}
-              {%- assign line = raw -%}
-              {%- assign first_ch = line | slice: 0 -%}
-              {%- unless first_ch == ' ' or first_ch == '	' -%}
-                {%- assign t = line | strip -%}
-                {%- if t != '' -%}
-                  {%- assign second_idx = second_idx | plus: 1 -%}
-                  {%- assign pipe_t = t | split: '|' -%}
-                  {%- if pipe_t.size > 1 -%}
-                    {%- assign second_title = pipe_t[0] | strip -%}
-                  {%- else -%}
-                    {%- assign us_t = t | split: '_' -%}
-                    {%- if us_t.size > 1 -%}
-                      {%- assign second_title = '' -%}
-                      {%- for p in us_t -%}{%- unless forloop.last -%}{%- if second_title != '' -%}{%- assign second_title = second_title | append: '_' -%}{%- endif -%}{%- assign second_title = second_title | append: p -%}{%- endunless -%}{%- endfor -%}
-                    {%- else -%}
-                      {%- assign second_title = t -%}
-                    {%- endif -%}
-                  {%- endif -%}
-                  <a class="sx-sub-item" data-sx-show-second="{{ gid }}-{{ second_idx }}">{{ second_title }}</a>
-                {%- endif -%}
-              {%- endunless -%}
-            {%- endfor -%}
-          </div>
-        </div>
-      {%- endfor -%}
-      {%- if sidebar_blocks.size == 0 -%}
-        <div style="padding:12px 20px;color:var(--text3);font-size:16px">No groups configured.</div>
-      {%- endif -%}
-    </aside>
-
-    <!-- ============ MAIN ============ -->
-    <main class="sx-main">
-
-      <section class="sx-hero">
-        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
-        <div class="sx-hero-inner">
-          <div class="sx-hero-title-row">
-            <span class="sx-ball" aria-hidden="true"></span>
-            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
-          </div>
-          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game." }}</p>
-        </div>
-      </section>
-
-      <section class="sx-section">
-        {%- for block in sidebar_blocks -%}
-          {%- assign gid = "group-" | append: forloop.index -%}
-          <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
-            <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
-            <div class="sx-grid">
-              {%- assign link_lines = block.settings.links | strip | split: "
-" -%}
-              {%- assign cur_second = 0 -%}
-              {%- for raw in link_lines -%}
-                {%- assign line = raw -%}
-                {%- assign first_ch = line | slice: 0 -%}
-                {%- if first_ch == ' ' or first_ch == '	' -%}
-                  {%- assign card_line = line | strip -%}
-                  {%- if card_line == '' -%}{%- continue -%}{%- endif -%}
-
-                  {%- comment -%} 解析卡片行 "标题|URL"，兼容 "标题_URL" {%- endcomment -%}
-                  {%- assign pipe = card_line | split: '|' -%}
-                  {%- if pipe.size > 1 -%}
-                    {%- assign link_title = pipe[0] | strip -%}
-                    {%- assign link_url = pipe[1] | strip -%}
-                  {%- else -%}
-                    {%- assign us = card_line | split: '_' -%}
-                    {%- if us.size > 1 -%}
-                      {%- assign link_url = us | last -%}
-                      {%- assign link_title = '' -%}
-                      {%- for p in us -%}
-                        {%- unless forloop.last -%}
-                          {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
-                          {%- assign link_title = link_title | append: p -%}
-                        {%- endunless -%}
-                      {%- endfor -%}
-                    {%- else -%}
-                      {%- assign link_title = card_line -%}
-                      {%- assign link_url = '' -%}
-                    {%- endif -%}
-                  {%- endif -%}
-
-                  {%- if link_url != '' -%}
-                    {%- unless link_url contains '/' or link_url contains ':' -%}
-                      {%- assign link_url = '/collections/' | append: link_url -%}
-                    {%- endunless -%}
-                  {%- else -%}
-                    {%- assign link_url = '#' -%}
-                  {%- endif -%}
-
-                  <a class="sx-tile" data-sx-second="{{ gid }}-{{ cur_second }}" href="{{ link_url }}">
-                    <div class="sx-tile-logo">
-                      <span class="sx-ph">🎴</span>
-                    </div>
-                    <div class="sx-tile-name">{{ link_title }}</div>
-                  </a>
-                {%- else -%}
-                  {%- assign t = line | strip -%}
-                  {%- if t != '' -%}
-                    {%- assign cur_second = cur_second | plus: 1 -%}
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endfor -%}
-      </section>
-
-    </main>
-  </div>
-</div>
-
-<script>
-(function(){
-  var panels = document.querySelectorAll('.sx-cats [data-sx-panel]');
-  var cards  = document.querySelectorAll('.sx-cats [data-sx-second]');
-  var heads  = document.querySelectorAll('.sx-cats [data-sx-group-head]');
-  var seconds = document.querySelectorAll('.sx-cats [data-sx-show-second]');
-
-  function showGroup(gid){
-    panels.forEach(function(p){
-      p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
-    });
-    // 显示该组所有卡片，清除第二级高亮
-    cards.forEach(function(c){ c.classList.remove('hidden'); });
-    seconds.forEach(function(s){ s.classList.remove('active'); });
-  }
-
-  function showSecond(cid){
-    // cid = "group-1-2"
-    var gid = cid.split('-').slice(0,2).join('-');
-    panels.forEach(function(p){
-      p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
-    });
-    cards.forEach(function(c){
-      c.classList.toggle('hidden', c.getAttribute('data-sx-second') !== cid);
-    });
-    seconds.forEach(function(s){
-      s.classList.toggle('active', s.getAttribute('data-sx-show-second') === cid);
-    });
-  }
-
-  heads.forEach(function(h){
-    h.addEventListener('click', function(){
-      var container = h.closest('[data-sx-group-container]');
-      if (container) container.classList.toggle('closed');
-      showGroup(h.getAttribute('data-sx-show-group'));
-    });
-  });
-
-  seconds.forEach(function(s){
-    s.addEventListener('click', function(e){
-      e.preventDefault();
-      showSecond(s.getAttribute('data-sx-show-second'));
-    });
-  });
-})();
-</script>
-
-{% schema %}
 {
-  "name": "Categories",
-  "settings": [
-    { "type": "header", "content": "Hero" },
-    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokemon TCG" },
-    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch them all. Explore every expansion." },
-    { "type": "text", "id": "watermark_text", "label": "Watermark", "default": "Pokemon" },
-    { "type": "header", "content": "Sidebar Font Sizes (px)" },
-    { "type": "range", "id": "sidebar_title_font_size", "label": "Sidebar title", "min": 10, "max": 24, "step": 1, "default": 12, "unit": "px" },
-    { "type": "range", "id": "group_font_size", "label": "Main category (level 1)", "min": 8, "max": 22, "step": 1, "default": 12, "unit": "px" },
-    { "type": "range", "id": "sub_font_size", "label": "Sub category (level 2)", "min": 10, "max": 22, "step": 1, "default": 13, "unit": "px" },
-    { "type": "range", "id": "card_font_size", "label": "Card name", "min": 10, "max": 22, "step": 1, "default": 12, "unit": "px" }
-  ],
-  "blocks": [
-    {
-      "type": "sidebar_group",
-      "name": "Main Category",
-      "settings": [
-        { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
-        { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
+  "sections": {
+    "sc_categories_main": {
+      "type": "scrydex-categories",
+      "settings": {
+        "hero_title": "Pokémon TCG",
+        "hero_description": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
+        "watermark_text": "Pokémon",
+        "section_title": "NEWEST EXPANSIONS",
+        "source_collection": "",
+        "show_date": true,
+        "sidebar_title": "EXPANSIONS",
+        "sidebar_menu": "",
+        "sidebar_title_font_size": 30,
+        "group_font_size": 30,
+        "sub_font_size": 20,
+        "card_font_size": 18
+      },
+      "blocks": {
+        "sidebar_dcf9ad8d": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "寶可夢",
+            "links": "日文版\n  30th セレブレーション プレミアムデッキセット エーフィ・ブラッキー|mf\n  30th セレブレーション|m6a\n  ADV Promos|advp\n  Black & White Promos|bwp\n  Diamond & Pearl Promos|dpp\n  EXバトルブースト|ebb1\n簡中版\n  30 周年庆典 豪华卡组套装|30thDC\n  暗影夺辉|CS5.5C\n  宝可梦卡牌 家庭组合|CS2DaC\n繁中版\n  ex初階牌組 噴火龍|SVQL\n  ex初階牌組 皮卡丘|SVQP\n  ex初階牌組|SVD\n英文版\n  30th Celebration_ Classic Collection|me55c\n  30th Celebration|me55"
+          }
+        },
+        "sidebar_c372f6b0": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "航海王/海賊王",
+            "links": "繁中版\n簡中版\n日文版\n  500 Years In The Future|OP07\n  Absolute Justice|ST06"
+          }
+        },
+        "sidebar_dbfc5e5d": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "悟空",
+            "links": "全部\n  補充包DUALEVOLUTIONFB09\n  補充包覺醒的心跳FB01"
+          }
+        }
+      },
+      "block_order": [
+        "sidebar_dcf9ad8d",
+        "sidebar_c372f6b0",
+        "sidebar_dbfc5e5d"
       ]
     }
-  ],
-  "presets": [
-    {
-      "name": "Categories",
-      "blocks": [
-        { "type": "sidebar_group", "settings": { "group_title": "Pokemon", "links": "Brilliant Stars|/collections/brilliant-stars" } }
-      ]
-    }
+  },
+  "order": [
+    "sc_categories_main"
   ]
 }
-{% endschema %}
