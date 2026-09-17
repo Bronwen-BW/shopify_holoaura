@@ -1,0 +1,450 @@
+{%- comment -%}
+  ====================================================================
+  全站像素风皮肤（Pixel Arcade Theme）
+  - 仅覆盖视觉样式（颜色/字体/圆角/边框/阴影），不改任何业务结构与逻辑
+  - 首页 .px-shop 与 分类页 .sx-cats 自带像素样式，本文件不干预其容器内部
+  - 通过覆盖主题设计令牌（--color-* / --font-* / --style-border-radius-*）
+    让 header / footer / 商品 / 系列 / 购物车 / 搜索 / 博客 / 弹窗 等全站统一
+  ====================================================================
+{%- endcomment -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+{% style %}
+/* ============ 1. 设计令牌：深色像素配色 / 像素字体 / 去圆角 ============ */
+:root,
+body,
+[class*='color-scheme']{
+  /* 背景 / 文字 */
+  --color-background:#0d0b1a;
+  --color-background-rgb:13,11,26;
+  --color-foreground:#e8e6ff;
+  --color-foreground-rgb:232,230,255;
+  --color-foreground-heading:#ffffff;
+  --color-foreground-muted:#9a94c7;
+  --color-primary:#00f0ff;
+  --color-primary-rgb:0,240,255;
+  --color-primary-hover:#ff2e88;
+  --color-primary-hover-rgb:255,46,136;
+  --color-border:#2e2656;
+  --color-border-rgb:46,38,86;
+  --color-shadow:#000000;
+  --color-shadow-rgb:0,0,0;
+
+  /* 主按钮：青色像素块 */
+  --color-primary-button-text:#001a1a;
+  --color-primary-button-background:#00f0ff;
+  --color-primary-button-border:#000000;
+  --color-primary-button-hover-text:#001a1a;
+  --color-primary-button-hover-background:#00d0dd;
+  --color-primary-button-hover-border:#000000;
+
+  /* 次按钮：深紫面板 + 金字 */
+  --color-secondary-button-text:#ffd600;
+  --color-secondary-button-background:#1a1636;
+  --color-secondary-button-border:#000000;
+  --color-secondary-button-hover-text:#ffffff;
+  --color-secondary-button-hover-background:#221d47;
+  --color-secondary-button-hover-border:#000000;
+
+  /* 输入框 */
+  --color-input-background:#1a1636;
+  --color-input-text:#e8e6ff;
+  --color-input-border:#000000;
+  --color-input-hover-background:#221d47;
+
+  /* 变体（variant） */
+  --color-variant-background:#1a1636;
+  --color-variant-border:#000000;
+  --color-variant-text:#e8e6ff;
+  --color-variant-hover-background:#221d47;
+  --color-variant-hover-text:#ffffff;
+  --color-variant-hover-border:#000000;
+  --color-selected-variant-background:#00f0ff;
+  --color-selected-variant-border:#000000;
+  --color-selected-variant-text:#001a1a;
+  --color-selected-variant-hover-background:#00d0dd;
+  --color-selected-variant-hover-text:#001a1a;
+  --color-selected-variant-hover-border:#000000;
+
+  /* 字体 */
+  --font-body--family:'VT323',ui-monospace,monospace;
+  --font-subheading--family:'VT323',ui-monospace,monospace;
+  --font-heading--family:'Press Start 2P','VT323',monospace;
+  --font-accent--family:'Press Start 2P','VT323',monospace;
+  --font-primary--family:'VT323',ui-monospace,monospace;
+
+  /* 圆角全部清零（硬边像素） */
+  --style-border-radius-xs:0;
+  --style-border-radius-sm:0;
+  --style-border-radius-md:0;
+  --style-border-radius-lg:0;
+  --style-border-radius-pills:0;
+  --style-border-radius-inputs:0;
+  --style-border-radius-buttons-primary:0;
+  --style-border-radius-buttons-secondary:0;
+  --style-border-radius-popover:0;
+  --card-corner-radius:0px;
+  --product-corner-radius:0px;
+  --media-radius:0px;
+  --image-facet-border-radius:0px;
+  --variant-picker-swatch-radius:0px;
+}
+
+/* ============ 2. 基底 ============ */
+html, body{ background:#0d0b1a; }
+body{
+  font-family:'VT323',ui-monospace,monospace !important;
+  font-size:19px;
+  line-height:1.5;
+  color:#e8e6ff;
+}
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.title{
+  font-family:'Press Start 2P','VT323',monospace !important;
+  color:#ffffff;
+  line-height:1.4;
+}
+h1,.h1{ text-shadow:4px 4px 0 #ff2e88,7px 7px 0 rgba(0,0,0,.45); }
+h2,.h2{ text-shadow:3px 3px 0 rgba(0,0,0,.5); }
+a{ color:#00f0ff; }
+.rte, .rte p, .rte li{ font-family:'VT323',monospace; font-size:19px; color:#e8e6ff; }
+.rte h1,.rte h2,.rte h3,.rte h4{ font-family:'Press Start 2P',monospace !important; }
+::selection{ background:#ff2e88; color:#fff; }
+
+/* 全站去圆角（兜底） */
+.button,.button--primary,.button--secondary,.button--tertiary,
+.card,.card-wrapper,.card__inner,.card__media,.card__content,
+.product-card__content,.product-grid__card,
+.field__input,.select__select,.quantity,.quantity__input,.quantity__button,
+input,select,textarea,
+.badge,.price__badge,.tag,
+.modal__content,.drawer,.dialog-modal,.menu-drawer__inner-container,
+.accordion__content,.accordion__summary,
+.pagination__item,.breadcrumb,
+.collection-card,.collection-card__card,.article-card,.blog-card,
+.menu-drawer,.cart-drawer,.facets-block-wrapper{
+  border-radius:0 !important;
+}
+
+/* ============ 3. 按钮 ============ */
+.button,.button--primary,.button--secondary,.button--tertiary,
+.shopify-payment-button__button--unbranded,
+.product-form__cart-submit,
+button.button{
+  font-family:'Press Start 2P',monospace !important;
+  font-size:11px !important;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  border:2px solid #000 !important;
+  box-shadow:4px 4px 0 rgba(0,0,0,.5) !important;
+  min-height:46px;
+  transition:transform .1s,box-shadow .1s;
+}
+.button:hover,.button--primary:hover,.button--secondary:hover,
+.shopify-payment-button__button--unbranded:hover,
+.product-form__cart-submit:hover{
+  transform:translate(2px,2px);
+  box-shadow:2px 2px 0 rgba(0,0,0,.5) !important;
+}
+/* 显式按钮配色（不依赖颜色变量，确保覆盖主题默认白底） */
+.button,.button--primary,
+.product-form__cart-submit,
+.shopify-payment-button__button--unbranded,
+button.button{
+  background:#00f0ff !important;
+  color:#001a1a !important;
+}
+.button--primary:hover,.product-form__cart-submit:hover,
+.shopify-payment-button__button--unbranded,button.button:hover{
+  background:#00d0dd !important;
+  color:#001a1a !important;
+}
+.button--secondary{
+  background:#1a1636 !important;
+  color:#ffd600 !important;
+}
+.button--secondary:hover{ background:#221d47 !important; color:#fff !important; }
+.button--tertiary{ /* 文字按钮 */
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#00f0ff !important;
+  text-decoration:underline;
+}
+.button--tertiary:hover{ transform:none; background:transparent !important; color:#ff2e88 !important; }
+.button-unstyled{ font-family:'VT323',monospace; }
+
+/* ============ 4. 卡片（商品 / 集合 / 博客 / 通用） ============ */
+.card,.card-wrapper,.card__inner,
+.product-card__content,.product-grid__card,
+.collection-card .card,.collection-card__card,
+.article-card,.blog-card{
+  background:#1a1636 !important;
+  border:3px solid #000 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important;
+  overflow:hidden;
+}
+.card__media,.card .media,.product-card .card-gallery,.global-media-settings{
+  border-radius:0 !important;
+  background:#221d47;
+}
+.card__media::after,.card-wrapper .card__media::after{ box-shadow:none !important; border:0 !important; }
+.card__heading,.card__heading a,.card-information__text,
+.collection-card__title,.article-card__title{
+  font-family:'VT323',monospace !important;
+  font-size:21px !important;
+  font-weight:bold;
+  color:#ffffff !important;
+  line-height:1.25;
+}
+.card__heading a:hover,.collection-card__title a:hover,.article-card__title a:hover{ color:#00f0ff !important; }
+.card-information{ color:#9a94c7; }
+/* 商品卡 block（系列页 / 搜索 / 推荐共用）：标题是 p[role=heading] */
+.product-card__content{ padding:0 0 16px !important; }
+.product-card .card-gallery{ background:#221d47 !important; border:0 !important; border-bottom:3px solid #000 !important; }
+.product-card [role="heading"],.product-card .product-card__title{
+  font-family:'VT323',monospace !important;
+  font-size:21px !important; line-height:1.25 !important;
+  color:#ffffff !important; letter-spacing:.3px;
+  padding:0 14px; margin:12px 0 0;
+}
+.product-card:hover [role="heading"],.product-card:hover .product-card__title{ color:#00f0ff !important; }
+.product-card [ref="priceContainer"]{ padding:0 14px; margin-top:10px; }
+.product-card .quick-add,.product-card quick-add-form{ padding:0 14px; margin-top:12px; }
+.product-card .quick-add__button,.product-card .quick-add .button{
+  width:100%; background:#ff2e88 !important; color:#fff !important;
+}
+/* 卡片整体作为链接时去下划线、标题保持白色 */
+.full-unstyled-link,.collection-card,a.collection-card,a.card-wrapper,a.card{ text-decoration:none; color:inherit; }
+.collection-card .card__heading,.collection-card:hover .card__heading{ text-decoration:none; }
+.full-unstyled-link:hover{ color:#00f0ff; }
+
+/* 角标 */
+.badge,.price__badge,.card__badge{
+  background:#ff2e88 !important;
+  color:#fff !important;
+  border:2px solid #000 !important;
+  box-shadow:3px 3px 0 rgba(0,0,0,.5) !important;
+  font-family:'Press Start 2P',monospace !important;
+  font-size:8px !important;
+  letter-spacing:1px;
+  padding:5px 8px !important;
+}
+.badge.color-background-2,.badge.color-background-1{ background:#ff2e88 !important; color:#fff !important; }
+
+/* 价格（全站，含商品详情） */
+.price{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; }
+.price,.price .price-item,.price-item--sale,.price-item--regular,
+.price-item__taxes,.price-dynamic-checkout,
+.product .price{ font-family:'Press Start 2P',monospace !important; }
+.price{ color:#ffd600 !important; font-size:15px; }
+.price-item--sale.price,.price__sale .price-item--sale{ color:#ff2e88 !important; }
+.price-item--regular.compare-at-price,.compare-at-price{ color:#9a94c7 !important; text-decoration:line-through; }
+.price__sale .price-item--regular{ color:#9a94c7 !important; }
+
+/* ============ 5. 表单 / 输入 / 下拉 / 数量 ============ */
+.field__input,.select__select,.quantity__input,
+input[type='text'],input[type='email'],input[type='search'],input[type='password'],input[type='tel'],input[type='number'],
+textarea,select{
+  background:#1a1636 !important;
+  color:#e8e6ff !important;
+  border:2px solid #000 !important;
+  border-radius:0 !important;
+  font-family:'VT323',monospace !important;
+  font-size:19px !important;
+  box-shadow:4px 4px 0 rgba(0,0,0,.35);
+}
+.field__input::placeholder,input::placeholder,textarea::placeholder{ color:#5e5888; }
+.select__select{ background-image:none !important; padding-right:34px; }
+.select__icon{ color:#00f0ff; }
+.field__label,.form__label,.cart-attribute__name{
+  font-family:'Press Start 2P',monospace !important;
+  font-size:10px !important;
+  color:#ffd600 !important;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.quantity{ border:2px solid #000 !important; box-shadow:4px 4px 0 rgba(0,0,0,.35); overflow:hidden; }
+.quantity__button{ background:#221d47 !important; color:#00f0ff !important; border:0 !important; }
+.quantity__button:hover{ background:#ff2e88 !important; color:#fff !important; }
+.quantity__input{ border:0 !important; box-shadow:none !important; text-align:center; }
+
+/* 变体选择 */
+.variant-picker__label,.product-form__input .form__label,
+.product-form__input > input[type='radio'] + label,
+fieldset legend{
+  font-family:'Press Start 2P',monospace !important; font-size:10px !important; color:#ffd600 !important;
+}
+input[type='radio'],input[type='checkbox']{ accent-color:#ff2e88; }
+.variant-picker input[type='radio']:checked + label,
+.product-form__input input[type='radio']:checked + label,
+.swatch-input__input:checked + .swatch-input__label{
+  outline:3px solid #00f0ff; outline-offset:2px;
+}
+
+/* ============ 6. 商品详情页 ============ */
+.product__title,.product__title h1, h1.product__title{
+  font-family:'Press Start 2P',monospace !important;
+  color:#fff; text-shadow:4px 4px 0 #ff2e88,7px 7px 0 rgba(0,0,0,.45);
+}
+.product__media,.product-media-gallery,.product__media-item{
+  border:3px solid #000 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important;
+  background:#221d47;
+  border-radius:0 !important;
+}
+.product__media img,.product-media-gallery img{ border-radius:0 !important; }
+.slideshow-control,.slider-button{
+  background:rgba(13,11,26,.9) !important;
+  border:3px solid #000 !important;
+  color:#ffd600 !important;
+  border-radius:0 !important;
+  box-shadow:4px 4px 0 rgba(0,0,0,.6);
+}
+.slideshow-control:hover,.slider-button:hover{ background:#ff2e88 !important; color:#fff !important; }
+.accordion,.product__accordion{
+  border:3px solid #000 !important;
+  background:#1a1636 !important;
+  box-shadow:4px 4px 0 rgba(0,0,0,.4);
+  border-radius:0 !important;
+  margin-bottom:12px;
+}
+.accordion__summary,.accordion summary{
+  font-family:'Press Start 2P',monospace !important;
+  font-size:12px !important;
+  color:#ffd600 !important;
+  padding:16px !important;
+}
+.accordion__content{ background:#1a1636 !important; color:#e8e6ff; }
+.accordion__icon{ color:#00f0ff; }
+.product__description,.product__description .rte{ color:#e8e6ff; }
+.product-recommendations{ border-top:3px solid #000; }
+.product-recommendations__heading{
+  font-family:'Press Start 2P',monospace !important; color:#fff;
+  text-shadow:3px 3px 0 #ff2e88;
+}
+.breadcrumb,.breadcrumbs{ font-family:'VT323',monospace; font-size:18px; }
+.breadcrumb a,.breadcrumbs a{ color:#00f0ff; }
+.breadcrumb[aria-current='page'],.breadcrumbs [aria-current='page']{ color:#9a94c7; }
+
+/* ============ 7. Header / 导航 ============ */
+header-component,.header,.header-wrapper{ background:#1a1636 !important; }
+.header{ border-bottom:3px solid #000; box-shadow:0 4px 0 rgba(0,0,0,.4); }
+.header__heading-link,.header__heading-link .h2,.header__heading-link span,
+.header__heading-logo,.header__active-menu-item{
+  font-family:'Press Start 2P',monospace !important; color:#fff !important; letter-spacing:.5px;
+}
+.header__menu-item,.header__menu-item span,.menu-drawer__menu-item,.menu-opening{
+  font-family:'VT323',monospace !important; font-size:21px !important; color:#e8e6ff !important; letter-spacing:.5px;
+}
+.header__menu-item:hover,.header__menu-item .header__active-menu-item,
+.menu-drawer__menu-item:hover{ color:#00f0ff !important; }
+.header__menu-item .icon-caret,.header__icon .icon,.header__icon{ color:#ffd600 !important; }
+.header__icon:hover .icon{ color:#ff2e88 !important; }
+.header__submenu,.megamenu,.header__dropdown{
+  background:#1a1636 !important; border:3px solid #000 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important; border-radius:0 !important;
+}
+.header__submenu .header__submenu-link{ color:#e8e6ff !important; font-family:'VT323',monospace !important; font-size:19px; }
+.header__submenu .header__submenu-link:hover{ color:#00f0ff !important; }
+.announcement-bar,.announcement-bar-section{ background:#000 !important; border-bottom:2px solid #ff2e88; }
+.announcement-bar__message{ font-family:'Press Start 2P',monospace !important; font-size:11px !important; color:#ffd600 !important; letter-spacing:.5px; }
+
+/* 移动菜单抽屉 */
+.menu-drawer,.menu-drawer__inner-container,.menu-drawer__navigation{
+  background:#1a1636 !important; color:#e8e6ff !important;
+}
+.menu-drawer__menu-item{ border-bottom:2px solid #2e2656; }
+.menu-drawer__close-button .icon{ color:#00f0ff; }
+
+/* ============ 8. Footer ============ */
+footer .footer,.footer{ background:#0d0b1a !important; border-top:3px solid #000; color:#e8e6ff; }
+.footer__content-top{ border-bottom:2px solid #2e2656; }
+.footer-block__heading,.footer__content h2,.footer__content h3{
+  font-family:'Press Start 2P',monospace !important; font-size:13px !important; color:#ffd600 !important;
+}
+.footer-block__details-content a,.footer__content a,.footer-block__details-content{
+  font-family:'VT323',monospace !important; font-size:19px !important; color:#9a94c7 !important;
+}
+.footer-block__details-content a:hover{ color:#00f0ff !important; }
+.footer__content-bottom{ border-top:2px solid #2e2656; }
+.footer__copyright,.footer__content-bottom .footer__copyright{ color:#5e5888 !important; font-family:'VT323',monospace; }
+
+/* ============ 9. 弹窗 / 抽屉 / 弹层 ============ */
+.modal__content,.dialog-modal,.cart-drawer,.facets-block-wrapper,
+.quick-add__popup,.quick-add-modal__content,.search-modal__content,
+.popover,.dropdown__content,.tooltip__content{
+  background:#1a1636 !important;
+  color:#e8e6ff !important;
+  border:3px solid #000 !important;
+  box-shadow:8px 8px 0 rgba(0,0,0,.55) !important;
+  border-radius:0 !important;
+}
+.modal__close-button,.dialog__close,.search-modal__close-button{ color:#00f0ff !important; }
+.modal__close-button:hover,.dialog__close:hover{ color:#ff2e88 !important; }
+.overlay{ background:rgba(13,11,26,.75) !important; }
+.search-modal__content .search__input,.search-modal__input{
+  background:#1a1636 !important; color:#e8e6ff !important; border:2px solid #000 !important;
+}
+.cart-drawer__footer,.totals,.cart-drawer__contents{ color:#e8e6ff; }
+.tax-note,.cart-drawer__tax-note{ color:#9a94c7 !important; font-family:'VT323',monospace; }
+
+/* ============ 10. 购物车 / 搜索 / 博客 / 404 / 通用区块 ============ */
+.cart-items thead,.cart-items th{
+  font-family:'Press Start 2P',monospace !important; font-size:10px !important;
+  color:#ffd600 !important; text-transform:uppercase; border-bottom:2px solid #2e2656;
+}
+.cart-item,.cart-items tbody tr{ border-bottom:2px solid #2e2656; }
+.cart-item__media,.cart-item img{ border:2px solid #000 !important; border-radius:0 !important; background:#221d47; }
+.cart-item__details .cart-item__name{ font-family:'VT323',monospace !important; font-size:21px !important; color:#fff !important; }
+.totals{ border-top:3px solid #000; }
+.totals__total,.totals .price{ font-family:'Press Start 2P',monospace !important; color:#ffd600 !important; }
+.main-search__results .card,.search__results .card{ background:#1a1636; }
+.article-template__title,.article__title,.blog-articles__article h2,
+.main-blog .title,.article-template h1{
+  font-family:'Press Start 2P',monospace !important; color:#fff; text-shadow:3px 3px 0 #ff2e88;
+}
+.article-template__content,.article__content{ color:#e8e6ff; }
+.pagination__item{
+  font-family:'Press Start 2P',monospace !important; font-size:11px !important;
+  background:#1a1636 !important; color:#ffd600 !important;
+  border:2px solid #000 !important; box-shadow:3px 3px 0 rgba(0,0,0,.5); min-width:44px;
+}
+.pagination__item[aria-current='page']{ background:#ff2e88 !important; color:#fff !important; }
+.pagination__item:hover{ background:#221d47 !important; color:#fff !important; }
+
+/* 筛选（系列页侧栏/抽屉/横栏，除已局部处理外的兜底） */
+.facets__heading,.facets__filters-title,.facets-vertical__heading,.facets-drawer__title,
+.facet-filters__label{
+  font-family:'Press Start 2P',monospace !important; font-size:12px !important; color:#ffd600 !important;
+}
+.facets__display,.facets__summary,.facet-filters__sort{
+  border:2px solid #000 !important; border-radius:0 !important; background:#1a1636 !important; color:#e8e6ff !important;
+}
+.facets__clear-all-link{ font-family:'Press Start 2P',monospace !important; font-size:9px !important; color:#00f0ff !important; }
+
+/* 通用 section 标题 / 空状态 */
+.collection-hero__title,.list-collections__title,.search__title,.cart__title,
+.main-cart h1,.main-search h1,.main-blog h1,.main-404 h1,.title--primary{
+  font-family:'Press Start 2P',monospace !important; color:#fff;
+  text-shadow:4px 4px 0 #ff2e88,7px 7px 0 rgba(0,0,0,.45);
+}
+.main-404 .button,.contact__button,.button--primary{ letter-spacing:1px; }
+
+/* ============ 11. 首页 / 分类页保护（其容器内部自管理） ============ */
+/* 清掉全局裸标题阴影，交回 .px-shop / .sx-cats 各自规则（自带阴影的会被其更高特异性规则恢复） */
+.px-shop h1,.px-shop h2,.px-shop h3,.px-shop h4,.px-shop h5,.px-shop h6,
+.sx-cats h1,.sx-cats h2,.sx-cats h3,.sx-cats h4,.sx-cats h5,.sx-cats h6{
+  text-shadow:none;
+}
+.px-shop .hero h1{ text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5); }
+.sx-cats .sx-hero h1{ text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5); }
+
+/* ============ 12. 滚动条 ============ */
+::-webkit-scrollbar{ width:12px; height:12px; }
+::-webkit-scrollbar-track{ background:#0d0b1a; }
+::-webkit-scrollbar-thumb{ background:#2e2656; border:2px solid #000; }
+::-webkit-scrollbar-thumb:hover{ background:#ff2e88; }
+{% endstyle %}
