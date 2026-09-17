@@ -82,6 +82,7 @@
 .sx-cats .sx-panel.active{display:block}
 .sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
 .sx-cats .sx-cardgroup{margin-bottom:32px}
+.sx-cats .sx-hero + .sx-cardgroup,.sx-cats .sx-hero + .sx-grid{margin-top:32px}
 .sx-cats .sx-cardgroup-head{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;font-family:"Press Start 2P",monospace;font-size:11px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;border-bottom:2px solid var(--panel2)}
 .sx-cats .sx-cardgroup-head:hover{color:#fff}
 .sx-cats .sx-cardgroup-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
@@ -187,7 +188,6 @@
               </div>
             </section>
 
-            <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
             {%- assign link_lines = block.settings.links | strip | split: "
 " -%}
             {%- assign cur_second = 0 -%}
