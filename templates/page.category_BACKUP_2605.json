@@ -1,9 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "sc_categories_main": {
       "type": "scrydex-categories",
       "settings": {
         "hero_title": "Pokémon TCG",
+<<<<<<< HEAD
         "hero_description": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
         "watermark_text": "Pokémon",
         "section_title": "NEWEST EXPANSIONS",
@@ -11,19 +21,11 @@
         "show_date": true,
         "sidebar_title": "EXPANSIONS",
         "sidebar_menu": ""
-      },
-      "blocks": {
-        "sidebar_129f0b70": {
-          "type": "sidebar_group",
-          "settings": {
-            "group_title": "Pokemon",
-            "links": "25th Anniversary Collection_swsh8a\n30th セレブレーション_m6a\nGXウルトラシャイニー_sm8b\nTAG TEAM GX タッグオールスターズ_sm12a\nストームエメラルダ_m6\nポケモンカード151_sv2a"
-          }
-        }
-      },
-      "block_order": [
-        "sidebar_129f0b70"
-      ]
+=======
+        "source_collection": "",
+        "show_date": true
+>>>>>>> 3322037eb943b200ddd6ac576cd0b102528c1829
+      }
     }
   },
   "order": [

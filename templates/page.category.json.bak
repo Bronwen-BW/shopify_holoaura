@@ -11,19 +11,7 @@
         "show_date": true,
         "sidebar_title": "EXPANSIONS",
         "sidebar_menu": ""
-      },
-      "blocks": {
-        "sidebar_129f0b70": {
-          "type": "sidebar_group",
-          "settings": {
-            "group_title": "Pokemon",
-            "links": "25th Anniversary Collection_swsh8a\n30th セレブレーション_m6a\nGXウルトラシャイニー_sm8b\nTAG TEAM GX タッグオールスターズ_sm12a\nストームエメラルダ_m6\nポケモンカード151_sv2a"
-          }
-        }
-      },
-      "block_order": [
-        "sidebar_129f0b70"
-      ]
+      }
     }
   },
   "order": [

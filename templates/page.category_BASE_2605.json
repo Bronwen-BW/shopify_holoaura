@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "sc_categories_main": {
+      "type": "scrydex-categories",
+      "settings": {
+        "hero_crumb": "EXPANSIONS",
+        "hero_title": "Pokémon TCG",
+        "hero_subtitle": "<p>Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.</p>",
+        "source_collection": "",
+        "featured_count": 8,
+        "featured_title": "NEWEST EXPANSIONS",
+        "show_id": true,
+        "show_cards": true,
+        "show_date": true,
+        "search_placeholder": "Filter expansions by name…"
+      }
+    }
+  },
+  "order": [
+    "sc_categories_main"
+  ]
+}
