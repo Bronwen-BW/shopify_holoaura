@@ -1,24 +1,16 @@
 {% comment %}
-  Pixel Anime Card Display Case Shop — homepage section.
-  Dark pixel/8-bit theme. Hero auto-carousel, horizontal product carousels,
-  category tiles, features, reviews, newsletter CTA.
+  Scrydex — Category / Expansions page.
+  主分类 = sidebar_group block（标题 + links 每行一条子分类：标题|URL）
+  左侧点主分类 tab，右侧切换显示该组下的子分类卡片。
+  由配套的 CategoryManager 工具维护数据。
 {% endcomment %}
-
-{% assign best_coll = section.settings.best_collection | default: collections['best-sellers'] | default: collections.all %}
-{% assign new_coll  = section.settings.new_collection  | default: collections['new-arrivals'] | default: collections['new'] | default: collections.all %}
-{% assign hero_products = best_coll.products %}
-
-<div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
-<script>try{if(localStorage.getItem('px_bw')==='1')document.currentScript.parentNode.classList.add('bw')}catch(e){}</script>
-<div class="bw-toggle" title="切换黑白/彩色" onclick="var r=document.querySelector('.px-shop');r.classList.toggle('bw');try{localStorage.setItem('px_bw',r.classList.contains('bw')?'1':'0')}catch(e){}">BW</div>
-
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
 <style>
-.px-shop{
+.sx-cats{
   --bg:#0d0b1a; --panel:#1a1636; --panel2:#221d47;
   --line:#2e2656; --line2:#3d3373;
   --text:#e8e6ff; --text2:#9a94c7; --text3:#5e5888;
@@ -27,599 +19,297 @@
   background:var(--bg); color:var(--text);
   font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
 }
-.px-shop.bw{
-  --bg:#f0f0f0; --panel:#ffffff; --panel2:#e8e8e8;
-  --line:#bbbbbb; --line2:#888888;
-  --text:#1a1a1a; --text2:#444444; --text3:#777777;
-  --pink:#1a1a1a; --cyan:#333333; --gold:#555555;
-  --red:#1a1a1a; --purple:#333333;
+.sx-cats *,.sx-cats *::before,.sx-cats *::after{box-sizing:border-box}
+.sx-cats{
+  --f-sidebar-title:{{ section.settings.sidebar_title_font_size }}px;
+  --f-group:{{ section.settings.group_font_size }}px;
+  --f-sub:{{ section.settings.sub_font_size }}px;
+  --f-card:{{ section.settings.card_font_size }}px;
 }
-.px-shop.bw .announce{background:#1a1a1a;border-bottom-color:#1a1a1a;color:#ddd}
-.px-shop.bw .announce .p,.px-shop.bw .announce .c{color:#aaa}
-.px-shop.bw .hero{background:linear-gradient(180deg,#e8e8e8,#f0f0f0)}
-.px-shop.bw .hero::before{background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px)}
-.px-shop.bw .crumbs{color:#1a1a1a;background:#fff;border-color:#1a1a1a}
-.px-shop.bw .hero h1{color:#111;text-shadow:4px 4px 0 #ccc,8px 8px 0 rgba(0,0,0,.15)}
-.px-shop.bw .hero h1 .c{color:#333}
-.px-shop.bw .hero .lead b{color:#333}
-.px-shop.bw .pbtn.pk{background:#1a1a1a;color:#fff;box-shadow:4px 4px 0 #999}
-.px-shop.bw .pbtn.cy{background:#fff;color:#1a1a1a;box-shadow:4px 4px 0 #999}
-.px-shop.bw .carousel{background:#fff;border-color:#1a1a1a;box-shadow:8px 8px 0 rgba(0,0,0,.15)}
-.px-shop.bw .car-viewport{background:#ddd;border-color:#1a1a1a}
-.px-shop.bw .car-dots .dot{background:#bbb}
-.px-shop.bw .car-dots .dot.active{background:#1a1a1a}
-.px-shop.bw .sec-head h2{color:#111}
-.px-shop.bw .sec-head .blk{color:#333}
-.px-shop.bw .sec-head .more{color:#1a1a1a;border-color:#1a1a1a}
-.px-shop.bw .sec-head .more:hover{background:#1a1a1a;color:#fff}
-.px-shop.bw .cat{border-color:#1a1a1a;box-shadow:6px 6px 0 rgba(0,0,0,.15)}
-.px-shop.bw .cat.c1 .cat-bg{background:linear-gradient(135deg,#d0d0d0,#888)!important}
-.px-shop.bw .cat.c2 .cat-bg{background:linear-gradient(135deg,#b0b0b0,#666)!important}
-.px-shop.bw .cat.c3 .cat-bg{background:linear-gradient(135deg,#c0c0c0,#777)!important}
-.px-shop.bw .cat.c4 .cat-bg{background:linear-gradient(135deg,#d8d8d8,#999)!important}
-.px-shop.bw .cat.c5 .cat-bg{background:linear-gradient(135deg,#b8b8b8,#707070)!important}
-.px-shop.bw .cat.c6 .cat-bg{background:linear-gradient(135deg,#ccc,#888)!important}
-.px-shop.bw .cat.c7 .cat-bg{background:linear-gradient(135deg,#d5d5d5,#909090)!important}
-.px-shop.bw .cat.c8 .cat-bg{background:linear-gradient(135deg,#c5c5c5,#7a7a7a)!important}
-.px-shop.bw .cat .shade{background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.55))}
-.px-shop.bw .cat .ct .cnt{color:#ddd}
-.px-shop.bw .prod{border-color:#1a1a1a;box-shadow:6px 6px 0 rgba(0,0,0,.15)}
-.px-shop.bw .prod .g1{background:linear-gradient(160deg,#555,#2a2a2a)!important}
-.px-shop.bw .prod .g2{background:linear-gradient(160deg,#666,#333)!important}
-.px-shop.bw .prod .g3{background:linear-gradient(160deg,#444,#222)!important}
-.px-shop.bw .prod .g4{background:linear-gradient(160deg,#777,#3a3a3a)!important}
-.px-shop.bw .prod .tag.hot{background:#1a1a1a;color:#fff}
-.px-shop.bw .prod .tag.new{background:#ccc;color:#1a1a1a}
-.px-shop.bw .prod .tag.best{background:#1a1a1a;color:#fff}
-.px-shop.bw .prod .info{background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.95) 35%)}
-.px-shop.bw .prod .pname{color:#111}
-.px-shop.bw .prod .prow{border-top-color:#bbb}
-.px-shop.bw .prod .pprice{color:#1a1a1a}
-.px-shop.bw .prod .padd{background:#1a1a1a;color:#fff;box-shadow:3px 3px 0 #999}
-.px-shop.bw .prod .padd:hover{background:#444;color:#fff}
-.px-shop.bw .pnav{background:rgba(255,255,255,.95);color:#1a1a1a;border-color:#1a1a1a;box-shadow:4px 4px 0 rgba(0,0,0,.25)}
-.px-shop.bw .pnav:hover{background:#1a1a1a;color:#fff}
-.px-shop.bw .feat{background:#fff;border-color:#1a1a1a;box-shadow:5px 5px 0 rgba(0,0,0,.15)}
-.px-shop.bw .feat .fico{background:#e8e8e8;border-color:#1a1a1a}
-.px-shop.bw .feat h4{color:#111}
-.px-shop.bw .rev{background:#fff;border-color:#1a1a1a;box-shadow:5px 5px 0 rgba(0,0,0,.15)}
-.px-shop.bw .rev .stars{color:#555}
-.px-shop.bw .cta{background:linear-gradient(180deg,#e0e0e0,#f0f0f0);border-color:#1a1a1a}
-.px-shop.bw .cta h2{color:#111;text-shadow:3px 3px 0 #ccc}
-.px-shop.bw .cta .sub input{background:#fff;border-color:#1a1a1a;color:#111}
-.px-shop.bw .cta .sub button{background:#1a1a1a;color:#fff;box-shadow:4px 4px 0 #999}
-.px-shop.bw footer{background:#1a1a1a;border-top-color:#1a1a1a}
-.px-shop.bw .fbrand h3{color:#fff}
-.px-shop.bw .fbrand h3 span{color:#ccc}
-.px-shop.bw .fbrand p{color:#bbb}
-.px-shop.bw .fsocial a{background:#2a2a2a;border-color:#000}
-.px-shop.bw .fsocial a:hover{background:#444}
-.px-shop.bw .fcol h4{color:#ccc}
-.px-shop.bw .fcol a{color:#999}
-.px-shop.bw .fcol a:hover{color:#fff}
-.px-shop .bw-toggle{position:fixed;right:18px;top:80px;z-index:99999;width:54px;height:54px;background:var(--panel);color:var(--gold);border:3px solid #000;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 rgba(0,0,0,.5);font-family:'Press Start 2P',monospace;line-height:1;user-select:none;pointer-events:auto}
-.px-shop .bw-toggle:hover{background:var(--pink);color:#fff}
-.px-shop *,.px-shop *::before,.px-shop *::after{box-sizing:border-box}
-.px-shop a{color:inherit;text-decoration:none}
-.px-shop img{max-width:100%;display:block}
-.px-shop .wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.sx-cats a{color:inherit;text-decoration:none}
+.sx-cats button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+.sx-cats img{max-width:100%;display:block}
 
-/* ── announcement ticker ── */
-.px-shop .announce{background:#000;border-bottom:2px solid var(--pink);overflow:hidden;white-space:nowrap;font-family:"Press Start 2P",monospace;font-size:12px;color:var(--gold);padding:9px 0}
-.px-shop .announce .in{display:inline-flex;animation:px-tick 30s linear infinite}
-.px-shop .announce .in span{margin-right:100px}
-@keyframes px-tick{to{transform:translateX(-50%)}}
-.px-shop .announce .p{color:var(--pink)} .px-shop .announce .c{color:var(--cyan)}
+.sx-cats .sx-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sx-cats .sx-main{min-width:0}
 
-/* ── hero ── */
-.px-shop .hero{position:relative;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a);padding:64px 0 72px;overflow:hidden}
-.px-shop .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
-.px-shop .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.px-shop .crumbs{display:inline-block;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);background:var(--panel);border:2px solid #000;padding:8px 12px;box-shadow:3px 3px 0 #000;margin-bottom:20px}
-.px-shop .hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(20px,3.6vw,36px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
-.px-shop .hero h1 .c{color:var(--cyan)}
-.px-shop .hero .lead{font-size:20px;color:var(--text2);max-width:560px;margin:22px 0 0}
-.px-shop .hero .lead b{color:var(--gold)}
-.px-shop .cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
-.px-shop .pbtn{font-family:"Press Start 2P",monospace;font-size:12px;padding:14px 22px;border:2px solid #000;display:inline-flex;align-items:center;gap:10px;transition:transform .1s}
-.px-shop .pbtn:active{transform:translate(2px,2px)}
-.px-shop .pbtn.pk{background:var(--pink);color:#fff;box-shadow:4px 4px 0 #7a0f44}
-.px-shop .pbtn.cy{background:var(--cyan);color:#001a1a;box-shadow:4px 4px 0 #007a8a}
-
-/* ── hero carousel (no arrows, dots only) ── */
-.px-shop .carousel{background:var(--panel);border:3px solid #000;box-shadow:8px 8px 0 rgba(0,0,0,.5);padding:18px}
-.px-shop .car-viewport{position:relative;aspect-ratio:1;overflow:hidden;border:3px solid #000;background:#000}
-.px-shop .car-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s;display:flex;align-items:center;justify-content:center}
-.px-shop .car-slide.active{opacity:1}
-.px-shop .car-slide img,.px-shop .car-slide .ph{width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:80px}
-.px-shop .car-slide .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.15),transparent 65%)}
-.px-shop .car-dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
-.px-shop .car-dots .dot{width:10px;height:10px;background:var(--line2);border:1px solid #000;cursor:pointer}
-.px-shop .car-dots .dot.active{background:var(--pink)}
-
-/* ── section header ── */
-.px-shop section{padding:56px 0}
-.px-shop .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-.px-shop .sec-head h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.2vw,20px);margin:0;color:#fff;line-height:1.3}
-.px-shop .sec-head h2 .blk{color:var(--pink)}
-.px-shop .sec-head .more{font-family:"Press Start 2P",monospace;font-size:10px;color:var(--cyan);border:2px solid var(--cyan);padding:8px 14px;box-shadow:3px 3px 0 #000}
-.px-shop .sec-head .more:hover{background:var(--cyan);color:#001a1a}
-
-/* ── category carousel (horizontal scroll) ── */
-.px-shop .cat-wrap{position:relative}
-.px-shop .cat-track{display:flex;gap:18px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 12px}
-.px-shop .cat-track::-webkit-scrollbar{display:none}
-.px-shop .cat{position:relative;flex:0 0 calc((100% - 54px)/4);min-height:200px;display:flex;align-items:flex-end;overflow:hidden;border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s}
-.px-shop .cat:hover{transform:translateY(-4px)}
-.px-shop .cat .cat-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
-.px-shop .cat:hover .cat-bg{transform:scale(1.06)}
-.px-shop .cat.c1 .cat-bg{background:linear-gradient(135deg,#f7b733,#fc4a1a)}
-.px-shop .cat.c2 .cat-bg{background:linear-gradient(135deg,#e53935,#7f1d1d)}
-.px-shop .cat.c3 .cat-bg{background:linear-gradient(135deg,#6a11cb,#2575fc)}
-.px-shop .cat.c4 .cat-bg{background:linear-gradient(135deg,#11998e,#38ef7d)}
-.px-shop .cat.c5 .cat-bg{background:linear-gradient(135deg,#f5576c,#f093fb)}
-.px-shop .cat.c6 .cat-bg{background:linear-gradient(135deg,#4facfe,#00f2fe)}
-.px-shop .cat.c7 .cat-bg{background:linear-gradient(135deg,#43e97b,#38f9d7)}
-.px-shop .cat.c8 .cat-bg{background:linear-gradient(135deg,#fa709a,#fee140)}
-.px-shop .cat .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.82))}
-.px-shop .cat .ct{position:relative;z-index:2;padding:18px;width:100%}
-.px-shop .cat .ct h3{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;margin:0 0 6px;text-shadow:2px 2px 0 #000}
-.px-shop .cat .ct p{margin:0;color:rgba(255,255,255,.85);font-size:15px}
-.px-shop .cat .ct .cnt{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:4px 8px;color:var(--gold)}
-
-/* ── product carousel (horizontal scroll, rectangular cards) ── */
-.px-shop .prod-wrap{position:relative}
-.px-shop .prod-track{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:4px 2px 12px}
-.px-shop .prod-track::-webkit-scrollbar{display:none}
-.px-shop .prod{position:relative;flex:0 0 calc((100% - 60px)/4);aspect-ratio:4/5;overflow:hidden;border:3px solid #000;background:var(--panel2);box-shadow:6px 6px 0 rgba(0,0,0,.5);transition:transform .15s;display:block}
-.px-shop .prod:hover{transform:translateY(-4px)}
-.px-shop .prod .pimg{position:absolute;inset:0}
-.px-shop .prod .pimg img,.px-shop .prod .pimg .ph{width:100%;height:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:72px}
-.px-shop .prod .pimg img{transition:transform .3s}
-.px-shop .prod:hover .pimg img{transform:scale(1.05)}
-.px-shop .prod .tag{position:absolute;top:10px;left:10px;z-index:2;font-family:"Press Start 2P",monospace;font-size:9px;padding:5px 9px;color:#fff;border:2px solid #000}
-.px-shop .prod .tag.hot{background:var(--red)}
-.px-shop .prod .tag.new{background:var(--gold);color:#1a1205}
-.px-shop .prod .tag.best{background:#000;color:var(--gold)}
-.px-shop .prod .g1{background:linear-gradient(160deg,#3a1f5e,#1a1437)}
-.px-shop .prod .g2{background:linear-gradient(160deg,#1e3a6b,#142447)}
-.px-shop .prod .g3{background:linear-gradient(160deg,#5e1f3a,#37142a)}
-.px-shop .prod .g4{background:linear-gradient(160deg,#5e4a1f,#372e14)}
-/* hover overlay */
-.px-shop .prod .info{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:40px 14px 14px;background:linear-gradient(180deg,rgba(10,8,25,0),rgba(10,8,25,.92) 35%);transform:translateY(100%);transition:transform .28s;display:flex;flex-direction:column;gap:6px}
-.px-shop .prod:hover .info,.px-shop .prod:focus-within .info{transform:translateY(0)}
-.px-shop .prod .pname{font-size:17px;font-weight:bold;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.px-shop .prod .pseries{font-size:13px;color:var(--text2)}
-.px-shop .prod .prow{margin-top:6px;display:flex;justify-content:space-between;align-items:center;border-top:2px dashed var(--line2);padding-top:8px}
-.px-shop .prod .pprice{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--gold)}
-.px-shop .prod .padd{font-family:"Press Start 2P",monospace;font-size:10px;background:var(--pink);color:#fff;border:2px solid #000;padding:8px 13px;box-shadow:3px 3px 0 #7a0f44}
-.px-shop .prod .padd:hover{background:var(--cyan);color:#001a1a}
-/* product carousel nav buttons */
-.px-shop .pnav{position:absolute;top:45%;transform:translateY(-50%);width:42px;height:42px;background:rgba(13,11,26,.9);border:3px solid #000;color:var(--gold);font-size:18px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;box-shadow:4px 4px 0 rgba(0,0,0,.6)}
-.px-shop .pnav:hover{background:var(--pink);color:#fff}
-.px-shop .pnav.prev{left:-21px}
-.px-shop .pnav.next{right:-21px}
-
-/* ── features ── */
-.px-shop .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.px-shop .feat{background:var(--panel);border:3px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:22px;text-align:center}
-.px-shop .feat .fico{width:64px;height:64px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:32px;background:var(--panel2);border:2px solid #000}
-.px-shop .feat h4{font-family:"Press Start 2P",monospace;font-size:12px;color:#fff;margin:0 0 8px;line-height:1.4}
-.px-shop .feat p{margin:0;color:var(--text2);font-size:15px}
-
-/* ── reviews ── */
-.px-shop .revs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.px-shop .rev{background:var(--panel);border:3px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.5);padding:20px}
-.px-shop .rev .stars{color:var(--gold);letter-spacing:2px}
-.px-shop .rev p{margin:10px 0 0;font-size:16px;color:var(--text)}
-.px-shop .rev .who{margin-top:10px;font-size:14px;color:var(--text3)}
-
-/* ── CTA ── */
-.px-shop .cta{text-align:center;background:radial-gradient(60% 100% at 50% 0%,rgba(255,46,136,.3),transparent 70%),linear-gradient(180deg,#2a1447,#0d0b1a);border:3px solid var(--pink);box-shadow:0 0 0 3px #000,8px 8px 0 rgba(0,0,0,.5);padding:60px 24px}
-.px-shop .cta h2{font-family:"Press Start 2P",monospace;font-size:clamp(15px,2.6vw,24px);margin:0;color:#fff;text-shadow:3px 3px 0 var(--pink)}
-.px-shop .cta p{color:var(--text2);max-width:560px;margin:16px auto 0;font-size:18px}
-.px-shop .cta .sub{display:flex;gap:12px;max-width:480px;margin:26px auto 0}
-.px-shop .cta .sub input{flex:1;background:#000;border:2px solid var(--cyan);color:var(--text);padding:12px 16px;font-family:"VT323",monospace;font-size:18px;outline:none}
-.px-shop .cta .sub button{font-family:"Press Start 2P",monospace;font-size:11px;background:var(--cyan);color:#001a1a;border:2px solid #000;padding:0 22px;cursor:pointer;box-shadow:4px 4px 0 #007a8a}
-
-/* ── footer ── */
-.px-shop footer{background:#08060f;border-top:3px solid var(--pink);padding:48px 0 24px}
-.px-shop .fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px}
-.px-shop .fbrand h3{font-family:"Press Start 2P",monospace;font-size:16px;color:#fff;margin:0 0 12px}
-.px-shop .fbrand h3 span{color:var(--pink)}
-.px-shop .fbrand p{color:var(--text2);font-size:15px;margin:0 0 18px;max-width:320px}
-.px-shop .fsocial{display:flex;gap:10px}
-.px-shop .fsocial a{width:40px;height:40px;background:var(--panel);border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .15s}
-.px-shop .fsocial a:hover{background:var(--pink)}
-.px-shop .fcol h4{font-family:"Press Start 2P",monospace;font-size:11px;color:var(--gold);margin:0 0 14px}
-.px-shop .fcol a{display:block;color:var(--text2);font-size:16px;padding:4px 0;transition:color .15s}
-.px-shop .fcol a:hover{color:var(--cyan)}
-.px-shop .fbottom{border-top:2px solid var(--line);margin-top:36px;padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.px-shop .fbottom small{color:var(--text3);font-size:14px}
-.px-shop .fpays{display:flex;gap:8px;flex-wrap:wrap}
-.px-shop .fpays span{font-family:"Press Start 2P",monospace;font-size:8px;background:var(--panel);border:2px solid #000;padding:5px 8px;color:var(--text2)}
-
-/* ── responsive ── */
-@media (max-width:1024px){
-  .px-shop .hero .wrap{grid-template-columns:1fr}
-  .px-shop .prod{flex:0 0 calc((100% - 40px)/3)}
-  .px-shop .cat{flex:0 0 calc((100% - 36px)/3)}
+.sx-cats .sx-sidebar{background:var(--panel);border-right:3px solid #000;padding:24px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sx-cats .sx-sidebar-label{padding:8px 20px 12px;font-family:"Press Start 2P",monospace;font-size:var(--f-sidebar-title);letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
+.sx-cats .sx-main-cat{
+  display:flex;width:100%;align-items:center;justify-content:space-between;
+  padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;
+  color:var(--text2);text-transform:uppercase;text-align:left;
+  border-left:3px solid transparent;transition:background .12s,color .12s;
 }
-@media (max-width:768px){
-  .px-shop .prod{flex:0 0 calc((100% - 20px)/2)}
-  .px-shop .cat{flex:0 0 calc((100% - 18px)/2)}
-  .px-shop .feats,.px-shop .revs{grid-template-columns:1fr}
-  .px-shop .cta .sub{flex-direction:column}
-  .px-shop .fgrid{grid-template-columns:1fr 1fr}
-  .px-shop .pnav.prev{left:4px}
-  .px-shop .pnav.next{right:4px}
+.sx-cats .sx-main-cat .sx-glyph{margin-right:10px;color:var(--pink)}
+.sx-cats .sx-main-cat .sx-count{font-family:"VT323",monospace;font-size:14px;color:var(--text3);letter-spacing:0}
+.sx-cats .sx-main-cat:hover{color:var(--text);background:var(--panel2)}
+.sx-cats .sx-main-cat.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
+
+/* 两级树：父分类头 + 缩进子项 */
+.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:var(--f-group);letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase;border-left:3px solid transparent;transition:background .12s,color .12s}
+.sx-cats .sx-group-head:hover{background:var(--panel2);color:#fff}
+.sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
+.sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
+.sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
+.sx-cats .sx-group.closed .sx-children{display:none}
+.sx-cats .sx-sub-item{display:block;padding:5px 20px 5px 44px;color:var(--text2);font-size:var(--f-sub);border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer}
+.sx-cats .sx-sub-item:hover{color:var(--text);background:var(--panel2)}
+.sx-cats .sx-sub-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
+.sx-cats .sx-tile.hidden{display:none}
+
+.sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
+.sx-cats .sx-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
+.sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:780px}
+.sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+.sx-cats .sx-ball{width:46px;height:46px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:3px solid #000;position:relative;flex:0 0 auto;box-shadow:4px 4px 0 #000}
+.sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:8px;background:#000;transform:translateY(-50%)}
+.sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:14px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
+.sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(18px,2.6vw,28px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
+.sx-cats .sx-hero p{font-size:20px;color:var(--text2);margin:0;max-width:700px}
+
+.sx-cats .sx-section{padding:40px 40px 64px}
+.sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:clamp(14px,2vw,18px);margin:0 0 28px;color:#fff;line-height:1.3}
+.sx-cats .sx-panel{display:none}
+.sx-cats .sx-panel.active{display:block}
+.sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
+
+.sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.sx-cats .sx-tile{background:var(--panel);border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);padding:20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .15s}
+.sx-cats .sx-tile:hover{transform:translateY(-4px)}
+.sx-cats .sx-tile-logo{height:110px;width:100%;display:flex;align-items:center;justify-content:center;background:var(--panel2);border:2px solid #000;padding:8px}
+.sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s}
+.sx-cats .sx-tile:hover .sx-tile-logo img{transform:scale(1.05)}
+.sx-cats .sx-tile-logo .sx-ph{font-size:42px}
+.sx-cats .sx-tile-name{font-family:"VT323",monospace;font-size:var(--f-card);font-weight:bold;color:#fff;margin-top:14px;line-height:1.3;min-height:2.6em}
+.sx-cats .sx-tile:hover .sx-tile-name{color:var(--cyan)}
+.sx-cats .sx-tile-date{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:5px 8px;color:var(--gold)}
+
+@media (max-width:1100px){ .sx-cats .sx-grid{grid-template-columns:repeat(4,1fr)} }
+@media (max-width:900px){
+  .sx-cats .sx-layout{grid-template-columns:1fr}
+  .sx-cats .sx-sidebar{position:relative;height:auto;border-right:0;border-bottom:3px solid #000}
+  .sx-cats .sx-grid{grid-template-columns:repeat(3,1fr)}
+  .sx-cats .sx-hero,.sx-cats .sx-section{padding-left:20px;padding-right:20px}
 }
-@media (max-width:480px){
-  .px-shop .prod{flex:0 0 100%}
-  .px-shop .cat{flex:0 0 80%}
-  .px-shop .fgrid{grid-template-columns:1fr}
-  .px-shop .fbottom{flex-direction:column;text-align:center}
+@media (max-width:560px){
+  .sx-cats .sx-grid{grid-template-columns:repeat(2,1fr);gap:16px}
+  .sx-cats .sx-tile-logo{height:80px}
+  .sx-cats .sx-tile-name{font-size:16px}
 }
 </style>
 
-  <!-- announcement ticker (content duplicated for seamless loop) -->
-  <div class="announce">
-    <div class="in">
-      <span style="color:#ffd600">★ FREE WORLDWIDE SHIPPING over $50</span>
-      <span style="color:#ff2e88">✦ NEW: ASCENDED HEROES extended art cases now live</span>
-      <span style="color:#ffd600">♦ Limited stock — UMBREON SIR restocked</span>
-      <span style="color:#00f0ff">♥ 30-day money-back guarantee</span>
-      <span style="color:#ffd600">★ UV-protected archival materials</span>
-      <span style="color:#ffd600">★ FREE WORLDWIDE SHIPPING over $50</span>
-      <span style="color:#ff2e88">✦ NEW: ASCENDED HEROES extended art cases now live</span>
-      <span style="color:#ffd600">♦ Limited stock — UMBREON SIR restocked</span>
-      <span style="color:#00f0ff">♥ 30-day money-back guarantee</span>
-      <span style="color:#ffd600">★ UV-protected archival materials</span>
-    </div>
-  </div>
+{%- assign sidebar_blocks = section.blocks | where: "type", "sidebar_group" -%}
 
-  <!-- hero + featured carousel -->
-  <section class="hero">
-    <div class="wrap">
-      <div>
-        <span class="crumbs">♦ HOME / EXTENDED ART DISPLAY CASES</span>
-        <h1>PROTECT &amp;<span class="c">SHOWCASE</span><br>YOUR RARESTCARDS.</h1>
-        <p class="lead">Ultra-clear extended-art display cases for Pok&#233;mon, One Piece &amp; Lorcana. Magnetic-close, UV-protected, built so your SIR / SAR cards look flawless.</p>
-        <div class="cta-row"><a class="pbtn" href="/products/charizard-x-display" style="background:#ff2e88;box-shadow:4px 4px 0 #661236">▶ SHOP BEST SELLERS</a><a class="pbtn" href="/products/charizard-y-display" style="background:#049FBB;box-shadow:4px 4px 0 #013F4A">▶ BROWSE CATEGORIES</a></div>
-      </div>
+<div class="sx-cats">
+  <div class="sx-layout">
 
-      <div class="carousel" data-hero-carousel>
-        <div class="car-viewport">
-          {%- if hero_products.size >= 1 -%}
-            {%- for product in hero_products limit:4 -%}
-              <div class="car-slide {% if forloop.first %}active{% endif %}">
-                <div class="glow"></div>
-                {%- if product.featured_image -%}
-                  <img src="{{ product.featured_image | image_url: width:800, height:800, crop:'center' }}" alt="{{ product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                  <span class="ph" style="display:none">🎴</span>
-                {%- else -%}
-                  <span class="ph">🎴</span>
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sx-sidebar">
+      <div class="sx-sidebar-label">MENU</div>
+      {%- for block in sidebar_blocks -%}
+        {%- assign gid = "group-" | append: forloop.index -%}
+        {%- assign link_lines = block.settings.links | strip | split: "
+" -%}
+        <div class="sx-group {% if forloop.first %}open{% else %}closed{% endif %}" data-sx-group-container="{{ gid }}">
+          <div class="sx-group-head" data-sx-group-head data-sx-show-group="{{ gid }}">
+            <span><span class="sx-glyph">▣</span>{{ block.settings.group_title | default: 'GROUP' }}</span>
+            <span class="sx-caret">▼</span>
+          </div>
+          <div class="sx-children">
+            {%- assign second_idx = 0 -%}
+            {%- for raw in link_lines -%}
+              {%- assign line = raw -%}
+              {%- assign first_ch = line | slice: 0 -%}
+              {%- unless first_ch == ' ' or first_ch == '	' -%}
+                {%- assign t = line | strip -%}
+                {%- if t != '' -%}
+                  {%- assign second_idx = second_idx | plus: 1 -%}
+                  {%- assign pipe_t = t | split: '|' -%}
+                  {%- if pipe_t.size > 1 -%}
+                    {%- assign second_title = pipe_t[0] | strip -%}
+                  {%- else -%}
+                    {%- assign us_t = t | split: '_' -%}
+                    {%- if us_t.size > 1 -%}
+                      {%- assign second_title = '' -%}
+                      {%- for p in us_t -%}{%- unless forloop.last -%}{%- if second_title != '' -%}{%- assign second_title = second_title | append: '_' -%}{%- endif -%}{%- assign second_title = second_title | append: p -%}{%- endunless -%}{%- endfor -%}
+                    {%- else -%}
+                      {%- assign second_title = t -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                  <a class="sx-sub-item" data-sx-show-second="{{ gid }}-{{ second_idx }}">{{ second_title }}</a>
                 {%- endif -%}
-              </div>
+              {%- endunless -%}
             {%- endfor -%}
-          {%- else -%}
-            <div class="car-slide active" style="background:linear-gradient(160deg,#3a1f5e,#1a1437);cursor:pointer" onclick="window.location.href='#best-sellers'"><span class="ph">🔥</span></div>
-            <div class="car-slide " style="background:linear-gradient(160deg,#1e3a6b,#142447);cursor:pointer" onclick="window.location.href='/products/charizard-y-display'"><span class="ph">🌙</span></div>
-            <div class="car-slide " style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="ph">✨</span></div>
-            <div class="car-slide " style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="ph">⚡</span></div>
-
-          {%- endif -%}
-        </div>
-        <div class="car-dots">
-          {%- if hero_products.size >= 1 -%}
-            {%- for product in hero_products limit:4 -%}
-              <span class="dot {% if forloop.first %}active{% endif %}" data-dot="{{ forloop.index0 }}"></span>
-            {%- endfor -%}
-          {%- else -%}
-            <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          {%- endif -%}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- categories -->
-  <section id="categories">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// SHOP BY <span class="blk">CATEGORY</span></h2>
-        <a class="more" href="/collections/all">ALL →</a>
-      </div>
-      <div class="cat-wrap">
-        <span class="pnav prev" data-cat-prev>‹</span>
-        <div class="cat-track">
-        {%- if collections.all.size > 0 -%}
-          {%- for collection in collections.all limit:8 -%}
-            <a class="cat c{{ forloop.index0 | modulo:8 | plus:1 }}" href="{{ collection.url }}">
-              <div class="cat-bg" {% if collection.image %}style="background-image:url('{{ collection.image | image_url: width:800, height:500, crop:'center' }}')"{% endif %}></div>
-              <div class="shade"></div>
-              <div class="ct">
-                <h3>{{ collection.title }}</h3>
-                <p>Extended art &amp; display cases</p>
-                <span class="cnt">{{ collection.products_count }}+ ITEMS</span>
-              </div>
-            </a>
-          {%- endfor -%}
-        {%- else -%}
-          <a class="cat" href="/collections/pokemon"><div class="cat-bg" style="background:linear-gradient(135deg,#F7B733,#FC4A1A)"></div><div class="shade"></div><div class="ct"><h3>Pok&#233;mon</h3><p>SIR / SAR display cases</p><span class="cnt">48+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/one-piece"><div class="cat-bg" style="background:linear-gradient(135deg,#e53935,#7f1d1d)"></div><div class="shade"></div><div class="ct"><h3>One Piece</h3><p>Manga &amp; OP card cases</p><span class="cnt">24+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/lorcana"><div class="cat-bg" style="background:linear-gradient(135deg,#6a11cb,#2575fc)"></div><div class="shade"></div><div class="ct"><h3>Lorcana</h3><p>Ravensburger TCG cases</p><span class="cnt">32+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/accessories"><div class="cat-bg" style="background:linear-gradient(135deg,#11998e,#38ef7d)"></div><div class="shade"></div><div class="ct"><h3>Accessories</h3><p>Sleeves, slabs, storage</p><span class="cnt">18+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/yugioh"><div class="cat-bg" style="background:linear-gradient(135deg,#f5576c,#f093fb)"></div><div class="shade"></div><div class="ct"><h3>Yu-Gi-Oh</h3><p>Rarity collection cases</p><span class="cnt">36+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/magic"><div class="cat-bg" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"></div><div class="shade"></div><div class="ct"><h3>Magic: The Gathering</h3><p>MTG rare display cases</p><span class="cnt">22+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/digimon"><div class="cat-bg" style="background:linear-gradient(135deg,#43e97b,#38f9d7)"></div><div class="shade"></div><div class="ct"><h3>Digimon</h3><p>BT / EX series cases</p><span class="cnt">15+ ITEMS</span></div></a>
-          <a class="cat" href="/collections/star-wars"><div class="cat-bg" style="background:linear-gradient(135deg,#fa709a,#fee140)"></div><div class="shade"></div><div class="ct"><h3>Star Wars</h3><p>Unlimited &amp; Vintage cases</p><span class="cnt">12+ ITEMS</span></div></a>
-
-          {%- endif -%}
-        </div>
-        <span class="pnav next" data-cat-next>›</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- best sellers -->
-  <section id="best-sellers" style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// BEST <span class="blk">SELLERS</span></h2>
-        <a class="more" href="{{ best_coll.url | default: '/collections/all' }}">SEE MORE →</a>
-      </div>
-      <div class="prod-wrap">
-        <span class="pnav prev" data-prev>‹</span>
-        <div class="prod-track">
-          {%- if best_coll.products.size > 0 -%}
-            {%- for product in best_coll.products limit:16 -%}
-              <a class="prod" href="{{ product.url }}">
-                <div class="pimg g{{ forloop.index0 | modulo:4 | plus:1 }}">
-                  {%- if forloop.first -%}<span class="tag hot">HOT</span>
-                  {%- elsif forloop.index == 2 -%}<span class="tag best">BEST</span>
-                  {%- elsif forloop.index == 4 -%}<span class="tag new">NEW</span>{%- endif -%}
-                  {%- if product.featured_image -%}
-                    <img src="{{ product.featured_image | image_url: width:600, height:750, crop:'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <span class="ph" style="display:none">🎴</span>
-                  {%- else -%}
-                    <span class="ph">🎴</span>
-                  {%- endif -%}
-                </div>
-                <div class="info">
-                  <div class="pname">{{ product.title }}</div>
-                  <div class="pseries">{{ product.type | default: 'Extended Art' }}</div>
-                  <div class="prow"><span class="pprice">{{ product.price | money }}</span><span class="padd">ADD +</span></div>
-                </div>
-              </a>
-            {%- endfor -%}
-          {%- else -%}
-            <a class="prod" href="/products/charizard-x-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">HOT</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard ex SIR SAR Display Case</div><div class="pseries">Phantasmal Flames</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/umbreon-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">BEST</span><span class="ph">🌙</span></div><div class="info"><div class="pname">Umbreon SIR SAR Prismatic Evolutions</div><div class="pseries">Prismatic Evolutions</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/mew-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">HOT</span><span class="ph">✨</span></div><div class="info"><div class="pname">Mew ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/pikachu-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Pikachu ex SIR SAR Ascended Heroes</div><div class="pseries">Ascended Heroes</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/gengar-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">BEST</span><span class="ph">👻</span></div><div class="info"><div class="pname">Gengar ex SIR SAR Ascended Heroes</div><div class="pseries">Ascended Heroes</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/dragonite-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">NEW</span><span class="ph">🐉</span></div><div class="info"><div class="pname">Dragonite EX SAR SIR Display Case</div><div class="pseries">SAR</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/pikachu-felt-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">BEST</span><span class="ph">🎨</span></div><div class="info"><div class="pname">Pikachu Grey Felt Hat SVP 085</div><div class="pseries">Black Star Promo</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/legendary-birds-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">HOT</span><span class="ph">🕊️</span></div><div class="info"><div class="pname">Moltres Zapdos Articuno GX SM210</div><div class="pseries">Legendary Birds</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/blastoise-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">BEST</span><span class="ph">🐢</span></div><div class="info"><div class="pname">Blastoise ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/charizard-ex-twilight"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">HOT</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard ex SIR SAR Twilight Masquerade</div><div class="pseries">Twilight Masquerade</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/lucario-vstar-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">NEW</span><span class="ph">🥋</span></div><div class="info"><div class="pname">Lucario VSTAR Crown Zenith SIR Case</div><div class="pseries">Crown Zenith</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/gardevoir-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">BEST</span><span class="ph">🔮</span></div><div class="info"><div class="pname">Gardevoir ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/alakazam-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">NEW</span><span class="ph">🧙</span></div><div class="info"><div class="pname">Alakazam ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/rayquaza-vmax-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">HOT</span><span class="ph">🐲</span></div><div class="info"><div class="pname">Rayquaza VMAX Climax SIR Case</div><div class="pseries">VMAX Climax</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/espeon-vmax-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">BEST</span><span class="ph">🌅</span></div><div class="info"><div class="pname">Espeon VMAX Fusion Strike SIR Case</div><div class="pseries">Fusion Strike</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/sylveon-vmax-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">NEW</span><span class="ph">🎀</span></div><div class="info"><div class="pname">Sylveon VMAX Evolving Skies SIR</div><div class="pseries">Evolving Skies</div><div class="prow"><span class="pprice">$34.99</span><span class="padd">ADD +</span></div></div></a>
-
-          {%- endif -%}
-        </div>
-        <span class="pnav next" data-next>›</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- features -->
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// WHY <span class="blk">COLLECTORS CHOOSE US</span></h2>
-      </div>
-      <div class="feats">
-        <div class="feat"><div class="fico">&#128737;️</div><h4>UV PROTECTION</h4><p>Archival, fade-safe acrylic keeps your SIR cards crystal clear for years.</p></div>
-        <div class="feat"><div class="fico">&#129522;</div><h4>MAGNETIC CLOSE</h4><p>Snap-shut magnetic lid holds your card securely with a premium feel.</p></div>
-        <div class="feat"><div class="fico">&#128269;</div><h4>ULTRA-CLEAR FRONT</h4><p>Extended-art window shows the full card illustration, no cropped borders.</p></div>
-        <div class="feat"><div class="fico">&#128666;</div><h4>WORLDWIDE SHIPPING</h4><p>Discreet, tracked delivery. Free shipping on orders over $50.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- new arrivals -->
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// NEW <span class="blk">ARRIVALS</span></h2>
-        <a class="more" href="{{ new_coll.url | default: '/collections/new' }}">SEE MORE →</a>
-      </div>
-      <div class="prod-wrap">
-        <span class="pnav prev" data-prev>‹</span>
-        <div class="prod-track">
-          {%- if new_coll.products.size > 0 -%}
-            {%- for product in new_coll.products limit:8 -%}
-              <a class="prod" href="{{ product.url }}">
-                <div class="pimg g{{ forloop.index0 | modulo:4 | plus:1 }}">
-                  <span class="tag new">NEW</span>
-                  {%- if product.featured_image -%}
-                    <img src="{{ product.featured_image | image_url: width:600, height:750, crop:'center' }}" alt="{{ product.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <span class="ph" style="display:none">🎴</span>
-                  {%- else -%}
-                    <span class="ph">🎴</span>
-                  {%- endif -%}
-                </div>
-                <div class="info">
-                  <div class="pname">{{ product.title }}</div>
-                  <div class="pseries">{{ product.type | default: 'Just dropped' }}</div>
-                  <div class="prow"><span class="pprice">{{ product.price | money }}</span><span class="padd">ADD +</span></div>
-                </div>
-              </a>
-            {%- endfor -%}
-          {%- else -%}
-            <a class="prod" href="/products/charizard-y-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">NEW</span><span class="ph">🔥</span></div><div class="info"><div class="pname">Charizard Y ex Hyper Rare MUR Case</div><div class="pseries">Hyper Rare</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/psyduck-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">NEW</span><span class="ph">🦆</span></div><div class="info"><div class="pname">Psyduck IR AR Ascended Heroes</div><div class="pseries">IR Art</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/pikachu-ex-277-display"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Pikachu ex SIR SAR Ascended Heroes</div><div class="pseries">SIR SAR</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/gengar-ex-269-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">NEW</span><span class="ph">👻</span></div><div class="info"><div class="pname">Gengar ex Attack Rare Ascended Heroes</div><div class="pseries">Attack Rare</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/greninja-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e1f3a,#37142a)"><span class="tag">NEW</span><span class="ph">🥷</span></div><div class="info"><div class="pname">Greninja ex SIR SAR Twilight Masquerade</div><div class="pseries">Twilight Masquerade</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/mewtwo-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#3a1f5e,#1a1437)"><span class="tag">NEW</span><span class="ph">🧬</span></div><div class="info"><div class="pname">Mewtwo ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/kyogre-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#1e3a6b,#142447)"><span class="tag">NEW</span><span class="ph">🌊</span></div><div class="info"><div class="pname">Kyogre ex SIR SAR Paldean Fates</div><div class="pseries">Paldean Fates</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-            <a class="prod" href="/products/zapdos-ex-display"><div class="pimg" style="background:linear-gradient(160deg,#5e4a1f,#372e14)"><span class="tag">NEW</span><span class="ph">⚡</span></div><div class="info"><div class="pname">Zapdos ex SIR SAR 151 Case</div><div class="pseries">SV 151</div><div class="prow"><span class="pprice">$29.99</span><span class="padd">ADD +</span></div></div></a>
-
-          {%- endif -%}
-        </div>
-        <span class="pnav next" data-next>›</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- reviews -->
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>// COLLECTORS <span class="blk">REVIEWS</span></h2>
-      </div>
-      <div class="revs">
-        <div class="rev"><div class="stars">★★★★★</div><p>"The case is crystal clear and the magnetic close feels premium. My Charizard SIR has never looked better on the shelf."</p><div class="who">— Ethan R. &#183; verified buyer</div></div>
-        <div class="rev"><div class="stars">★★★★★</div><p>"Fast worldwide shipping, packaging was perfect. The UV protection gives me peace of mind for my graded cards."</p><div class="who">— Maya K. &#183; verified buyer</div></div>
-        <div class="rev"><div class="stars">★★★★★</div><p>"Clean, modern look. The recessed slot holds my sleeved card perfectly. Already ordered three more."</p><div class="who">— Jordan L. &#183; verified buyer</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="cta">
-        <h2>JOIN THE <span class="c">COLLECTOR&#39;S CLUB</span></h2>
-        <p>Get early access to new extended-art drops, member-only discounts, and sneak peeks before anyone else.</p>
-        <form class="sub" action="/account" method="post">
-          <input type="email" name="email" placeholder="you@example.com" required>
-          <button type="submit">SIGN UP ▸</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- footer -->
-  <footer>
-    <div class="wrap">
-      <div class="fgrid">
-        <div class="fbrand">
-          <h3>★ <span>PHASEZERO</span> CARDS</h3>
-          <p>Premium extended-art display cases for serious collectors. UV-protected, magnetic-close, built to showcase your rarest SIR / SAR cards.</p>
-          <div class="fsocial">
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="Twitter">🐦</a>
-            <a href="#" aria-label="YouTube">📺</a>
-            <a href="#" aria-label="Discord">💬</a>
           </div>
         </div>
-        <div class="fcol">
-          <h4>SHOP</h4>
-          <a href="/collections/all">All Products</a>
-          <a href="/collections/pokemon">Pok&#233;mon</a>
-          <a href="/collections/one-piece">One Piece</a>
-          <a href="/collections/lorcana">Lorcana</a>
-        </div>
-        <div class="fcol">
-          <h4>SUPPORT</h4>
-          <a href="/pages/about">About Us</a>
-          <a href="/pages/shipping">Shipping Info</a>
-          <a href="/pages/returns">Returns &amp; Refunds</a>
-          <a href="/pages/contact">Contact</a>
-        </div>
-        <div class="fcol">
-          <h4>ACCOUNT</h4>
-          <a href="/account">My Account</a>
-          <a href="/account/orders">Order Tracking</a>
-          <a href="/cart">Cart</a>
-          <a href="/policies/privacy-policy">Privacy Policy</a>
-        </div>
-      </div>
-      <div class="fbottom">
-        <small>&#169; 2026 PhaseZero Cards. All rights reserved. &#183; Built for collectors, by collectors.</small>
-        <div class="fpays">
-          <span>VISA</span><span>MC</span><span>AMEX</span><span>PP</span><span>APPLE</span><span>G-PAY</span>
-        </div>
-      </div>
-    </div>
-  </footer>
+      {%- endfor -%}
+      {%- if sidebar_blocks.size == 0 -%}
+        <div style="padding:12px 20px;color:var(--text3);font-size:16px">No groups configured.</div>
+      {%- endif -%}
+    </aside>
 
+    <!-- ============ MAIN ============ -->
+    <main class="sx-main">
+
+      <section class="sx-hero">
+        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
+        <div class="sx-hero-inner">
+          <div class="sx-hero-title-row">
+            <span class="sx-ball" aria-hidden="true"></span>
+            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
+          </div>
+          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game." }}</p>
+        </div>
+      </section>
+
+      <section class="sx-section">
+        {%- for block in sidebar_blocks -%}
+          {%- assign gid = "group-" | append: forloop.index -%}
+          <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
+            <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
+            <div class="sx-grid">
+              {%- assign link_lines = block.settings.links | strip | split: "
+" -%}
+              {%- assign cur_second = 0 -%}
+              {%- for raw in link_lines -%}
+                {%- assign line = raw -%}
+                {%- assign first_ch = line | slice: 0 -%}
+                {%- if first_ch == ' ' or first_ch == '	' -%}
+                  {%- assign card_line = line | strip -%}
+                  {%- if card_line == '' -%}{%- continue -%}{%- endif -%}
+
+                  {%- comment -%} 解析卡片行 "标题|URL"，兼容 "标题_URL" {%- endcomment -%}
+                  {%- assign pipe = card_line | split: '|' -%}
+                  {%- if pipe.size > 1 -%}
+                    {%- assign link_title = pipe[0] | strip -%}
+                    {%- assign link_url = pipe[1] | strip -%}
+                  {%- else -%}
+                    {%- assign us = card_line | split: '_' -%}
+                    {%- if us.size > 1 -%}
+                      {%- assign link_url = us | last -%}
+                      {%- assign link_title = '' -%}
+                      {%- for p in us -%}
+                        {%- unless forloop.last -%}
+                          {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
+                          {%- assign link_title = link_title | append: p -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- assign link_title = card_line -%}
+                      {%- assign link_url = '' -%}
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- if link_url != '' -%}
+                    {%- unless link_url contains '/' or link_url contains ':' -%}
+                      {%- assign link_url = '/collections/' | append: link_url -%}
+                    {%- endunless -%}
+                  {%- else -%}
+                    {%- assign link_url = '#' -%}
+                  {%- endif -%}
+
+                  <a class="sx-tile" data-sx-second="{{ gid }}-{{ cur_second }}" href="{{ link_url }}">
+                    <div class="sx-tile-logo">
+                      <span class="sx-ph">🎴</span>
+                    </div>
+                    <div class="sx-tile-name">{{ link_title }}</div>
+                  </a>
+                {%- else -%}
+                  {%- assign t = line | strip -%}
+                  {%- if t != '' -%}
+                    {%- assign cur_second = cur_second | plus: 1 -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </section>
+
+    </main>
+  </div>
 </div>
 
 <script>
 (function(){
-  /* Hero carousel: auto-rotate, dots clickable, no arrows */
-  document.querySelectorAll('[data-hero-carousel]').forEach(function(root){
-    var slides = root.querySelectorAll('.car-slide');
-    var dots = root.querySelectorAll('.car-dots .dot');
-    if (!slides.length) return;
-    var idx = 0, timer;
-    function show(n){
-      slides[idx].classList.remove('active');
-      if (dots[idx]) dots[idx].classList.remove('active');
-      idx = (n + slides.length) % slides.length;
-      slides[idx].classList.add('active');
-      if (dots[idx]) dots[idx].classList.add('active');
-    }
-    function start(){ timer = setInterval(function(){ show(idx+1); }, 5000); }
-    dots.forEach(function(d, k){
-      d.addEventListener('click', function(){ show(k); clearInterval(timer); start(); });
+  var panels = document.querySelectorAll('.sx-cats [data-sx-panel]');
+  var cards  = document.querySelectorAll('.sx-cats [data-sx-second]');
+  var heads  = document.querySelectorAll('.sx-cats [data-sx-group-head]');
+  var seconds = document.querySelectorAll('.sx-cats [data-sx-show-second]');
+
+  function showGroup(gid){
+    panels.forEach(function(p){
+      p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
     });
-    start();
+    // 显示该组所有卡片，清除第二级高亮
+    cards.forEach(function(c){ c.classList.remove('hidden'); });
+    seconds.forEach(function(s){ s.classList.remove('active'); });
+  }
+
+  function showSecond(cid){
+    // cid = "group-1-2"
+    var gid = cid.split('-').slice(0,2).join('-');
+    panels.forEach(function(p){
+      p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
+    });
+    cards.forEach(function(c){
+      c.classList.toggle('hidden', c.getAttribute('data-sx-second') !== cid);
+    });
+    seconds.forEach(function(s){
+      s.classList.toggle('active', s.getAttribute('data-sx-show-second') === cid);
+    });
+  }
+
+  heads.forEach(function(h){
+    h.addEventListener('click', function(){
+      var container = h.closest('[data-sx-group-container]');
+      if (container) container.classList.toggle('closed');
+      showGroup(h.getAttribute('data-sx-show-group'));
+    });
   });
 
-  /* Product carousels: scroll by one card width */
-  document.querySelectorAll('.prod-wrap').forEach(function(wrap){
-    var track = wrap.querySelector('.prod-track');
-    var prev = wrap.querySelector('[data-prev]');
-    var next = wrap.querySelector('[data-next]');
-    if (!track) return;
-    function step(){
-      var card = track.querySelector('.prod');
-      return card ? card.getBoundingClientRect().width + 20 : 300;
-    }
-    if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
-    if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
-  });
-
-  /* Category carousel */
-  document.querySelectorAll('.cat-wrap').forEach(function(wrap){
-    var track = wrap.querySelector('.cat-track');
-    var prev = wrap.querySelector('[data-cat-prev]');
-    var next = wrap.querySelector('[data-cat-next]');
-    if (!track) return;
-    function step(){
-      var card = track.querySelector('.cat');
-      return card ? card.getBoundingClientRect().width + 18 : 250;
-    }
-    if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
-    if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
+  seconds.forEach(function(s){
+    s.addEventListener('click', function(e){
+      e.preventDefault();
+      showSecond(s.getAttribute('data-sx-show-second'));
+    });
   });
 })();
-
 </script>
 
 {% schema %}
 {
-  "name": "Pixel Card Shop Home",
+  "name": "Categories",
   "settings": [
-    { "type": "header", "content": "Collections" },
-    { "type": "collection", "id": "best_collection", "label": "Best Sellers collection", "info": "Products in the Best Sellers carousel and hero rotation." },
-    { "type": "collection", "id": "new_collection", "label": "New Arrivals collection", "info": "Products in the New Arrivals carousel." },
-    { "type": "header", "content": "Section padding" },
-    { "type": "range", "id": "padding_block_start", "label": "Top padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
-    { "type": "range", "id": "padding_block_end", "label": "Bottom padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokemon TCG" },
+    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch them all. Explore every expansion." },
+    { "type": "text", "id": "watermark_text", "label": "Watermark", "default": "Pokemon" },
+    { "type": "header", "content": "Sidebar Font Sizes (px)" },
+    { "type": "range", "id": "sidebar_title_font_size", "label": "Sidebar title", "min": 10, "max": 40, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "group_font_size", "label": "Main category (level 1)", "min": 8, "max": 40, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "sub_font_size", "label": "Sub category (level 2)", "min": 10, "max": 40, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "card_font_size", "label": "Card name", "min": 10, "max": 40, "step": 1, "default": 18, "unit": "px" }
+  ],
+  "blocks": [
+    {
+      "type": "sidebar_group",
+      "name": "Main Category",
+      "settings": [
+        { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
+        { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
+      ]
+    }
   ],
   "presets": [
-    { "name": "Pixel Card Shop Home" }
+    {
+      "name": "Categories",
+      "blocks": [
+        { "type": "sidebar_group", "settings": { "group_title": "Pokemon", "links": "Brilliant Stars|/collections/brilliant-stars" } }
+      ]
+    }
   ]
 }
 {% endschema %}
