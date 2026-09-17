@@ -208,8 +208,8 @@
                   {%- assign close_bracket = stripped | index_of: ']' -%}
                   {%- if close_bracket > 0 -%}
                     {%- assign link_url = stripped | slice: 1, close_bracket | strip -%}
-                    {%- assign link_title = stripped | slice: close_bracket | plus: 1 -%}
-                    {%- assign link_title = link_title | strip -%}
+                    {%- assign title_start = close_bracket | plus: 1 -%}
+                    {%- assign link_title = stripped | slice: title_start | strip -%}
                   {%- else -%}
                     {%- assign link_title = stripped -%}
                     {%- assign link_url = '' -%}
