@@ -179,7 +179,7 @@
           <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
 
             <section class="sx-hero">
-              <div class="sx-watermark" aria-hidden="true">{{ block.settings.watermark_text | default: section.settings.watermark_text | default: 'Pokémon' }}</div>
+              <div class="sx-watermark" aria-hidden="true">{{ block.settings.watermark_text | default: block.settings.hero_title | default: section.settings.watermark_text | default: 'Pokémon' }}</div>
               <div class="sx-hero-inner">
                 <div class="sx-hero-title-row">
                   {%- if block.settings.hero_icon != blank -%}
