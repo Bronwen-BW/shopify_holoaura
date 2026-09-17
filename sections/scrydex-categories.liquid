@@ -115,11 +115,39 @@
   .sx-cats .sx-tile-logo{height:80px}
   .sx-cats .sx-tile-name{font-size:16px}
 }
+
+/* ============ 黑白模式（与首页共用 localStorage px_bw） ============ */
+.sx-cats.bw{
+  --bg:#f0f0f0; --panel:#ffffff; --panel2:#e8e8e8;
+  --line:#bbbbbb; --line2:#888888;
+  --text:#1a1a1a; --text2:#444444; --text3:#777777;
+  --pink:#1a1a1a; --cyan:#333333; --gold:#555555;
+  --red:#1a1a1a; --purple:#333333;
+}
+.sx-cats .bw-toggle{position:fixed;right:18px;top:80px;z-index:99999;width:54px;height:54px;background:var(--panel);color:var(--gold);border:3px solid #000;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 rgba(0,0,0,.5);font-family:'Press Start 2P',monospace;line-height:1;user-select:none;pointer-events:auto}
+.sx-cats .bw-toggle:hover{background:var(--pink);color:#fff}
+
+.sx-cats.bw .sx-sidebar{border-right-color:#1a1a1a}
+.sx-cats.bw .sx-sub-item.active,.sx-cats.bw .sx-group-head.active{background:rgba(0,0,0,.08);border-left-color:#1a1a1a}
+.sx-cats.bw .sx-hero{background:linear-gradient(180deg,#e8e8e8,#f0f0f0);border-bottom-color:#1a1a1a}
+.sx-cats.bw .sx-hero::before{background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px)}
+.sx-cats.bw .sx-hero h1{color:#111;text-shadow:4px 4px 0 #ccc,8px 8px 0 rgba(0,0,0,.15)}
+.sx-cats.bw .sx-watermark{color:rgba(0,0,0,.06)}
+.sx-cats.bw .sx-ball{box-shadow:4px 4px 0 #999}
+.sx-cats.bw .sx-tile{border-color:#1a1a1a;box-shadow:6px 6px 0 rgba(0,0,0,.15)}
+.sx-cats.bw .sx-tile-logo{border-color:#1a1a1a}
+.sx-cats.bw .sx-tile-name{color:#111}
+.sx-cats.bw .sx-tile:hover .sx-tile-name{color:#1a1a1a}
+.sx-cats.bw .sx-cardgroup-head{border-bottom-color:#bbb}
+.sx-cats.bw .sx-cardgroup.closed .sx-cardgroup-head,
+.sx-cats.bw .sx-group.closed .sx-caret{color:#999}
 </style>
 
 {%- assign sidebar_blocks = section.blocks | where: "type", "sidebar_group" -%}
 
 <div class="sx-cats">
+<script>try{if(localStorage.getItem('px_bw')==='1')document.currentScript.parentNode.classList.add('bw')}catch(e){}</script>
+<div class="bw-toggle" title="切换黑白/彩色" onclick="var r=document.querySelector('.sx-cats');r.classList.toggle('bw');try{localStorage.setItem('px_bw',r.classList.contains('bw')?'1':'0')}catch(e){}">BW</div>
   <div class="sx-layout">
 
     <!-- ============ SIDEBAR ============ -->
@@ -402,6 +430,14 @@
   fitWatermarks();
   window.addEventListener('resize', fitWatermarks);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWatermarks);
+
+  // 与首页黑白切换实时同步（跨标签页）
+  window.addEventListener('storage', function(e){
+    if (e.key === 'px_bw'){
+      var root = document.querySelector('.sx-cats');
+      if (root) root.classList.toggle('bw', e.newValue === '1');
+    }
+  });
 })();
 </script>
 
