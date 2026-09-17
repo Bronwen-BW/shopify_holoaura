@@ -205,11 +205,10 @@
                     <div class="sx-grid">
                   {%- endunless -%}
 
-                  {%- assign close_bracket = stripped | index_of: ']' -%}
-                  {%- if close_bracket > 0 -%}
-                    {%- assign link_url = stripped | slice: 1, close_bracket | strip -%}
-                    {%- assign title_start = close_bracket | plus: 1 -%}
-                    {%- assign link_title = stripped | slice: title_start | strip -%}
+                  {%- assign parts = stripped | split: ']' -%}
+                  {%- if parts.size > 1 -%}
+                    {%- assign link_url = parts[0] | remove: '[' | strip -%}
+                    {%- assign link_title = parts[1] | strip -%}
                   {%- else -%}
                     {%- assign link_title = stripped -%}
                     {%- assign link_url = '' -%}
