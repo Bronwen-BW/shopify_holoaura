@@ -228,6 +228,8 @@
                 {%- else -%}
                   {%- if in_group -%}
                     </div></div>
+                  {%- else -%}
+                    </div>
                   {%- endif -%}
                   <div class="sx-cardgroup">
                     <div class="sx-cardgroup-head" data-sx-cardgroup-head>{{ stripped }} <span class="sx-caret">▼</span></div>
@@ -239,12 +241,16 @@
                 {%- if in_group -%}
                   </div></div>
                   {%- assign in_group = false -%}
+                {%- else -%}
+                  </div>
                 {%- endif -%}
                 {%- assign cur_second = cur_second | plus: 1 -%}
               {%- endif -%}
             {%- endfor -%}
             {%- if in_group -%}
               </div></div>
+            {%- else -%}
+              </div>
             {%- endif -%}
           </div>
         {%- endfor -%}
