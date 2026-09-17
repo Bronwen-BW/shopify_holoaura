@@ -41,12 +41,23 @@
             "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the Dragon Ball Super Card Game, from the original Base Set to the latest releases.",
             "links": "全部\n  補充包DUALEVOLUTIONFB09\n  補充包覺醒的心跳FB01"
           }
+        },
+        "sidebar_de782625": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "高达",
+            "hero_icon": "",
+            "hero_title": "Gundam",
+            "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the Gundam Super Card Game, from the original Base Set to the latest releases.",
+            "links": "全部"
+          }
         }
       },
       "block_order": [
         "sidebar_dcf9ad8d",
         "sidebar_c372f6b0",
-        "sidebar_dbfc5e5d"
+        "sidebar_dbfc5e5d",
+        "sidebar_de782625"
       ],
       "settings": {
         "hero_title": "Pokémon TCG",
