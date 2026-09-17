@@ -16,7 +16,7 @@
           "type": "sidebar_group",
           "settings": {
             "group_title": "寶可夢",
-            "hero_icon": "",
+            "hero_icon": "https://cdn.shopify.com/s/files/1/0983/1179/9105/files/pokemon_logo.png?v=1789627834",
             "hero_title": "Pokémon TCG",
             "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
             "links": "日文版\n  30th セレブレーション プレミアムデッキセット エーフィ・ブラッキー|mf\n  30th セレブレーション|m6a\n  ADV Promos|advp\n  Black & White Promos|bwp\n  Diamond & Pearl Promos|dpp\n  EXバトルブースト|ebb1\n簡中版\n  30 周年庆典 豪华卡组套装|30thDC\n  暗影夺辉|CS5.5C\n  宝可梦卡牌 家庭组合|CS2DaC\n繁中版\n  ex初階牌組 噴火龍|SVQL\n  ex初階牌組 皮卡丘|SVQP\n  ex初階牌組|SVD\n英文版\n  30th Celebration_ Classic Collection|me55c\n  30th Celebration|me55"
@@ -26,7 +26,7 @@
           "type": "sidebar_group",
           "settings": {
             "group_title": "航海王/海賊王",
-            "hero_icon": "",
+            "hero_icon": "https://cdn.shopify.com/s/files/1/0983/1179/9105/files/onpiece_logo.png?v=1789627896",
             "hero_title": "One Piece",
             "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the One Piece Trading Card Game, from the original Base Set to the latest releases.",
             "links": "繁中版\n簡中版\n日文版\n  500 Years In The Future|OP07\n  Absolute Justice|ST06"
@@ -36,7 +36,7 @@
           "type": "sidebar_group",
           "settings": {
             "group_title": "悟空",
-            "hero_icon": "",
+            "hero_icon": "https://cdn.shopify.com/s/files/1/0983/1179/9105/files/wukong_logo.png?v=1789627886",
             "hero_title": "Dragon Ball",
             "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the Dragon Ball Super Card Game, from the original Base Set to the latest releases.",
             "links": "全部\n  補充包DUALEVOLUTIONFB09\n  補充包覺醒的心跳FB01"
@@ -46,7 +46,7 @@
           "type": "sidebar_group",
           "settings": {
             "group_title": "高达",
-            "hero_icon": "",
+            "hero_icon": "https://cdn.shopify.com/s/files/1/0983/1179/9105/files/gundam_logo.png?v=1789627874",
             "hero_title": "Gundam",
             "hero_description": "Catch 'em all! Explore the expansion artwork of every card in the Gundam Super Card Game, from the original Base Set to the latest releases.",
             "links": "全部"

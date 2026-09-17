@@ -166,8 +166,8 @@
               <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
               <div class="sx-hero-inner">
                 <div class="sx-hero-title-row">
-                  {%- if block.settings.hero_icon -%}
-                    <img class="sx-ball-img" src="{{ block.settings.hero_icon | image_url: width: 92 }}" alt="" />
+                  {%- if block.settings.hero_icon != blank -%}
+                    <img class="sx-ball-img" src="{{ block.settings.hero_icon }}" alt="" />
                   {%- else -%}
                     <span class="sx-ball" aria-hidden="true"></span>
                   {%- endif -%}
@@ -312,7 +312,7 @@
       "name": "Main Category",
       "settings": [
         { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
-        { "type": "image_picker", "id": "hero_icon", "label": "Hero icon (optional, overrides pokeball)" },
+        { "type": "text", "id": "hero_icon", "label": "Hero icon URL (optional, e.g. https://cdn.shopify.com/...)" },
         { "type": "text", "id": "hero_title", "label": "Hero title (shown when this group is selected)", "default": "Pokémon TCG" },
         { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all." },
         { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
