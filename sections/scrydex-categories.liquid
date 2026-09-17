@@ -198,15 +198,22 @@
               {%- assign first_ch = line | slice: 0 -%}
 
               {%- if first_ch == ' ' or first_ch == '	' -%}
-                {%- comment -%} 有缩进：含 | 当卡片，不含 | 当分组标题 {%- endcomment -%}
-                {%- if stripped contains '|' -%}
+                {%- comment -%} 有缩进：以 [ 开头=卡片 [URL]标题，否则=分组标题 {%- endcomment -%}
+                {%- assign first_two = stripped | slice: 0, 1 -%}
+                {%- if first_two == '[' -%}
                   {%- unless in_group -%}
                     <div class="sx-grid">
                   {%- endunless -%}
 
-                  {%- assign pipe = stripped | split: '|' -%}
-                  {%- assign link_title = pipe[0] | strip -%}
-                  {%- assign link_url = pipe[1] | strip -%}
+                  {%- assign close_bracket = stripped | index_of: ']' -%}
+                  {%- if close_bracket > 0 -%}
+                    {%- assign link_url = stripped | slice: 1, close_bracket | strip -%}
+                    {%- assign link_title = stripped | slice: close_bracket | plus: 1 -%}
+                    {%- assign link_title = link_title | strip -%}
+                  {%- else -%}
+                    {%- assign link_title = stripped -%}
+                    {%- assign link_url = '' -%}
+                  {%- endif -%}
                   {%- if link_url != '' -%}
                     {%- unless link_url contains '/' or link_url contains ':' -%}
                       {%- assign link_url = '/collections/' | append: link_url -%}
