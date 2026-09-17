@@ -112,22 +112,29 @@
             <span class="sx-caret">▼</span>
           </div>
           <div class="sx-children">
+            {%- assign second_idx = 0 -%}
             {%- for raw in link_lines -%}
-              {%- assign line = raw | strip -%}
-              {%- if line == '' -%}{%- continue -%}{%- endif -%}
-              {%- assign pipe = line | split: '|' -%}
-              {%- if pipe.size > 1 -%}
-                {%- assign sub_title = pipe[0] | strip -%}
-              {%- else -%}
-                {%- assign us = line | split: '_' -%}
-                {%- if us.size > 1 -%}
-                  {%- assign sub_title = '' -%}
-                  {%- for p in us -%}{%- unless forloop.last -%}{%- if sub_title != '' -%}{%- assign sub_title = sub_title | append: '_' -%}{%- endif -%}{%- assign sub_title = sub_title | append: p -%}{%- endunless -%}{%- endfor -%}
-                {%- else -%}
-                  {%- assign sub_title = line -%}
+              {%- assign line = raw -%}
+              {%- assign first_ch = line | slice: 0 -%}
+              {%- unless first_ch == ' ' or first_ch == '	' -%}
+                {%- assign t = line | strip -%}
+                {%- if t != '' -%}
+                  {%- assign second_idx = second_idx | plus: 1 -%}
+                  {%- assign pipe_t = t | split: '|' -%}
+                  {%- if pipe_t.size > 1 -%}
+                    {%- assign second_title = pipe_t[0] | strip -%}
+                  {%- else -%}
+                    {%- assign us_t = t | split: '_' -%}
+                    {%- if us_t.size > 1 -%}
+                      {%- assign second_title = '' -%}
+                      {%- for p in us_t -%}{%- unless forloop.last -%}{%- if second_title != '' -%}{%- assign second_title = second_title | append: '_' -%}{%- endif -%}{%- assign second_title = second_title | append: p -%}{%- endunless -%}{%- endfor -%}
+                    {%- else -%}
+                      {%- assign second_title = t -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                  <a class="sx-sub-item" data-sx-show-second="{{ gid }}-{{ second_idx }}">{{ second_title }}</a>
                 {%- endif -%}
-              {%- endif -%}
-              <a class="sx-sub-item" data-sx-show-card="{{ gid }}-{{ forloop.index }}">{{ sub_title }}</a>
+              {%- endunless -%}
             {%- endfor -%}
           </div>
         </div>
@@ -159,52 +166,58 @@
             <div class="sx-grid">
               {%- assign link_lines = block.settings.links | strip | split: "
 " -%}
+              {%- assign cur_second = 0 -%}
               {%- for raw in link_lines -%}
-                {%- assign line = raw | strip -%}
-                {%- if line == '' -%}{%- continue -%}{%- endif -%}
+                {%- assign line = raw -%}
+                {%- assign first_ch = line | slice: 0 -%}
+                {%- if first_ch == ' ' or first_ch == '	' -%}
+                  {%- assign card_line = line | strip -%}
+                  {%- if card_line == '' -%}{%- continue -%}{%- endif -%}
 
-                {%- comment -%} 解析一行：优先 "标题|URL"，兼容旧格式 "标题_URL" {%- endcomment -%}
-                {%- assign pipe = line | split: '|' -%}
-                {%- if pipe.size > 1 -%}
-                  {%- assign link_title = pipe[0] | strip -%}
-                  {%- assign link_url = pipe[1] | strip -%}
-                {%- else -%}
-                  {%- assign us = line | split: '_' -%}
-                  {%- if us.size > 1 -%}
-                    {%- assign link_url = us | last -%}
-                    {%- assign link_title = '' -%}
-                    {%- for p in us -%}
-                      {%- unless forloop.last -%}
-                        {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
-                        {%- assign link_title = link_title | append: p -%}
-                      {%- endunless -%}
-                    {%- endfor -%}
+                  {%- comment -%} 解析卡片行 "标题|URL"，兼容 "标题_URL" {%- endcomment -%}
+                  {%- assign pipe = card_line | split: '|' -%}
+                  {%- if pipe.size > 1 -%}
+                    {%- assign link_title = pipe[0] | strip -%}
+                    {%- assign link_url = pipe[1] | strip -%}
                   {%- else -%}
-                    {%- assign link_title = line -%}
-                    {%- assign link_url = '' -%}
+                    {%- assign us = card_line | split: '_' -%}
+                    {%- if us.size > 1 -%}
+                      {%- assign link_url = us | last -%}
+                      {%- assign link_title = '' -%}
+                      {%- for p in us -%}
+                        {%- unless forloop.last -%}
+                          {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
+                          {%- assign link_title = link_title | append: p -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- assign link_title = card_line -%}
+                      {%- assign link_url = '' -%}
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- if link_url != '' -%}
+                    {%- unless link_url contains '/' or link_url contains ':' -%}
+                      {%- assign link_url = '/collections/' | append: link_url -%}
+                    {%- endunless -%}
+                  {%- else -%}
+                    {%- assign link_url = '#' -%}
+                  {%- endif -%}
+
+                  <a class="sx-tile" data-sx-second="{{ gid }}-{{ cur_second }}" href="{{ link_url }}">
+                    <div class="sx-tile-logo">
+                      <span class="sx-ph">🎴</span>
+                    </div>
+                    <div class="sx-tile-name">{{ link_title }}</div>
+                  </a>
+                {%- else -%}
+                  {%- assign t = line | strip -%}
+                  {%- if t != '' -%}
+                    {%- assign cur_second = cur_second | plus: 1 -%}
                   {%- endif -%}
                 {%- endif -%}
-
-                {%- comment -%} URL 补全：裸句柄加 /collections/ 前缀 {%- endcomment -%}
-                {%- if link_url != '' -%}
-                  {%- unless link_url contains '/' or link_url contains ':' -%}
-                    {%- assign link_url = '/collections/' | append: link_url -%}
-                  {%- endunless -%}
-                {%- else -%}
-                  {%- assign link_url = '#' -%}
-                {%- endif -%}
-
-                <a class="sx-tile" data-sx-card="{{ gid }}-{{ forloop.index }}" href="{{ link_url }}">
-                  <div class="sx-tile-logo">
-                    <span class="sx-ph">🎴</span>
-                  </div>
-                  <div class="sx-tile-name">{{ link_title }}</div>
-                </a>
               {%- endfor -%}
             </div>
-            {%- if link_lines.size == 0 -%}
-              <p class="sx-panel-empty">No items in this category yet.</p>
-            {%- endif -%}
           </div>
         {%- endfor -%}
       </section>
@@ -216,35 +229,30 @@
 <script>
 (function(){
   var panels = document.querySelectorAll('.sx-cats [data-sx-panel]');
-  var cards  = document.querySelectorAll('.sx-cats [data-sx-card]');
-  var heads = document.querySelectorAll('.sx-cats [data-sx-group-head]');
-  var subs  = document.querySelectorAll('.sx-cats [data-sx-show-card]');
+  var cards  = document.querySelectorAll('.sx-cats [data-sx-second]');
+  var heads  = document.querySelectorAll('.sx-cats [data-sx-group-head]');
+  var seconds = document.querySelectorAll('.sx-cats [data-sx-show-second]');
 
   function showGroup(gid){
     panels.forEach(function(p){
       p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
     });
-    // 显示该组所有卡片，隐藏其他组
-    cards.forEach(function(c){
-      var cg = c.getAttribute('data-sx-card').split('-').slice(0,2).join('-');
-      c.classList.toggle('hidden', cg !== gid);
-    });
-    // 清除子项高亮
-    subs.forEach(function(s){ s.classList.remove('active'); });
+    // 显示该组所有卡片，清除第二级高亮
+    cards.forEach(function(c){ c.classList.remove('hidden'); });
+    seconds.forEach(function(s){ s.classList.remove('active'); });
   }
 
-  function showCard(cid){
-    // cid = "group-1-3"
+  function showSecond(cid){
+    // cid = "group-1-2"
     var gid = cid.split('-').slice(0,2).join('-');
     panels.forEach(function(p){
       p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
     });
     cards.forEach(function(c){
-      c.classList.toggle('hidden', c.getAttribute('data-sx-card') !== cid);
+      c.classList.toggle('hidden', c.getAttribute('data-sx-second') !== cid);
     });
-    // 高亮对应子项
-    subs.forEach(function(s){
-      s.classList.toggle('active', s.getAttribute('data-sx-show-card') === cid);
+    seconds.forEach(function(s){
+      s.classList.toggle('active', s.getAttribute('data-sx-show-second') === cid);
     });
   }
 
@@ -256,10 +264,10 @@
     });
   });
 
-  subs.forEach(function(s){
+  seconds.forEach(function(s){
     s.addEventListener('click', function(e){
       e.preventDefault();
-      showCard(s.getAttribute('data-sx-show-card'));
+      showSecond(s.getAttribute('data-sx-show-second'));
     });
   });
 })();
