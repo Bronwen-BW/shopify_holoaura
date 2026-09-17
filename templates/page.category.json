@@ -11,15 +11,38 @@
   "sections": {
     "sc_categories_main": {
       "type": "scrydex-categories",
+      "blocks": {
+        "sidebar_dcf9ad8d": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "寶可夢",
+            "links": "日文版\n  30th セレブレーション プレミアムデッキセット エーフィ・ブラッキー_mf\n  30th セレブレーション_m6a\n  ADV Promos_advp\n  Black & White Promos_bwp\n  Diamond & Pearl Promos_dpp\n  EXバトルブースト_ebb1\n簡中版\n  30 周年庆典 豪华卡组套装_30thDC\n  暗影夺辉_CS5.5C\n  宝可梦卡牌 家庭组合_CS2DaC\n繁中版\n  ex初階牌組 噴火龍_SVQL\n  ex初階牌組 皮卡丘_SVQP\n  ex初階牌組_SVD\n英文版\n  30th Celebration_ Classic Collection_me55c\n  30th Celebration_me55"
+          }
+        },
+        "sidebar_c372f6b0": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "航海王/海賊王",
+            "links": "繁中版\n簡中版"
+          }
+        },
+        "sidebar_dbfc5e5d": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "悟空",
+            "links": "全部"
+          }
+        }
+      },
+      "block_order": [
+        "sidebar_dcf9ad8d",
+        "sidebar_c372f6b0",
+        "sidebar_dbfc5e5d"
+      ],
       "settings": {
         "hero_title": "Pokémon TCG",
         "hero_description": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
-        "watermark_text": "Pokémon",
-        "section_title": "NEWEST EXPANSIONS",
-        "source_collection": "",
-        "show_date": true,
-        "sidebar_title": "EXPANSIONS",
-        "sidebar_menu": ""
+        "watermark_text": "Pokémon"
       }
     }
   },
