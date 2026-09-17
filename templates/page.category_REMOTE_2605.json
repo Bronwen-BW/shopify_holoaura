@@ -11,11 +11,7 @@
   "sections": {
     "sc_categories_main": {
       "type": "scrydex-categories",
-      "settings": {
-        "hero_title": "Pokémon TCG",
-        "source_collection": "",
-        "show_date": true
-      }
+      "settings": {}
     }
   },
   "order": [

@@ -1,19 +1,17 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "sc_categories_main": {
       "type": "scrydex-categories",
-      "settings": {
-        "hero_crumb": "EXPANSIONS",
-        "hero_title": "Pokémon TCG",
-        "hero_subtitle": "<p>Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.</p>",
-        "source_collection": "",
-        "featured_count": 8,
-        "featured_title": "NEWEST EXPANSIONS",
-        "show_id": true,
-        "show_cards": true,
-        "show_date": true,
-        "search_placeholder": "Filter expansions by name…"
-      }
+      "settings": {}
     }
   },
   "order": [

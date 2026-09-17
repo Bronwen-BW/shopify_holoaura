@@ -201,26 +201,25 @@
   "name": "Categories",
   "settings": [
     { "type": "header", "content": "Hero" },
-    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokémon TCG" },
-    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." },
-    { "type": "text", "id": "watermark_text", "label": "Background watermark", "default": "Pokémon" },
-    { "type": "header", "content": "Sidebar" },
-    { "type": "paragraph", "content": "主分类通过下方 Add block → 主分类 添加；每个主分类的 links 里每行写一个子分类，格式：标题|链接" }
+    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokemon TCG" },
+    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch them all. Explore every expansion." },
+    { "type": "text", "id": "watermark_text", "label": "Watermark", "default": "Pokemon" }
   ],
-  "blocks": {
-    "sidebar_group": {
-      "name": "主分类 (Main Category)",
+  "blocks": [
+    {
+      "type": "sidebar_group",
+      "name": "Main Category",
       "settings": [
-        { "type": "text", "id": "group_title", "label": "主分类名称", "default": "SERIES" },
-        { "type": "textarea", "id": "links", "label": "子分类列表（每行：标题|链接）", "default": "Brilliant Stars|/collections/brilliant-stars\nAstral Radiance|/collections/astral-radiance" }
+        { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
+        { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
       ]
     }
-  },
+  ],
   "presets": [
     {
       "name": "Categories",
       "blocks": [
-        { "type": "sidebar_group", "settings": { "group_title": "Pokemon", "links": "Brilliant Stars|/collections/brilliant-stars\nAstral Radiance|/collections/astral-radiance" } }
+        { "type": "sidebar_group", "settings": { "group_title": "Pokemon", "links": "Brilliant Stars|/collections/brilliant-stars" } }
       ]
     }
   ]
