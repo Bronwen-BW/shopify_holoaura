@@ -179,7 +179,7 @@
           <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
 
             <section class="sx-hero">
-              <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
+              <div class="sx-watermark" aria-hidden="true">{{ block.settings.watermark_text | default: section.settings.watermark_text | default: 'Pokémon' }}</div>
               <div class="sx-hero-inner">
                 <div class="sx-hero-title-row">
                   {%- if block.settings.hero_icon != blank -%}
@@ -387,6 +387,7 @@
         { "type": "text", "id": "hero_icon", "label": "Hero icon URL (optional, e.g. https://cdn.shopify.com/...)" },
         { "type": "text", "id": "hero_title", "label": "Hero title (shown when this group is selected)", "default": "Pokémon TCG" },
         { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all." },
+        { "type": "text", "id": "watermark_text", "label": "Watermark (背景大字, 留空用全局)" },
         { "type": "textarea", "id": "links", "label": "Links. 不缩进=第二级; 缩进无[=分组; 缩进[URL]标题=卡片", "default": "日文版\n  Mega Evolution\n  [mf]Brilliant Stars" }
       ]
     }
