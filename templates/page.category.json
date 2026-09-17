@@ -16,14 +16,14 @@
           "type": "sidebar_group",
           "settings": {
             "group_title": "寶可夢",
-            "links": "日文版\n  30th セレブレーション プレミアムデッキセット エーフィ・ブラッキー_mf\n  30th セレブレーション_m6a\n  ADV Promos_advp\n  Black & White Promos_bwp\n  Diamond & Pearl Promos_dpp\n  EXバトルブースト_ebb1\n簡中版\n  30 周年庆典 豪华卡组套装_30thDC\n  暗影夺辉_CS5.5C\n  宝可梦卡牌 家庭组合_CS2DaC\n繁中版\n  ex初階牌組 噴火龍_SVQL\n  ex初階牌組 皮卡丘_SVQP\n  ex初階牌組_SVD\n英文版\n  30th Celebration_ Classic Collection_me55c\n  30th Celebration_me55"
+            "links": "日文版\n  30th セレブレーション プレミアムデッキセット エーフィ・ブラッキー|mf\n  30th セレブレーション|m6a\n  ADV Promos|advp\n  Black & White Promos|bwp\n  Diamond & Pearl Promos|dpp\n  EXバトルブースト|ebb1\n簡中版\n  30 周年庆典 豪华卡组套装|30thDC\n  暗影夺辉|CS5.5C\n  宝可梦卡牌 家庭组合|CS2DaC\n繁中版\n  ex初階牌組 噴火龍|SVQL\n  ex初階牌組 皮卡丘|SVQP\n  ex初階牌組|SVD\n英文版\n  30th Celebration_ Classic Collection|me55c\n  30th Celebration|me55"
           }
         },
         "sidebar_c372f6b0": {
           "type": "sidebar_group",
           "settings": {
             "group_title": "航海王/海賊王",
-            "links": "繁中版\n簡中版\n日文版\n  500 Years In The Future_OP07\n  Absolute Justice_ST06"
+            "links": "繁中版\n簡中版\n日文版\n  500 Years In The Future|OP07\n  Absolute Justice|ST06"
           }
         },
         "sidebar_dbfc5e5d": {
@@ -42,7 +42,11 @@
       "settings": {
         "hero_title": "Pokémon TCG",
         "hero_description": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
-        "watermark_text": "Pokémon"
+        "watermark_text": "Pokémon",
+        "sidebar_title_font_size": 30,
+        "group_font_size": 30,
+        "sub_font_size": 20,
+        "card_font_size": 18
       }
     }
   },
