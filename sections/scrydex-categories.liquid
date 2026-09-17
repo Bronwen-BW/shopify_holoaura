@@ -254,7 +254,9 @@
                     {%- assign head_parts = parts[0] | remove: '[' | split: '|' -%}
                     {%- assign link_url = head_parts[0] | strip -%}
                     {%- assign card_image = head_parts[1] | strip -%}
-                    {%- assign link_title = parts[1] | strip -%}
+                    {%- comment -%} 标题=去掉第一个 [URL|IMG] 段后的全部内容，标题自身可含 [xxx] {%- endcomment -%}
+                    {%- assign head_str = parts[0] | append: ']' -%}
+                    {%- assign link_title = stripped | remove_first: head_str | strip -%}
                   {%- else -%}
                     {%- assign link_title = stripped -%}
                     {%- assign link_url = '' -%}
