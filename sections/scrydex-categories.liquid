@@ -53,7 +53,8 @@
 .sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:var(--f-group);letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase;border-left:3px solid transparent;transition:background .12s,color .12s}
 .sx-cats .sx-group-head:hover{background:var(--panel2);color:#fff}
 .sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
-.sx-cats .sx-side-icon{width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:10px;border-radius:4px}
+.sx-cats .sx-group-head > span:first-child{display:inline-flex;align-items:center;white-space:nowrap}
+.sx-cats .sx-side-icon{width:22px;height:22px;object-fit:contain;margin-right:10px;border-radius:4px;flex:0 0 auto}
 .sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
 .sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
 .sx-cats .sx-group.closed .sx-children{display:none}
