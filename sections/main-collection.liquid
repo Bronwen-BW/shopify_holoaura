@@ -20,16 +20,16 @@
 /* 全站去圆角 */
 #shopify-section-section *,#shopify-section-main *{border-radius:0 !important;}
 
-/* —— 顶部系列标题 / 描述 —— */
+/* —— 顶部系列标题 / 描述（居中、缩小） —— */
 #shopify-section-section h1{
   font-family:"Press Start 2P",monospace !important;
-  font-size:clamp(20px,3.2vw,34px) !important;line-height:1.35 !important;
-  color:#fff !important;margin:0 0 14px;
-  text-shadow:4px 4px 0 var(--pxpink),8px 8px 0 rgba(0,0,0,.5);
+  font-size:clamp(13px,1.9vw,21px) !important;line-height:1.5 !important;
+  color:#fff !important;margin:0 auto 14px;text-align:center;word-break:break-word;
+  text-shadow:3px 3px 0 var(--pxpink),6px 6px 0 rgba(0,0,0,.5);
 }
 #shopify-section-section .section-field__rte,
 #shopify-section-section p,
-#shopify-section-section .rte{color:var(--pxtext2) !important;font-family:"VT323",monospace !important;font-size:20px !important;line-height:1.55 !important;}
+#shopify-section-section .rte{color:var(--pxtext2) !important;font-family:"VT323",monospace !important;font-size:18px !important;line-height:1.55 !important;text-align:center;}
 
 /* —— 商品卡（复刻首页 .prod：4:5 卡牌、图铺满、hover 底部浮层） —— */
 #shopify-section-main .product-grid__item{display:block;transition:transform .15s;}
@@ -112,6 +112,83 @@ ul[product-grid-view="zoom-out"] .px-card__ph{font-size:34px;}
 }
 #shopify-section-main .facets-block-wrapper,
 #shopify-section-main .facets--drawer{background:var(--pxpanel) !important;color:var(--pxtext);}
+
+/* —— 筛选 / 排序 触发按钮（横向 summary） —— */
+#shopify-section-main .facets__summary{
+  display:inline-flex !important;align-items:center;gap:8px;
+  background:var(--pxpanel) !important;color:var(--pxtext) !important;
+  border:2px solid #000 !important;border-radius:0 !important;
+  box-shadow:3px 3px 0 rgba(0,0,0,.5) !important;
+  padding:10px 13px !important;min-height:0 !important;cursor:pointer;list-style:none;
+  font-family:"Press Start 2P",monospace !important;font-size:9px !important;
+  letter-spacing:.5px;text-transform:uppercase;line-height:1.4;
+  transition:background .12s,border-color .12s,transform .1s;
+}
+#shopify-section-main .facets__summary::-webkit-details-marker{display:none;}
+#shopify-section-main .facets__summary:hover{background:var(--pxpanel2) !important;border-color:var(--pxcyan) !important;}
+#shopify-section-main details[open] > .facets__summary{background:var(--pxpanel2) !important;border-color:var(--pxcyan) !important;}
+#shopify-section-main .facets__summary .facets__label{
+  color:var(--pxgold) !important;font-family:"Press Start 2P",monospace !important;font-size:9px !important;letter-spacing:.5px;
+}
+#shopify-section-main .facets__summary .facets__status,
+#shopify-section-main .facets__summary .facets__bubble{
+  color:var(--pxcyan) !important;font-family:"VT323",monospace !important;font-size:15px !important;
+}
+#shopify-section-main .facets__summary .icon-caret{color:var(--pxgold) !important;width:11px;height:11px;transition:transform .2s;}
+#shopify-section-main details[open] > .facets__summary .icon-caret{transform:rotate(180deg);}
+/* —— 筛选 / 排序 弹层 —— */
+#shopify-section-main .facets__inputs.facets__panel-content,
+#shopify-section-main .sorting-filter__options{
+  background:var(--pxpanel) !important;border:3px solid #000 !important;border-radius:0 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.55) !important;color:var(--pxtext) !important;padding:12px !important;
+}
+#shopify-section-main .facets__inputs .facets__header,
+#shopify-section-main .facets__inputs fieldset,
+#shopify-section-main .facets__inputs li{border-color:var(--line,#2e2656) !important;}
+#shopify-section-main .facets__inputs label,
+#shopify-section-main .sorting-filter__label{
+  font-family:"VT323",monospace !important;font-size:18px !important;color:var(--pxtext) !important;
+  display:flex;align-items:center;gap:8px;padding:5px 6px;cursor:pointer;border-radius:0;
+}
+#shopify-section-main .facets__inputs label:hover,
+#shopify-section-main .sorting-filter__option:hover{background:var(--pxpanel2) !important;}
+#shopify-section-main .facets__inputs label:hover,
+#shopify-section-main .sorting-filter__option:hover .sorting-filter__label{color:var(--pxcyan) !important;}
+#shopify-section-main .facets__inputs input[type="checkbox"],
+#shopify-section-main .facets__inputs input[type="radio"],
+#shopify-section-main .sorting-filter__input{accent-color:var(--pxcyan);width:14px;height:14px;}
+#shopify-section-main .facets__inputs input:checked ~ *,
+#shopify-section-main .sorting-filter__input:checked ~ .sorting-filter__label{color:var(--pxpink) !important;}
+#shopify-section-main .facets__inputs input[type="number"],
+#shopify-section-main .price-filter__input{
+  background:#0d0b1a !important;border:2px solid #000 !important;border-radius:0 !important;
+  color:var(--pxtext) !important;font-family:"VT323",monospace !important;font-size:17px !important;padding:6px 8px;
+}
+#shopify-section-main .facets__inputs .button,
+#shopify-section-main .facets__inputs button{border-radius:0 !important;}
+/* —— 商品计数 / 网格密度 —— */
+#shopify-section-main .products-count-wrapper,
+#shopify-section-main .products-count-wrapper span{
+  font-family:"Press Start 2P",monospace !important;font-size:10px !important;color:var(--pxtext2) !important;letter-spacing:.5px;
+}
+#shopify-section-main .grid-density-controls button,
+#shopify-section-main [class*="grid-density"] button{
+  background:var(--pxpanel) !important;border:2px solid #000 !important;border-radius:0 !important;
+  color:var(--pxtext2) !important;box-shadow:3px 3px 0 rgba(0,0,0,.5);padding:8px !important;
+}
+#shopify-section-main .grid-density-controls button[aria-pressed="true"],
+#shopify-section-main [class*="grid-density"] button[aria-pressed="true"],
+#shopify-section-main .grid-density-controls button:hover,
+#shopify-section-main [class*="grid-density"] button:hover{
+  color:var(--pxcyan) !important;background:var(--pxpanel2) !important;
+}
+#shopify-section-main .grid-density-controls .icon,
+#shopify-section-main [class*="grid-density"] .icon{color:inherit;width:16px;height:16px;}
+/* 移动端排序 select 兜底 */
+#shopify-section-main .sorting-filter__select{
+  background:var(--pxpanel) !important;color:var(--pxtext) !important;border:2px solid #000 !important;
+  border-radius:0 !important;font-family:"VT323",monospace !important;font-size:17px !important;padding:8px;
+}
 
 /* —— 空结果 —— */
 #shopify-section-main .main-collection-grid__empty{
