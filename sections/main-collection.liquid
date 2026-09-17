@@ -1,5 +1,136 @@
 
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/* ============ 商品系列页 · 像素风皮肤（本 section 仅 collection 模板输出） ============ */
+#shopify-section-section,
+#shopify-section-main{
+  --pxbg:#0d0b1a; --pxpanel:#1a1636; --pxpanel2:#221d47;
+  --pxtext:#e8e6ff; --pxtext2:#9a94c7;
+  --pxpink:#ff2e88; --pxcyan:#00f0ff; --pxgold:#ffd600;
+  background:#0d0b1a;
+  font-family:"VT323",ui-monospace,monospace;
+}
+#shopify-section-section .section-background,
+#shopify-section-main .section-background,
+#shopify-section-main results-list.product-grid-container,
+#shopify-section-main .collection-wrapper{background:#0d0b1a !important;color:var(--pxtext);}
+/* 全站去圆角 */
+#shopify-section-section *,#shopify-section-main *{border-radius:0 !important;}
+
+/* —— 顶部系列标题 / 描述 —— */
+#shopify-section-section h1{
+  font-family:"Press Start 2P",monospace !important;
+  font-size:clamp(20px,3.2vw,34px) !important;line-height:1.35 !important;
+  color:#fff !important;margin:0 0 14px;
+  text-shadow:4px 4px 0 var(--pxpink),8px 8px 0 rgba(0,0,0,.5);
+}
+#shopify-section-section .section-field__rte,
+#shopify-section-section p,
+#shopify-section-section .rte{color:var(--pxtext2) !important;font-family:"VT323",monospace !important;font-size:20px !important;line-height:1.55 !important;}
+
+/* —— 商品卡片 —— */
+#shopify-section-main .product-card__content,
+#shopify-section-main .product-grid__card{
+  background:var(--pxpanel) !important;
+  border:3px solid #000 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important;
+  padding:0 0 16px !important;
+  overflow:hidden;
+  transition:transform .15s, box-shadow .15s;
+}
+#shopify-section-main .product-grid__item{transition:transform .15s;}
+#shopify-section-main .product-grid__item:hover{transform:translate(-2px,-2px);}
+#shopify-section-main .product-grid__item:hover .product-card__content{box-shadow:8px 8px 0 rgba(0,0,0,.55) !important;}
+/* 图片框 */
+#shopify-section-main .card-gallery{background:var(--pxpanel2) !important;border:0 !important;border-bottom:3px solid #000 !important;}
+#shopify-section-main .card-gallery .media,
+#shopify-section-main .card-gallery .global-media-settings,
+#shopify-section-main .card-gallery img{border-radius:0 !important;}
+/* 商品名 */
+#shopify-section-main .product-card [role="heading"],
+#shopify-section-main .product-card .product-card__title{
+  font-family:"VT323",monospace !important;font-size:21px !important;line-height:1.25 !important;
+  color:#fff !important;letter-spacing:.3px;padding:0 14px;margin:12px 0 0;
+}
+#shopify-section-main .product-card:hover [role="heading"],
+#shopify-section-main .product-card:hover .product-card__title{color:var(--pxcyan) !important;}
+/* 价格 */
+#shopify-section-main .price,
+#shopify-section-main .compare-at-price,
+#shopify-section-main .price-item--sale{font-family:"Press Start 2P",monospace !important;font-size:13px !important;}
+#shopify-section-main .product-card [ref="priceContainer"]{padding:0 14px;margin-top:10px;}
+#shopify-section-main .price{color:var(--pxgold) !important;}
+#shopify-section-main .price-item--sale.price{color:var(--pxpink) !important;}
+#shopify-section-main .compare-at-price{color:var(--pxtext2) !important;text-decoration:line-through;}
+/* 角标 */
+#shopify-section-main .badge,
+#shopify-section-main .product-badges .badge{
+  background:var(--pxpink) !important;color:#fff !important;
+  border:2px solid #000 !important;box-shadow:3px 3px 0 rgba(0,0,0,.5) !important;
+  font-family:"Press Start 2P",monospace !important;font-size:8px !important;
+  letter-spacing:1px;padding:5px 8px !important;
+}
+/* 快速加购 / 通用按钮 */
+#shopify-section-main .button,
+#shopify-section-main button.button,
+#shopify-section-main .facets-toggle__button{
+  font-family:"Press Start 2P",monospace !important;font-size:11px !important;
+  border:2px solid #000 !important;box-shadow:4px 4px 0 rgba(0,0,0,.5) !important;
+  text-transform:uppercase;letter-spacing:.5px;padding:12px 18px !important;
+  transition:transform .1s, box-shadow .1s;
+}
+#shopify-section-main .button--primary,
+#shopify-section-main .facets-toggle__button{background:var(--pxcyan) !important;color:#001a1a !important;}
+#shopify-section-main .button--secondary{background:var(--pxpanel) !important;color:var(--pxgold) !important;}
+#shopify-section-main .quick-add__button,
+#shopify-section-main .quick-add button{background:var(--pxpink) !important;color:#fff !important;}
+#shopify-section-main .button:hover,
+#shopify-section-main .facets-toggle__button:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(0,0,0,.5) !important;}
+
+/* —— 筛选 / 排序 —— */
+#shopify-section-main .facets,
+#shopify-section-main .facets *{color:var(--pxtext);}
+#shopify-section-main .facets__filters-title,
+#shopify-section-main .facets__heading,
+#shopify-section-main .facets-vertical__heading,
+#shopify-section-main .facets-drawer__title{
+  font-family:"Press Start 2P",monospace !important;font-size:12px !important;color:var(--pxgold) !important;
+}
+#shopify-section-main .facets__clear-all-link{font-family:"Press Start 2P",monospace !important;font-size:9px !important;color:var(--pxcyan) !important;}
+#shopify-section-main .facets-toggle__wrapper{border:2px solid #000 !important;}
+#shopify-section-main .select__select,
+#shopify-section-main select,
+#shopify-section-main .facets__selected,
+#shopify-section-main input[type="text"],
+#shopify-section-main input[type="search"]{
+  background:var(--pxpanel) !important;color:var(--pxtext) !important;
+  border:2px solid #000 !important;border-radius:0 !important;
+  font-family:"VT323",monospace !important;font-size:18px !important;
+}
+#shopify-section-main .facets-block-wrapper,
+#shopify-section-main .facets--drawer{background:var(--pxpanel) !important;color:var(--pxtext);}
+
+/* —— 空结果 —— */
+#shopify-section-main .main-collection-grid__empty{
+  background:var(--pxpanel) !important;border:3px solid #000 !important;
+  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important;color:var(--pxtext);
+}
+#shopify-section-main .main-collection-grid__empty-title{
+  font-family:"Press Start 2P",monospace !important;color:#fff !important;
+  text-shadow:3px 3px 0 var(--pxpink);
+}
+/* —— 分页 —— */
+#shopify-section-main .pagination .button{background:var(--pxpanel) !important;color:var(--pxgold) !important;}
+#shopify-section-main .pagination .button[aria-current="page"]{background:var(--pxpink) !important;color:#fff !important;}
+/* 焦点 */
+#shopify-section-main a:focus-visible,
+#shopify-section-section a:focus-visible,
+#shopify-section-main button:focus-visible{outline:3px solid var(--pxcyan) !important;outline-offset:2px;}
+</style>
+
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
