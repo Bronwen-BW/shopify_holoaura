@@ -92,7 +92,8 @@
       <div class="sx-sidebar-label">MENU</div>
       {%- for block in sidebar_blocks -%}
         {%- assign gid = "group-" | append: forloop.index -%}
-        {%- assign link_lines = block.settings.links | strip | split: newline -%}
+        {%- assign link_lines = block.settings.links | strip | split: "
+" -%}
         <button type="button" class="sx-main-cat {% if forloop.first %}active{% endif %}" data-sx-group="{{ gid }}">
           <span><span class="sx-glyph">▣</span>{{ block.settings.group_title | default: 'GROUP' }}</span>
           <span class="sx-count">{{ link_lines.size }}</span>
@@ -123,7 +124,8 @@
           <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
             <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
             <div class="sx-grid">
-              {%- assign link_lines = block.settings.links | strip | split: newline -%}
+              {%- assign link_lines = block.settings.links | strip | split: "
+" -%}
               {%- for raw in link_lines -%}
                 {%- assign line = raw | strip -%}
                 {%- if line == '' -%}{%- continue -%}{%- endif -%}
