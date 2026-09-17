@@ -20,6 +20,12 @@
   font-family:"VT323",ui-monospace,monospace; font-size:18px; line-height:1.5;
 }
 .sx-cats *,.sx-cats *::before,.sx-cats *::after{box-sizing:border-box}
+.sx-cats{
+  --f-sidebar-title:{{ section.settings.sidebar_title_font_size }}px;
+  --f-group:{{ section.settings.group_font_size }}px;
+  --f-sub:{{ section.settings.sub_font_size }}px;
+  --f-card:{{ section.settings.card_font_size }}px;
+}
 .sx-cats a{color:inherit;text-decoration:none}
 .sx-cats button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
 .sx-cats img{max-width:100%;display:block}
@@ -28,7 +34,7 @@
 .sx-cats .sx-main{min-width:0}
 
 .sx-cats .sx-sidebar{background:var(--panel);border-right:3px solid #000;padding:24px 0 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sx-cats .sx-sidebar-label{padding:8px 20px 12px;font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
+.sx-cats .sx-sidebar-label{padding:8px 20px 12px;font-family:"Press Start 2P",monospace;font-size:var(--f-sidebar-title);letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
 .sx-cats .sx-main-cat{
   display:flex;width:100%;align-items:center;justify-content:space-between;
   padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;
@@ -41,13 +47,13 @@
 .sx-cats .sx-main-cat.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
 
 /* 两级树：父分类头 + 缩进子项 */
-.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:10px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase;border-left:3px solid transparent;transition:background .12s,color .12s}
+.sx-cats .sx-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;font-family:"Press Start 2P",monospace;font-size:var(--f-group);letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;text-transform:uppercase;border-left:3px solid transparent;transition:background .12s,color .12s}
 .sx-cats .sx-group-head:hover{background:var(--panel2);color:#fff}
 .sx-cats .sx-group-head .sx-glyph{margin-right:10px;color:var(--pink)}
 .sx-cats .sx-group-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
 .sx-cats .sx-group.closed .sx-caret{transform:rotate(-90deg)}
 .sx-cats .sx-group.closed .sx-children{display:none}
-.sx-cats .sx-sub-item{display:block;padding:5px 20px 5px 44px;color:var(--text2);font-size:13px;border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer}
+.sx-cats .sx-sub-item{display:block;padding:5px 20px 5px 44px;color:var(--text2);font-size:var(--f-sub);border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer}
 .sx-cats .sx-sub-item:hover{color:var(--text);background:var(--panel2)}
 .sx-cats .sx-sub-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
 .sx-cats .sx-tile.hidden{display:none}
@@ -76,7 +82,7 @@
 .sx-cats .sx-tile-logo img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s}
 .sx-cats .sx-tile:hover .sx-tile-logo img{transform:scale(1.05)}
 .sx-cats .sx-tile-logo .sx-ph{font-size:42px}
-.sx-cats .sx-tile-name{font-family:"VT323",monospace;font-size:18px;font-weight:bold;color:#fff;margin-top:14px;line-height:1.3;min-height:2.6em}
+.sx-cats .sx-tile-name{font-family:"VT323",monospace;font-size:var(--f-card);font-weight:bold;color:#fff;margin-top:14px;line-height:1.3;min-height:2.6em}
 .sx-cats .sx-tile:hover .sx-tile-name{color:var(--cyan)}
 .sx-cats .sx-tile-date{display:inline-block;margin-top:8px;font-family:"Press Start 2P",monospace;font-size:9px;background:rgba(0,0,0,.6);padding:5px 8px;color:var(--gold)}
 
@@ -280,7 +286,12 @@
     { "type": "header", "content": "Hero" },
     { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokemon TCG" },
     { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch them all. Explore every expansion." },
-    { "type": "text", "id": "watermark_text", "label": "Watermark", "default": "Pokemon" }
+    { "type": "text", "id": "watermark_text", "label": "Watermark", "default": "Pokemon" },
+    { "type": "header", "content": "Sidebar Font Sizes (px)" },
+    { "type": "range", "id": "sidebar_title_font_size", "label": "Sidebar title", "min": 10, "max": 24, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "group_font_size", "label": "Main category (level 1)", "min": 8, "max": 22, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "sub_font_size", "label": "Sub category (level 2)", "min": 10, "max": 22, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "card_font_size", "label": "Card name", "min": 10, "max": 22, "step": 1, "default": 12, "unit": "px" }
   ],
   "blocks": [
     {
