@@ -1,7 +1,8 @@
 {% comment %}
   Scrydex — Category / Expansions page.
-  配置由 WinForms 编辑器生成。下方 capture sx_config_json 块内是 JSON 数据，
-  请勿手动编辑，用配套的 CategoryEditor.exe 修改。
+  主分类 = sidebar_group block（标题 + links 每行一条子分类：标题|URL）
+  左侧点主分类 tab，右侧切换显示该组下的子分类卡片。
+  由配套的 CategoryManager 工具维护数据。
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,27 +82,7 @@
 }
 </style>
 
-{%- comment -%} ============ 配置数据（由 CategoryEditor.exe 维护） ============ {%- endcomment -%}
-{%- capture sx_config_json -%}
-[
-  {
-    "title": "Sword & Shield",
-    "items": [
-      { "title": "Brilliant Stars", "url": "/collections/brilliant-stars", "image": "", "date": "2022/02/25" },
-      { "title": "Astral Radiance", "url": "/collections/astral-radiance", "image": "", "date": "2022/05/27" }
-    ]
-  },
-  {
-    "title": "Scarlet & Violet",
-    "items": [
-      { "title": "Scarlet Base Set", "url": "/collections/scarlet", "image": "", "date": "2023/03/31" },
-      { "title": "Violet Base Set", "url": "/collections/violet", "image": "", "date": "2023/03/31" }
-    ]
-  }
-]
-{%- endcapture -%}
-{%- assign sx_config = sx_config_json | parse_json -%}
-{%- assign sx_total_cats = sx_config.size -%}
+{%- assign sidebar_blocks = section.blocks | where: "type", "sidebar_group" -%}
 
 <div class="sx-cats">
   <div class="sx-layout">
@@ -109,51 +90,84 @@
     <!-- ============ SIDEBAR ============ -->
     <aside class="sx-sidebar">
       <div class="sx-sidebar-label">MENU</div>
-      {%- for cat in sx_config -%}
-        <button type="button" class="sx-main-cat {% if forloop.first %}active{% endif %}" data-sx-group="cat-{{ forloop.index }}">
-          <span><span class="sx-glyph">▣</span>{{ cat.title }}</span>
-          <span class="sx-count">{{ cat.items.size }}</span>
+      {%- for block in sidebar_blocks -%}
+        {%- assign gid = "group-" | append: forloop.index -%}
+        {%- assign link_lines = block.settings.links | strip | split: newline -%}
+        <button type="button" class="sx-main-cat {% if forloop.first %}active{% endif %}" data-sx-group="{{ gid }}">
+          <span><span class="sx-glyph">▣</span>{{ block.settings.group_title | default: 'GROUP' }}</span>
+          <span class="sx-count">{{ link_lines.size }}</span>
         </button>
       {%- endfor -%}
+      {%- if sidebar_blocks.size == 0 -%}
+        <div style="padding:12px 20px;color:var(--text3);font-size:16px">No groups configured.</div>
+      {%- endif -%}
     </aside>
 
     <!-- ============ MAIN ============ -->
     <main class="sx-main">
 
       <section class="sx-hero">
-        <div class="sx-watermark" aria-hidden="true">Pokémon</div>
+        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
         <div class="sx-hero-inner">
           <div class="sx-hero-title-row">
             <span class="sx-ball" aria-hidden="true"></span>
-            <h1>Pokémon TCG</h1>
+            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
           </div>
-          <p>Catch 'em all. Explore every expansion in the Pokémon Trading Card Game.</p>
+          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game." }}</p>
         </div>
       </section>
 
       <section class="sx-section">
-        {%- for cat in sx_config -%}
-          <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="cat-{{ forloop.index }}">
-            <h2 class="sx-section-title">{{ cat.title }}</h2>
+        {%- for block in sidebar_blocks -%}
+          {%- assign gid = "group-" | append: forloop.index -%}
+          <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
+            <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
             <div class="sx-grid">
-              {%- for item in cat.items -%}
-                <a class="sx-tile" href="{{ item.url | default: '#' }}">
-                  <div class="sx-tile-logo">
-                    {%- if item.image and item.image != '' -%}
-                      <img src="{{ item.image }}" alt="{{ item.title | escape }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                      <span class="sx-ph" style="display:none">🎴</span>
-                    {%- else -%}
-                      <span class="sx-ph">🎴</span>
-                    {%- endif -%}
-                  </div>
-                  <div class="sx-tile-name">{{ item.title }}</div>
-                  {%- if item.date and item.date != '' -%}
-                    <div class="sx-tile-date">{{ item.date }}</div>
+              {%- assign link_lines = block.settings.links | strip | split: newline -%}
+              {%- for raw in link_lines -%}
+                {%- assign line = raw | strip -%}
+                {%- if line == '' -%}{%- continue -%}{%- endif -%}
+
+                {%- comment -%} 解析一行：优先 "标题|URL"，兼容旧格式 "标题_URL" {%- endcomment -%}
+                {%- assign pipe = line | split: '|' -%}
+                {%- if pipe.size > 1 -%}
+                  {%- assign link_title = pipe[0] | strip -%}
+                  {%- assign link_url = pipe[1] | strip -%}
+                {%- else -%}
+                  {%- assign us = line | split: '_' -%}
+                  {%- if us.size > 1 -%}
+                    {%- assign link_url = us | last -%}
+                    {%- assign link_title = '' -%}
+                    {%- for p in us -%}
+                      {%- unless forloop.last -%}
+                        {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
+                        {%- assign link_title = link_title | append: p -%}
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  {%- else -%}
+                    {%- assign link_title = line -%}
+                    {%- assign link_url = '' -%}
                   {%- endif -%}
+                {%- endif -%}
+
+                {%- comment -%} URL 补全：裸句柄加 /collections/ 前缀 {%- endcomment -%}
+                {%- if link_url != '' -%}
+                  {%- unless link_url contains '/' or link_url contains ':' -%}
+                    {%- assign link_url = '/collections/' | append: link_url -%}
+                  {%- endunless -%}
+                {%- else -%}
+                  {%- assign link_url = '#' -%}
+                {%- endif -%}
+
+                <a class="sx-tile" href="{{ link_url }}">
+                  <div class="sx-tile-logo">
+                    <span class="sx-ph">🎴</span>
+                  </div>
+                  <div class="sx-tile-name">{{ link_title }}</div>
                 </a>
               {%- endfor -%}
             </div>
-            {%- if cat.items.size == 0 -%}
+            {%- if link_lines.size == 0 -%}
               <p class="sx-panel-empty">No items in this category yet.</p>
             {%- endif -%}
           </div>
@@ -186,10 +200,29 @@
 {
   "name": "Categories",
   "settings": [
-    { "type": "paragraph", "content": "分类数据由配套的 CategoryEditor.exe 工具维护，直接在左侧菜单用工具编辑即可。本 section 无需在 Shopify 后台配置 block。" }
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Pokémon TCG" },
+    { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases." },
+    { "type": "text", "id": "watermark_text", "label": "Background watermark", "default": "Pokémon" },
+    { "type": "header", "content": "Sidebar" },
+    { "type": "paragraph", "content": "主分类通过下方 Add block → 主分类 添加；每个主分类的 links 里每行写一个子分类，格式：标题|链接" }
   ],
+  "blocks": {
+    "sidebar_group": {
+      "name": "主分类 (Main Category)",
+      "settings": [
+        { "type": "text", "id": "group_title", "label": "主分类名称", "default": "SERIES" },
+        { "type": "textarea", "id": "links", "label": "子分类列表（每行：标题|链接）", "default": "Brilliant Stars|/collections/brilliant-stars\nAstral Radiance|/collections/astral-radiance" }
+      ]
+    }
+  },
   "presets": [
-    { "name": "Categories" }
+    {
+      "name": "Categories",
+      "blocks": [
+        { "type": "sidebar_group", "settings": { "group_title": "Pokemon", "links": "Brilliant Stars|/collections/brilliant-stars\nAstral Radiance|/collections/astral-radiance" } }
+      ]
+    }
   ]
 }
 {% endschema %}
