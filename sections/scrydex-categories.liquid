@@ -191,6 +191,7 @@
 " -%}
             {%- assign cur_second = 0 -%}
             {%- assign in_group = false -%}
+            {%- assign loose_grid = false -%}
             {%- for raw in link_lines -%}
               {%- assign line = raw -%}
               {%- assign stripped = line | strip -%}
@@ -198,11 +199,15 @@
               {%- assign first_ch = line | slice: 0 -%}
 
               {%- if first_ch == ' ' or first_ch == '	' -%}
-                {%- comment -%} 有缩进：以 [ 开头=卡片 [URL]标题，否则=分组标题 {%- endcomment -%}
+                {%- comment -%} 缩进行：以 [ 开头=卡片 [URL]标题，否则=分组标题 {%- endcomment -%}
                 {%- assign first_two = stripped | slice: 0, 1 -%}
                 {%- if first_two == '[' -%}
+                  {%- comment -%} 卡片 {%- endcomment -%}
                   {%- unless in_group -%}
-                    <div class="sx-grid">
+                    {%- unless loose_grid -%}
+                      <div class="sx-grid">
+                      {%- assign loose_grid = true -%}
+                    {%- endunless -%}
                   {%- endunless -%}
 
                   {%- assign parts = stripped | split: ']' -%}
@@ -226,10 +231,14 @@
                     <div class="sx-tile-name">{{ link_title }}</div>
                   </a>
                 {%- else -%}
+                  {%- comment -%} 分组标题：先关闭之前打开的容器 {%- endcomment -%}
                   {%- if in_group -%}
-                    </div></div>
-                  {%- else -%}
+                    </div></div></div>
+                    {%- assign in_group = false -%}
+                  {%- endif -%}
+                  {%- if loose_grid -%}
                     </div>
+                    {%- assign loose_grid = false -%}
                   {%- endif -%}
                   <div class="sx-cardgroup">
                     <div class="sx-cardgroup-head" data-sx-cardgroup-head>{{ stripped }} <span class="sx-caret">▼</span></div>
@@ -238,18 +247,23 @@
                   {%- assign in_group = true -%}
                 {%- endif -%}
               {%- else -%}
+                {%- comment -%} 不缩进=第二级：关闭所有容器 {%- endcomment -%}
                 {%- if in_group -%}
-                  </div></div>
+                  </div></div></div>
                   {%- assign in_group = false -%}
-                {%- else -%}
+                {%- endif -%}
+                {%- if loose_grid -%}
                   </div>
+                  {%- assign loose_grid = false -%}
                 {%- endif -%}
                 {%- assign cur_second = cur_second | plus: 1 -%}
               {%- endif -%}
             {%- endfor -%}
+            {%- comment -%} 循环结束关闭残留容器 {%- endcomment -%}
             {%- if in_group -%}
-              </div></div>
-            {%- else -%}
+              </div></div></div>
+            {%- endif -%}
+            {%- if loose_grid -%}
               </div>
             {%- endif -%}
           </div>
@@ -342,7 +356,7 @@
         { "type": "text", "id": "hero_icon", "label": "Hero icon URL (optional, e.g. https://cdn.shopify.com/...)" },
         { "type": "text", "id": "hero_title", "label": "Hero title (shown when this group is selected)", "default": "Pokémon TCG" },
         { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all." },
-        { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
+        { "type": "textarea", "id": "links", "label": "Links. 不缩进=第二级; 缩进无[=分组; 缩进[URL]标题=卡片", "default": "日文版\n  Mega Evolution\n  [mf]Brilliant Stars" }
       ]
     }
   ],
