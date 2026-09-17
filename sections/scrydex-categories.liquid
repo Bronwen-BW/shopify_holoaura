@@ -219,11 +219,14 @@
 
                   {%- assign parts = stripped | split: ']' -%}
                   {%- if parts.size > 1 -%}
-                    {%- assign link_url = parts[0] | remove: '[' | strip -%}
+                    {%- assign head_parts = parts[0] | remove: '[' | split: '|' -%}
+                    {%- assign link_url = head_parts[0] | strip -%}
+                    {%- assign card_image = head_parts[1] | strip -%}
                     {%- assign link_title = parts[1] | strip -%}
                   {%- else -%}
                     {%- assign link_title = stripped -%}
                     {%- assign link_url = '' -%}
+                    {%- assign card_image = '' -%}
                   {%- endif -%}
                   {%- if link_url != '' -%}
                     {%- unless link_url contains '/' or link_url contains ':' -%}
@@ -234,7 +237,13 @@
                   {%- endif -%}
 
                   <a class="sx-tile" data-sx-second="{{ gid }}-{{ cur_second }}" href="{{ link_url }}">
-                    <div class="sx-tile-logo"><span class="sx-ph">🎴</span></div>
+                    <div class="sx-tile-logo">
+                      {%- if card_image != blank -%}
+                        <img src="{{ card_image }}" alt="{{ link_title }}" loading="lazy" />
+                      {%- else -%}
+                        <span class="sx-ph">🎴</span>
+                      {%- endif -%}
+                    </div>
                     <div class="sx-tile-name">{{ link_title }}</div>
                   </a>
                   {%- assign has_any = true -%}
