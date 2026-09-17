@@ -61,6 +61,7 @@
 .sx-cats .sx-sub-item{display:block;padding:5px 20px 5px 44px;color:var(--text2);font-size:var(--f-sub);border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer}
 .sx-cats .sx-sub-item:hover{color:var(--text);background:var(--panel2)}
 .sx-cats .sx-sub-item.active{color:var(--gold);border-left-color:var(--pink);background:rgba(255,46,136,.14)}
+.sx-cats .sx-sub-empty{padding:5px 20px 5px 44px;color:var(--text3);font-size:var(--f-sub);font-style:italic}
 .sx-cats .sx-tile.hidden{display:none}
 .sx-cats .sx-cardgroup.hidden,.sx-cats .sx-grid.hidden{display:none}
 
@@ -158,6 +159,9 @@
                 {%- endif -%}
               {%- endunless -%}
             {%- endfor -%}
+            {%- if second_idx == 0 -%}
+              <div class="sx-sub-empty">当前分类数据为空</div>
+            {%- endif -%}
           </div>
         </div>
       {%- endfor -%}
@@ -344,7 +348,6 @@
     h.addEventListener('click', function(){
       var container = h.closest('[data-sx-group-container]');
       if (container) container.classList.toggle('closed');
-      showGroup(h.getAttribute('data-sx-show-group'));
     });
   });
 
