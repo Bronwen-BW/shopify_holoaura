@@ -80,6 +80,13 @@
 .sx-cats .sx-panel{display:none}
 .sx-cats .sx-panel.active{display:block}
 .sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
+.sx-cats .sx-cardgroup{margin-bottom:32px}
+.sx-cats .sx-cardgroup-head{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;font-family:"Press Start 2P",monospace;font-size:11px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;border-bottom:2px solid var(--panel2)}
+.sx-cats .sx-cardgroup-head:hover{color:#fff}
+.sx-cats .sx-cardgroup-head .sx-caret{transition:transform .2s;font-size:9px;color:var(--text3)}
+.sx-cats .sx-cardgroup.closed .sx-caret{transform:rotate(-90deg)}
+.sx-cats .sx-cardgroup.closed .sx-cardgroup-body{display:none}
+.sx-cats .sx-cardgroup .sx-grid{margin-top:18px}
 
 .sx-cats .sx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
 .sx-cats .sx-tile{background:var(--panel);border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);padding:20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .15s}
@@ -180,39 +187,26 @@
             </section>
 
             <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
-            <div class="sx-grid">
-              {%- assign link_lines = block.settings.links | strip | split: "
+            {%- assign link_lines = block.settings.links | strip | split: "
 " -%}
-              {%- assign cur_second = 0 -%}
-              {%- for raw in link_lines -%}
-                {%- assign line = raw -%}
-                {%- assign first_ch = line | slice: 0 -%}
-                {%- if first_ch == ' ' or first_ch == '	' -%}
-                  {%- assign card_line = line | strip -%}
-                  {%- if card_line == '' -%}{%- continue -%}{%- endif -%}
+            {%- assign cur_second = 0 -%}
+            {%- assign in_group = false -%}
+            {%- for raw in link_lines -%}
+              {%- assign line = raw -%}
+              {%- assign stripped = line | strip -%}
+              {%- if stripped == '' -%}{%- continue -%}{%- endif -%}
+              {%- assign first_ch = line | slice: 0 -%}
 
-                  {%- comment -%} 解析卡片行 "标题|URL"，兼容 "标题_URL" {%- endcomment -%}
-                  {%- assign pipe = card_line | split: '|' -%}
-                  {%- if pipe.size > 1 -%}
-                    {%- assign link_title = pipe[0] | strip -%}
-                    {%- assign link_url = pipe[1] | strip -%}
-                  {%- else -%}
-                    {%- assign us = card_line | split: '_' -%}
-                    {%- if us.size > 1 -%}
-                      {%- assign link_url = us | last -%}
-                      {%- assign link_title = '' -%}
-                      {%- for p in us -%}
-                        {%- unless forloop.last -%}
-                          {%- if link_title != '' -%}{%- assign link_title = link_title | append: '_' -%}{%- endif -%}
-                          {%- assign link_title = link_title | append: p -%}
-                        {%- endunless -%}
-                      {%- endfor -%}
-                    {%- else -%}
-                      {%- assign link_title = card_line -%}
-                      {%- assign link_url = '' -%}
-                    {%- endif -%}
-                  {%- endif -%}
+              {%- if first_ch == ' ' or first_ch == '	' -%}
+                {%- comment -%} 有缩进：含 | 当卡片，不含 | 当分组标题 {%- endcomment -%}
+                {%- if stripped contains '|' -%}
+                  {%- unless in_group -%}
+                    <div class="sx-grid">
+                  {%- endunless -%}
 
+                  {%- assign pipe = stripped | split: '|' -%}
+                  {%- assign link_title = pipe[0] | strip -%}
+                  {%- assign link_url = pipe[1] | strip -%}
                   {%- if link_url != '' -%}
                     {%- unless link_url contains '/' or link_url contains ':' -%}
                       {%- assign link_url = '/collections/' | append: link_url -%}
@@ -222,19 +216,30 @@
                   {%- endif -%}
 
                   <a class="sx-tile" data-sx-second="{{ gid }}-{{ cur_second }}" href="{{ link_url }}">
-                    <div class="sx-tile-logo">
-                      <span class="sx-ph">🎴</span>
-                    </div>
+                    <div class="sx-tile-logo"><span class="sx-ph">🎴</span></div>
                     <div class="sx-tile-name">{{ link_title }}</div>
                   </a>
                 {%- else -%}
-                  {%- assign t = line | strip -%}
-                  {%- if t != '' -%}
-                    {%- assign cur_second = cur_second | plus: 1 -%}
+                  {%- if in_group -%}
+                    </div></div>
                   {%- endif -%}
+                  <div class="sx-cardgroup">
+                    <div class="sx-cardgroup-head" data-sx-cardgroup-head>{{ stripped }} <span class="sx-caret">▼</span></div>
+                    <div class="sx-cardgroup-body">
+                      <div class="sx-grid">
+                  {%- assign in_group = true -%}
                 {%- endif -%}
-              {%- endfor -%}
-            </div>
+              {%- else -%}
+                {%- if in_group -%}
+                  </div></div>
+                  {%- assign in_group = false -%}
+                {%- endif -%}
+                {%- assign cur_second = cur_second | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if in_group -%}
+              </div></div>
+            {%- endif -%}
           </div>
         {%- endfor -%}
       </section>
@@ -249,6 +254,14 @@
   var cards  = document.querySelectorAll('.sx-cats [data-sx-second]');
   var heads  = document.querySelectorAll('.sx-cats [data-sx-group-head]');
   var seconds = document.querySelectorAll('.sx-cats [data-sx-show-second]');
+  var cardgroupHeads = document.querySelectorAll('.sx-cats [data-sx-cardgroup-head]');
+
+  cardgroupHeads.forEach(function(h){
+    h.addEventListener('click', function(){
+      var g = h.closest('.sx-cardgroup');
+      if (g) g.classList.toggle('closed');
+    });
+  });
 
   function showGroup(gid){
     panels.forEach(function(p){
