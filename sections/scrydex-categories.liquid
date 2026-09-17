@@ -67,7 +67,7 @@
 
 .sx-cats .sx-hero{position:relative;overflow:hidden;padding:56px 40px 48px;border-bottom:3px solid #000;background:radial-gradient(60% 80% at 25% 20%,rgba(177,74,237,.28),transparent 60%),radial-gradient(50% 70% at 85% 75%,rgba(255,46,136,.22),transparent 60%),linear-gradient(180deg,#1a1240,#0d0b1a)}
 .sx-cats .sx-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
-.sx-cats .sx-watermark{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
+.sx-cats .sx-watermark{position:absolute;right:24px;top:50%;transform:translateY(-50%);transform-origin:right center;font-family:"Press Start 2P",monospace;font-size:clamp(80px,14vw,220px);font-weight:400;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:0;line-height:1}
 .sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:780px}
 .sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:18px;margin-bottom:20px}
 .sx-cats .sx-ball{width:46px;height:46px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:3px solid #000;position:relative;flex:0 0 auto;box-shadow:4px 4px 0 #000}
@@ -305,6 +305,19 @@
     });
   });
 
+  // 背景水印按 Hero 可用宽度等比缩放，避免长文字被裁切
+  function fitWatermarks(){
+    document.querySelectorAll('.sx-cats .sx-panel.active .sx-watermark').forEach(function(el){
+      var hero = el.parentElement;
+      var maxW = hero.clientWidth - 48;
+      el.style.transform = 'translateY(-50%) scale(1)';
+      var w = el.getBoundingClientRect().width;
+      if (w > maxW && w > 0){
+        el.style.transform = 'translateY(-50%) scale(' + (maxW / w) + ')';
+      }
+    });
+  }
+
   function showGroup(gid){
     panels.forEach(function(p){
       p.classList.toggle('active', p.getAttribute('data-sx-panel') === gid);
@@ -315,6 +328,7 @@
     loosegrids.forEach(function(g){ g.classList.remove('hidden'); });
     empties.forEach(function(e){ e.classList.add('hidden'); });
     seconds.forEach(function(s){ s.classList.remove('active'); });
+    fitWatermarks();
   }
 
   function showSecond(cid){
@@ -342,6 +356,7 @@
     seconds.forEach(function(s){
       s.classList.toggle('active', s.getAttribute('data-sx-show-second') === cid);
     });
+    fitWatermarks();
   }
 
   heads.forEach(function(h){
@@ -357,6 +372,10 @@
       showSecond(s.getAttribute('data-sx-show-second'));
     });
   });
+
+  fitWatermarks();
+  window.addEventListener('resize', fitWatermarks);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWatermarks);
 })();
 </script>
 
