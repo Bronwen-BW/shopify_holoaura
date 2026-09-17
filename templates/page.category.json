@@ -19,10 +19,18 @@
             "group_title": "Pokemon",
             "links": "25th Anniversary Collection_swsh8a\n30th セレブレーション_m6a\nGXウルトラシャイニー_sm8b\nTAG TEAM GX タッグオールスターズ_sm12a\nストームエメラルダ_m6\nポケモンカード151_sv2a"
           }
+        },
+        "sidebar_c9245f82": {
+          "type": "sidebar_group",
+          "settings": {
+            "group_title": "Onepiece",
+            "links": "500 Years In The Future_OP07\nAdventure on Kami's Island_OP15"
+          }
         }
       },
       "block_order": [
-        "sidebar_129f0b70"
+        "sidebar_129f0b70",
+        "sidebar_c9245f82"
       ]
     }
   },
