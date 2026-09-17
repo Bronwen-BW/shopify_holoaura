@@ -211,6 +211,8 @@
         }
       },
       "settings": {
+        "enable_infinite_scroll": false,
+        "products_per_page": 24,
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
