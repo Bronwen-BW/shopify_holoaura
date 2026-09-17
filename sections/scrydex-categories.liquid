@@ -25,6 +25,9 @@
   --f-group:{{ section.settings.group_font_size }}px;
   --f-sub:{{ section.settings.sub_font_size }}px;
   --f-card:{{ section.settings.card_font_size }}px;
+  --f-hero-title:{{ section.settings.hero_title_font_size }}px;
+  --f-hero-desc:{{ section.settings.hero_desc_font_size }}px;
+  --f-section-title:{{ section.settings.section_title_font_size }}px;
 }
 .sx-cats a{color:inherit;text-decoration:none}
 .sx-cats button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
@@ -64,13 +67,14 @@
 .sx-cats .sx-hero-inner{position:relative;z-index:1;max-width:780px}
 .sx-cats .sx-hero-title-row{display:flex;align-items:center;gap:18px;margin-bottom:20px}
 .sx-cats .sx-ball{width:46px;height:46px;border-radius:50%;background:linear-gradient(to bottom,var(--red) 0 50%,#fff 50% 100%);border:3px solid #000;position:relative;flex:0 0 auto;box-shadow:4px 4px 0 #000}
+.sx-cats .sx-ball-img{width:46px;height:46px;object-fit:contain;border:3px solid #000;box-shadow:4px 4px 0 #000;flex:0 0 auto;border-radius:50%}
 .sx-cats .sx-ball::before{content:"";position:absolute;left:0;right:0;top:50%;height:8px;background:#000;transform:translateY(-50%)}
 .sx-cats .sx-ball::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:14px;background:#fff;border:3px solid #000;border-radius:50%;transform:translate(-50%,-50%)}
-.sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:clamp(18px,2.6vw,28px);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
-.sx-cats .sx-hero p{font-size:20px;color:var(--text2);margin:0;max-width:700px}
+.sx-cats .sx-hero h1{font-family:"Press Start 2P",monospace;font-size:var(--f-hero-title);line-height:1.3;margin:0;color:#fff;text-shadow:4px 4px 0 var(--pink),8px 8px 0 rgba(0,0,0,.5)}
+.sx-cats .sx-hero p{font-size:var(--f-hero-desc);color:var(--text2);margin:0;max-width:700px}
 
 .sx-cats .sx-section{padding:40px 40px 64px}
-.sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:clamp(14px,2vw,18px);margin:0 0 28px;color:#fff;line-height:1.3}
+.sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:var(--f-section-title);margin:0 0 28px;color:#fff;line-height:1.3}
 .sx-cats .sx-panel{display:none}
 .sx-cats .sx-panel.active{display:block}
 .sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
@@ -153,21 +157,26 @@
     <!-- ============ MAIN ============ -->
     <main class="sx-main">
 
-      <section class="sx-hero">
-        <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
-        <div class="sx-hero-inner">
-          <div class="sx-hero-title-row">
-            <span class="sx-ball" aria-hidden="true"></span>
-            <h1>{{ section.settings.hero_title | default: 'Pokémon TCG' }}</h1>
-          </div>
-          <p>{{ section.settings.hero_description | default: "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game." }}</p>
-        </div>
-      </section>
-
       <section class="sx-section">
         {%- for block in sidebar_blocks -%}
           {%- assign gid = "group-" | append: forloop.index -%}
           <div class="sx-panel {% if forloop.first %}active{% endif %}" data-sx-panel="{{ gid }}">
+
+            <section class="sx-hero">
+              <div class="sx-watermark" aria-hidden="true">{{ section.settings.watermark_text | default: 'Pokémon' }}</div>
+              <div class="sx-hero-inner">
+                <div class="sx-hero-title-row">
+                  {%- if block.settings.hero_icon -%}
+                    <img class="sx-ball-img" src="{{ block.settings.hero_icon | image_url: width: 92 }}" alt="" />
+                  {%- else -%}
+                    <span class="sx-ball" aria-hidden="true"></span>
+                  {%- endif -%}
+                  <h1>{{ block.settings.hero_title | default: block.settings.group_title | default: 'Pokémon TCG' }}</h1>
+                </div>
+                <p>{{ block.settings.hero_description | default: '' }}</p>
+              </div>
+            </section>
+
             <h2 class="sx-section-title">{{ block.settings.group_title | default: 'EXPANSIONS' }}</h2>
             <div class="sx-grid">
               {%- assign link_lines = block.settings.links | strip | split: "
@@ -291,7 +300,11 @@
     { "type": "range", "id": "sidebar_title_font_size", "label": "Sidebar title", "min": 10, "max": 40, "step": 1, "default": 12, "unit": "px" },
     { "type": "range", "id": "group_font_size", "label": "Main category (level 1)", "min": 8, "max": 40, "step": 1, "default": 12, "unit": "px" },
     { "type": "range", "id": "sub_font_size", "label": "Sub category (level 2)", "min": 10, "max": 40, "step": 1, "default": 13, "unit": "px" },
-    { "type": "range", "id": "card_font_size", "label": "Card name", "min": 10, "max": 40, "step": 1, "default": 18, "unit": "px" }
+    { "type": "range", "id": "card_font_size", "label": "Card name", "min": 10, "max": 40, "step": 1, "default": 18, "unit": "px" },
+    { "type": "header", "content": "Hero / Panel Font Sizes (px)" },
+    { "type": "range", "id": "hero_title_font_size", "label": "Hero title (Pokémon TCG)", "min": 14, "max": 60, "step": 1, "default": 28, "unit": "px" },
+    { "type": "range", "id": "hero_desc_font_size", "label": "Hero description", "min": 12, "max": 40, "step": 1, "default": 20, "unit": "px" },
+    { "type": "range", "id": "section_title_font_size", "label": "Panel title (e.g. 寶可夢)", "min": 12, "max": 40, "step": 1, "default": 18, "unit": "px" }
   ],
   "blocks": [
     {
@@ -299,6 +312,9 @@
       "name": "Main Category",
       "settings": [
         { "type": "text", "id": "group_title", "label": "Group title", "default": "SERIES" },
+        { "type": "image_picker", "id": "hero_icon", "label": "Hero icon (optional, overrides pokeball)" },
+        { "type": "text", "id": "hero_title", "label": "Hero title (shown when this group is selected)", "default": "Pokémon TCG" },
+        { "type": "textarea", "id": "hero_description", "label": "Hero description", "default": "Catch 'em all." },
         { "type": "textarea", "id": "links", "label": "Links (one per line: Title|URL)", "default": "Brilliant Stars|/collections/brilliant-stars" }
       ]
     }
