@@ -31,48 +31,45 @@
 #shopify-section-section p,
 #shopify-section-section .rte{color:var(--pxtext2) !important;font-family:"VT323",monospace !important;font-size:20px !important;line-height:1.55 !important;}
 
-/* —— 商品卡片 —— */
-#shopify-section-main .product-card__content,
-#shopify-section-main .product-grid__card{
-  background:var(--pxpanel) !important;
-  border:3px solid #000 !important;
-  box-shadow:6px 6px 0 rgba(0,0,0,.5) !important;
-  padding:0 0 16px !important;
-  overflow:hidden;
-  transition:transform .15s, box-shadow .15s;
+/* —— 商品卡（复刻首页 .prod：4:5 卡牌、图铺满、hover 底部浮层） —— */
+#shopify-section-main .product-grid__item{display:block;transition:transform .15s;}
+#shopify-section-main .product-grid__item:hover{transform:translateY(-4px);}
+.px-card{
+  position:relative;display:block;width:100%;aspect-ratio:4/5;
+  background:linear-gradient(160deg,#3a1f5e,#1a1437);
+  border:3px solid #000;box-shadow:6px 6px 0 rgba(0,0,0,.5);
+  overflow:hidden;text-decoration:none;color:#fff;
 }
-#shopify-section-main .product-grid__item{transition:transform .15s;}
-#shopify-section-main .product-grid__item:hover{transform:translate(-2px,-2px);}
-#shopify-section-main .product-grid__item:hover .product-card__content{box-shadow:8px 8px 0 rgba(0,0,0,.55) !important;}
-/* 图片框 */
-#shopify-section-main .card-gallery{background:var(--pxpanel2) !important;border:0 !important;border-bottom:3px solid #000 !important;}
-#shopify-section-main .card-gallery .media,
-#shopify-section-main .card-gallery .global-media-settings,
-#shopify-section-main .card-gallery img{border-radius:0 !important;}
-/* 商品名 */
-#shopify-section-main .product-card [role="heading"],
-#shopify-section-main .product-card .product-card__title{
-  font-family:"VT323",monospace !important;font-size:21px !important;line-height:1.25 !important;
-  color:#fff !important;letter-spacing:.3px;padding:0 14px;margin:12px 0 0;
+.px-card__media{position:absolute;inset:0;display:block;background:linear-gradient(160deg,#3a1f5e,#1a1437);}
+.px-card__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.px-card:hover .px-card__media img{transform:scale(1.05);}
+.px-card__ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.5));}
+.px-card__tag{position:absolute;top:10px;left:10px;z-index:2;font-family:"Press Start 2P",monospace;font-size:9px;padding:5px 9px;color:#fff;border:2px solid #000;box-shadow:3px 3px 0 rgba(0,0,0,.45);letter-spacing:1px;}
+.px-card__tag--sale{background:var(--pxgold);color:#1a1205;}
+.px-card__tag--out{background:var(--pxpink);color:#fff;}
+.px-card__info{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;padding:40px 14px 14px;
+  display:flex;flex-direction:column;gap:6px;
+  background:linear-gradient(180deg,rgba(10,8,25,0),rgba(10,8,25,.92) 35%);
+  transform:translateY(100%);transition:transform .28s;
 }
-#shopify-section-main .product-card:hover [role="heading"],
-#shopify-section-main .product-card:hover .product-card__title{color:var(--pxcyan) !important;}
-/* 价格 */
-#shopify-section-main .price,
-#shopify-section-main .compare-at-price,
-#shopify-section-main .price-item--sale{font-family:"Press Start 2P",monospace !important;font-size:13px !important;}
-#shopify-section-main .product-card [ref="priceContainer"]{padding:0 14px;margin-top:10px;}
-#shopify-section-main .price{color:var(--pxgold) !important;}
-#shopify-section-main .price-item--sale.price{color:var(--pxpink) !important;}
-#shopify-section-main .compare-at-price{color:var(--pxtext2) !important;text-decoration:line-through;}
-/* 角标 */
-#shopify-section-main .badge,
-#shopify-section-main .product-badges .badge{
-  background:var(--pxpink) !important;color:#fff !important;
-  border:2px solid #000 !important;box-shadow:3px 3px 0 rgba(0,0,0,.5) !important;
-  font-family:"Press Start 2P",monospace !important;font-size:8px !important;
-  letter-spacing:1px;padding:5px 8px !important;
+.px-card:hover .px-card__info,.px-card:focus-within .px-card__info{transform:translateY(0);}
+.px-card__name{font-family:"VT323",monospace;font-size:18px;font-weight:bold;color:#fff;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.px-card__type{font-family:"VT323",monospace;font-size:14px;color:var(--pxtext2);}
+.px-card__row{margin-top:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:2px dashed #2e2656;padding-top:8px;}
+.px-card__price{display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;}
+.px-card__cmp{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--pxtext2);text-decoration:line-through;}
+.px-card__now{font-family:"Press Start 2P",monospace;font-size:13px;color:var(--pxgold);white-space:nowrap;}
+.px-card__view{font-family:"Press Start 2P",monospace;font-size:10px;background:var(--pxpink);color:#fff;border:2px solid #000;padding:8px 12px;box-shadow:3px 3px 0 #7a0f44;white-space:nowrap;transition:background .12s,color .12s;}
+.px-card:hover .px-card__view{background:var(--pxcyan);color:#001a1a;box-shadow:3px 3px 0 #007a8a;}
+/* 触屏（无 hover）：信息常驻，保证标题价格可见 */
+@media (hover:none){
+  .px-card__info{transform:translateY(0);padding-top:32px;}
 }
+/* zoom-out 缩略视图：只留图块，占位符缩小 */
+ul[product-grid-view="zoom-out"] .px-card__info,
+ul[product-grid-view="zoom-out"] .px-card__tag{display:none;}
+ul[product-grid-view="zoom-out"] .px-card__ph{font-size:34px;}
 /* 快速加购 / 通用按钮 */
 #shopify-section-main .button,
 #shopify-section-main button.button,
@@ -189,9 +186,40 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
+            <a class="px-card{% if product.available == false %} is-soldout{% endif %}" href="{{ product.url }}">
+              <span class="px-card__media">
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 640 }}"
+                    alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {%- else -%}
+                  <span class="px-card__ph" aria-hidden="true">🎴</span>
+                {%- endif -%}
+                {%- if product.available == false -%}
+                  <span class="px-card__tag px-card__tag--out">{{ 'content.product_badge_sold_out' | t }}</span>
+                {%- elsif product.compare_at_price > product.price -%}
+                  <span class="px-card__tag px-card__tag--sale">{{ 'content.product_badge_sale' | t }}</span>
+                {%- endif -%}
+              </span>
+              <span class="px-card__info">
+                <span class="px-card__name">{{ product.title }}</span>
+                {%- if product.type != blank -%}
+                  <span class="px-card__type">{{ product.type }}</span>
+                {%- endif -%}
+                <span class="px-card__row">
+                  <span class="px-card__price">
+                    {%- if product.compare_at_price > product.price -%}
+                      <s class="px-card__cmp">{{ product.compare_at_price | money }}</s>
+                    {%- endif -%}
+                    <b class="px-card__now">{{ product.price | money }}</b>
+                  </span>
+                  <span class="px-card__view">VIEW</span>
+                </span>
+              </span>
+            </a>
           </li>
         {% endfor %}
       {% endcapture %}
