@@ -10,7 +10,7 @@
 
 <div class="px-shop" style="{% render 'spacing-padding', settings: section.settings %}">
 <script>try{if(localStorage.getItem('px_bw')==='1')document.currentScript.parentNode.classList.add('bw')}catch(e){}</script>
-<div class="bw-toggle" title="切换黑白/彩色" onclick="var r=document.querySelector('.px-shop');r.classList.toggle('bw');try{localStorage.setItem('px_bw',r.classList.contains('bw')?'1':'0')}catch(e){}">BW</div>
+<div class="bw-toggle" title="切换黑白/彩色" onclick="var r=document.querySelector('.px-shop');r.classList.toggle('bw');try{localStorage.setItem('px_bw',r.classList.contains('bw')?'1':'0')}catch(e){}"><span class="ico-dark">🌙</span><span class="ico-light">☀️</span></div>
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,6 +99,10 @@
 .px-shop.bw .fcol a:hover{color:#fff}
 .px-shop .bw-toggle{position:fixed;right:18px;top:80px;z-index:99999;width:54px;height:54px;background:var(--panel);color:var(--gold);border:3px solid #000;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 rgba(0,0,0,.5);font-family:'Press Start 2P',monospace;line-height:1;user-select:none;pointer-events:auto}
 .px-shop .bw-toggle:hover{background:var(--pink);color:#fff}
+.px-shop .bw-toggle span{font-size:22px;line-height:1}
+.px-shop .bw-toggle .ico-light{display:none}
+.px-shop.bw .bw-toggle .ico-dark{display:none}
+.px-shop.bw .bw-toggle .ico-light{display:inline}
 .px-shop *,.px-shop *::before,.px-shop *::after{box-sizing:border-box}
 .px-shop a{color:inherit;text-decoration:none}
 .px-shop img{max-width:100%;display:block}
@@ -602,6 +606,14 @@
     }
     if (prev) prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
     if (next) next.addEventListener('click', function(){ track.scrollBy({left:step(), behavior:'smooth'}); });
+  });
+
+  // 与分类页黑白切换实时同步（跨标签页）
+  window.addEventListener('storage', function(e){
+    if (e.key === 'px_bw'){
+      var root = document.querySelector('.px-shop');
+      if (root) root.classList.toggle('bw', e.newValue === '1');
+    }
   });
 })();
 
