@@ -80,7 +80,8 @@
 .sx-cats .sx-section-title{font-family:"Press Start 2P",monospace;font-size:var(--f-section-title);margin:0 0 28px;color:#fff;line-height:1.3}
 .sx-cats .sx-panel{display:none}
 .sx-cats .sx-panel.active{display:block}
-.sx-cats .sx-panel-empty{color:var(--text3);font-size:18px;padding:20px 0}
+.sx-cats .sx-panel-empty{color:var(--text3);font-size:20px;padding:40px 0;text-align:center}
+.sx-cats .sx-panel-empty.hidden{display:none}
 .sx-cats .sx-cardgroup{margin-bottom:32px}
 .sx-cats .sx-hero + .sx-cardgroup,.sx-cats .sx-hero + .sx-grid{margin-top:32px}
 .sx-cats .sx-cardgroup-head{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;font-family:"Press Start 2P",monospace;font-size:11px;letter-spacing:.05em;color:var(--gold);cursor:pointer;user-select:none;border-bottom:2px solid var(--panel2)}
@@ -193,6 +194,7 @@
             {%- assign cur_second = 0 -%}
             {%- assign in_group = false -%}
             {%- assign loose_grid = false -%}
+            {%- assign has_any = false -%}
             {%- for raw in link_lines -%}
               {%- assign line = raw -%}
               {%- assign stripped = line | strip -%}
@@ -231,6 +233,7 @@
                     <div class="sx-tile-logo"><span class="sx-ph">🎴</span></div>
                     <div class="sx-tile-name">{{ link_title }}</div>
                   </a>
+                  {%- assign has_any = true -%}
                 {%- else -%}
                   {%- comment -%} 分组标题：先关闭之前打开的容器 {%- endcomment -%}
                   {%- if in_group -%}
@@ -258,6 +261,7 @@
                   {%- assign loose_grid = false -%}
                 {%- endif -%}
                 {%- assign cur_second = cur_second | plus: 1 -%}
+                <div class="sx-panel-empty hidden" data-sx-empty="{{ gid }}-{{ cur_second }}">当前分类数据为空</div>
               {%- endif -%}
             {%- endfor -%}
             {%- comment -%} 循环结束关闭残留容器 {%- endcomment -%}
@@ -267,6 +271,9 @@
             {%- if loose_grid -%}
               </div>
             {%- endif -%}
+            {%- unless has_any -%}
+              <div class="sx-panel-empty" data-sx-panel-empty="{{ gid }}">当前分类数据为空</div>
+            {%- endunless -%}
           </div>
         {%- endfor -%}
       </section>
@@ -284,6 +291,8 @@
   var cardgroupHeads = document.querySelectorAll('.sx-cats [data-sx-cardgroup-head]');
   var cardgroups = document.querySelectorAll('.sx-cats [data-sx-group-second]');
   var loosegrids = document.querySelectorAll('.sx-cats [data-sx-grid-second]');
+  var empties = document.querySelectorAll('.sx-cats [data-sx-empty]');
+  var panelEmpties = document.querySelectorAll('.sx-cats [data-sx-panel-empty]');
 
   cardgroupHeads.forEach(function(h){
     h.addEventListener('click', function(){
@@ -300,6 +309,7 @@
     cards.forEach(function(c){ c.classList.remove('hidden'); });
     cardgroups.forEach(function(g){ g.classList.remove('hidden'); });
     loosegrids.forEach(function(g){ g.classList.remove('hidden'); });
+    empties.forEach(function(e){ e.classList.add('hidden'); });
     seconds.forEach(function(s){ s.classList.remove('active'); });
   }
 
@@ -318,6 +328,13 @@
     loosegrids.forEach(function(g){
       g.classList.toggle('hidden', g.getAttribute('data-sx-grid-second') !== cid);
     });
+    // 该第二级是否有任何分组或卡片
+    var hasContent = document.querySelector('.sx-cats [data-sx-group-second="'+cid+'"], .sx-cats [data-sx-grid-second="'+cid+'"]');
+    empties.forEach(function(e){
+      var match = e.getAttribute('data-sx-empty') === cid;
+      e.classList.toggle('hidden', !(match && !hasContent));
+    });
+    panelEmpties.forEach(function(e){ e.classList.add('hidden'); });
     seconds.forEach(function(s){
       s.classList.toggle('active', s.getAttribute('data-sx-show-second') === cid);
     });
