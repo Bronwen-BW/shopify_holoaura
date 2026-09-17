@@ -43,9 +43,9 @@
         "hero_title": "Pokémon TCG",
         "hero_description": "Catch 'em all. Explore every expansion in the Pokémon Trading Card Game, from the original Base Set to the latest releases.",
         "watermark_text": "Pokémon",
-        "sidebar_title_font_size": 30,
-        "group_font_size": 30,
-        "sub_font_size": 20,
+        "sidebar_title_font_size": 25,
+        "group_font_size": 20,
+        "sub_font_size": 15,
         "card_font_size": 18
       }
     }
